@@ -217,10 +217,13 @@
       updateCallUI();
     });
 
-    const savedLessons = [];
     const allowedStudents = new Set(['Aisha', 'Ahmad', 'Fatima', 'Yusuf']);
     function sanitizeText(value) {
-      return value.replace(/[<>]/g, '').replace(/\s+/g, ' ').trim();
+      return value
+        .replace(/[^\p{L}\p{N}\s\-()',.]/gu, '')
+        .replace(/\s+/g, ' ')
+        .trim()
+        .slice(0, 120);
     }
     saveLessonBtn.addEventListener('click', function () {
       const student = studentSelect.value.trim();
@@ -232,11 +235,10 @@
         return;
       }
 
-      const lesson = { student, surah, ayah, savedAtDisplay: new Date().toLocaleString() };
-      savedLessons.push(lesson);
+      const lesson = { student, surah, ayah, savedAt: new Date().toLocaleString() };
 
       const item = document.createElement('li');
-      item.textContent = student + ': ' + surah + ' (' + ayah + ') — saved ' + lesson.savedAtDisplay;
+      item.textContent = student + ': ' + surah + ' (' + ayah + ') — saved ' + lesson.savedAt;
       lessonList.prepend(item);
       statusEl.textContent = 'Lesson shared and saved for ' + student + '.';
       surahInput.value = '';
