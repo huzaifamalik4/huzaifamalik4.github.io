@@ -154,9 +154,9 @@
             <option value="Yusuf">Yusuf</option>
           </select>
           <label for="surahInput" class="sr-only">Surah</label>
-          <input type="text" id="surahInput" placeholder="Surah (e.g. Al-Baqarah)">
+          <input type="text" id="surahInput" placeholder="Surah (e.g. Al-Baqarah)" maxlength="120">
           <label for="ayahInput" class="sr-only">Ayah range</label>
-          <input type="text" id="ayahInput" placeholder="Ayah range (e.g. 1-5)">
+          <input type="text" id="ayahInput" placeholder="Ayah range (e.g. 1-5)" maxlength="120">
           <button id="saveLessonBtn" class="primary">Save Lesson to Student</button>
         </div>
         <ul id="lessonList" aria-label="Saved lessons"></ul>
@@ -165,7 +165,8 @@
       <article class="card" aria-label="Quran viewer and pointer">
         <h2>3) Quran Majeed + Word Pointer</h2>
         <p class="lesson-meta">Click and drag on the board to point/highlight words like MS Paint.</p>
-        <canvas id="pointerCanvas" width="540" height="280" aria-label="Pointer board"></canvas>
+        <p id="pointerHelp" class="lesson-meta">Use mouse or touch to draw and point at words on the board.</p>
+        <canvas id="pointerCanvas" width="540" height="280" aria-label="Pointer board" role="application" aria-describedby="pointerHelp"></canvas>
         <div class="controls" style="margin-top:10px;">
           <button id="clearCanvasBtn">Clear Pointer Marks</button>
         </div>
@@ -188,6 +189,13 @@
     const clearCanvasBtn = document.getElementById('clearCanvasBtn');
     const canvas = document.getElementById('pointerCanvas');
     const ctx = canvas.getContext('2d');
+    const MAX_LESSON_INPUT_LENGTH = 120; // Prevent long entries from breaking card layout and list readability.
+    const LESSON_DATE_LOCALE = 'en-US';
+    const POINTER_COLOR = '#ef4444';
+    const POINTER_WIDTH = 3;
+    ctx.strokeStyle = POINTER_COLOR;
+    ctx.lineWidth = POINTER_WIDTH;
+    ctx.lineCap = 'round';
 
     let inCall = false;
     let sharing = false;
@@ -233,10 +241,6 @@
       updateCallUI();
     });
 
-    const MAX_LESSON_INPUT_LENGTH = 120; // Prevent long entries from breaking card layout and list readability.
-    const LESSON_DATE_LOCALE = 'en-US';
-    const POINTER_COLOR = '#ef4444';
-    const POINTER_WIDTH = 3;
     function isAllowedStudent(student) {
       return Array.from(studentSelect.options).some(function (option) {
         const value = option.value.trim();
@@ -307,9 +311,6 @@
       const p = positionFromEvent(event);
       ctx.beginPath();
       ctx.moveTo(p.x, p.y);
-      ctx.strokeStyle = POINTER_COLOR;
-      ctx.lineWidth = POINTER_WIDTH;
-      ctx.lineCap = 'round';
       if (event.cancelable) event.preventDefault();
     }
 
