@@ -233,7 +233,7 @@
       updateCallUI();
     });
 
-    const MAX_LESSON_INPUT_LENGTH = 120; // Keep entries short for compact lesson list display.
+    const MAX_LESSON_INPUT_LENGTH = 120; // Prevent long entries from breaking card layout and list readability.
     const LESSON_DATE_LOCALE = 'en-US';
     const POINTER_COLOR = '#ef4444';
     const POINTER_WIDTH = 3;
@@ -268,8 +268,7 @@
       });
       const savedTime = savedAt.toLocaleTimeString(LESSON_DATE_LOCALE, {
         hour: 'numeric',
-        minute: '2-digit',
-        second: '2-digit'
+        minute: '2-digit'
       });
       const item = document.createElement('li');
       item.setAttribute(
