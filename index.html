@@ -94,6 +94,16 @@
       color: var(--muted);
       margin-top: 0;
     }
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      border: 0;
+    }
     canvas {
       width: 100%;
       max-width: 100%;
@@ -143,7 +153,9 @@
             <option value="Fatima">Fatima</option>
             <option value="Yusuf">Yusuf</option>
           </select>
+          <label for="surahInput" class="sr-only">Surah</label>
           <input type="text" id="surahInput" placeholder="Surah (e.g. Al-Baqarah)">
+          <label for="ayahInput" class="sr-only">Ayah range</label>
           <input type="text" id="ayahInput" placeholder="Ayah range (e.g. 1-5)">
           <button id="saveLessonBtn" class="primary">Save Lesson to Student</button>
         </div>
@@ -181,6 +193,10 @@
     let sharing = false;
 
     function updateCallUI() {
+      startCallBtn.disabled = inCall;
+      endCallBtn.disabled = !inCall;
+      shareScreenBtn.disabled = !inCall || sharing;
+      stopShareBtn.disabled = !sharing;
       if (!inCall) {
         callStage.textContent = 'Start a call and share your screen for live Quran teaching sessions.';
         statusEl.textContent = 'Ready for live class';
@@ -222,7 +238,7 @@
         .map(function (option) { return option.value.trim(); })
         .filter(Boolean)
     );
-    function sanitizeText(value) {
+    function sanitizeLessonInput(value) {
       return value
         .replace(/[^\p{L}\p{N}\s\-()',.]/gu, '')
         .replace(/\s+/g, ' ')
@@ -231,8 +247,8 @@
     }
     saveLessonBtn.addEventListener('click', function () {
       const student = studentSelect.value.trim();
-      const surah = sanitizeText(surahInput.value);
-      const ayah = sanitizeText(ayahInput.value);
+      const surah = sanitizeLessonInput(surahInput.value);
+      const ayah = sanitizeLessonInput(ayahInput.value);
 
       if (!allowedStudents.has(student) || !surah || !ayah) {
         statusEl.textContent = 'Please select student, surah, and ayah range.';
@@ -240,12 +256,17 @@
       }
 
       const item = document.createElement('li');
+      item.setAttribute(
+        'aria-label',
+        'Student ' + student + ', Surah ' + surah + ', Ayah range ' + ayah
+      );
       item.textContent = student + ': ' + surah + ' (' + ayah + ') — saved ' + new Date().toLocaleString();
       lessonList.prepend(item);
       statusEl.textContent = 'Lesson shared and saved for ' + student + '.';
       surahInput.value = '';
       ayahInput.value = '';
     });
+    updateCallUI();
 
     let drawing = false;
 
