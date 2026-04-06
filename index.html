@@ -138,10 +138,10 @@
         <div class="students controls">
           <select id="studentSelect" aria-label="Select student">
             <option value="">Select student</option>
-            <option>Aisha</option>
-            <option>Ahmad</option>
-            <option>Fatima</option>
-            <option>Yusuf</option>
+            <option value="Aisha">Aisha</option>
+            <option value="Ahmad">Ahmad</option>
+            <option value="Fatima">Fatima</option>
+            <option value="Yusuf">Yusuf</option>
           </select>
           <input type="text" id="surahInput" placeholder="Surah (e.g. Al-Baqarah)">
           <input type="text" id="ayahInput" placeholder="Ayah range (e.g. 1-5)">
@@ -228,11 +228,11 @@
         return;
       }
 
-      const lesson = { student, surah, ayah, at: new Date().toLocaleString() };
+      const lesson = { student, surah, ayah, savedAt: new Date().toLocaleString() };
       savedLessons.push(lesson);
 
       const item = document.createElement('li');
-      item.textContent = student + ': ' + surah + ' (' + ayah + ') — saved ' + lesson.at;
+      item.textContent = student + ': ' + surah + ' (' + ayah + ') — saved ' + lesson.savedAt;
       lessonList.prepend(item);
       statusEl.textContent = 'Lesson shared and saved for ' + student + '.';
       surahInput.value = '';
@@ -253,8 +253,8 @@
         clientY = event.clientY;
       }
       return {
-        x: clientX - rect.left,
-        y: clientY - rect.top
+        x: (clientX - rect.left) * (canvas.width / rect.width),
+        y: (clientY - rect.top) * (canvas.height / rect.height)
       };
     }
 
