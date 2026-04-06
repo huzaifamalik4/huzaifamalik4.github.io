@@ -233,6 +233,7 @@
       updateCallUI();
     });
 
+    const MAX_LESSON_INPUT_LENGTH = 120;
     const allowedStudents = new Set(
       Array.from(studentSelect.options)
         .map(function (option) { return option.value.trim(); })
@@ -240,10 +241,10 @@
     );
     function sanitizeLessonInput(value) {
       return value
-        .replace(/[^\p{L}\p{N}\s\-()',.]/gu, '')
+        .replace(/[^\p{L}\p{N}\s\-']/gu, '')
         .replace(/\s+/g, ' ')
         .trim()
-        .slice(0, 120);
+        .slice(0, MAX_LESSON_INPUT_LENGTH);
     }
     saveLessonBtn.addEventListener('click', function () {
       const student = studentSelect.value.trim();
@@ -255,12 +256,15 @@
         return;
       }
 
+      const savedAt = new Date();
+      const savedDate = savedAt.toLocaleDateString();
+      const savedTime = savedAt.toLocaleTimeString();
       const item = document.createElement('li');
       item.setAttribute(
         'aria-label',
-        'Student ' + student + ', Surah ' + surah + ', Ayah range ' + ayah
+        'Student ' + student + ', Surah ' + surah + ', Ayah range ' + ayah + ', saved on ' + savedDate + ' at ' + savedTime
       );
-      item.textContent = student + ': ' + surah + ' (' + ayah + ') — saved ' + new Date().toLocaleString();
+      item.textContent = student + ': ' + surah + ' (' + ayah + ') — saved ' + savedDate + ' ' + savedTime;
       lessonList.prepend(item);
       statusEl.textContent = 'Lesson shared and saved for ' + student + '.';
       surahInput.value = '';
@@ -295,7 +299,7 @@
       ctx.strokeStyle = '#ef4444';
       ctx.lineWidth = 3;
       ctx.lineCap = 'round';
-      event.preventDefault();
+      if (event.cancelable) event.preventDefault();
     }
 
     function draw(event) {
@@ -303,12 +307,12 @@
       const p = positionFromEvent(event);
       ctx.lineTo(p.x, p.y);
       ctx.stroke();
-      event.preventDefault();
+      if (event.cancelable) event.preventDefault();
     }
 
     function endDraw(event) {
       drawing = false;
-      if (event) event.preventDefault();
+      if (event && event.cancelable) event.preventDefault();
     }
 
     canvas.addEventListener('mousedown', beginDraw);
