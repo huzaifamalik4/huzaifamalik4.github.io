@@ -234,11 +234,12 @@
     });
 
     const MAX_LESSON_INPUT_LENGTH = 120;
-    const allowedStudents = new Set(
-      Array.from(studentSelect.options)
-        .map(function (option) { return option.value.trim(); })
-        .filter(Boolean)
-    );
+    function isAllowedStudent(student) {
+      return Array.from(studentSelect.options).some(function (option) {
+        const value = option.value.trim();
+        return value && value === student;
+      });
+    }
     function sanitizeLessonInput(value) {
       return value
         .replace(/[^\p{L}\p{N}\s\-']/gu, '')
@@ -251,7 +252,7 @@
       const surah = sanitizeLessonInput(surahInput.value);
       const ayah = sanitizeLessonInput(ayahInput.value);
 
-      if (!allowedStudents.has(student) || !surah || !ayah) {
+      if (!isAllowedStudent(student) || !surah || !ayah) {
         statusEl.textContent = 'Please select student, surah, and ayah range.';
         return;
       }
@@ -264,7 +265,7 @@
         'aria-label',
         'Student ' + student + ', Surah ' + surah + ', Ayah range ' + ayah + ', saved on ' + savedDate + ' at ' + savedTime
       );
-      item.textContent = student + ': ' + surah + ' (' + ayah + ') — saved ' + savedDate + ' ' + savedTime;
+      item.textContent = student + ': ' + surah + ' (' + ayah + ') - saved ' + savedDate + ' ' + savedTime;
       lessonList.prepend(item);
       statusEl.textContent = 'Lesson shared and saved for ' + student + '.';
       surahInput.value = '';
