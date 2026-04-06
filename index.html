@@ -147,7 +147,7 @@
         <p class="lesson-meta">Select student + surah + ayah range, then save and share directly.</p>
         <div class="students controls">
           <select id="studentSelect" aria-label="Select student">
-            <option value="">Select student</option>
+            <option value="" disabled selected>Select student</option>
             <option value="Aisha">Aisha</option>
             <option value="Ahmad">Ahmad</option>
             <option value="Fatima">Fatima</option>
@@ -233,7 +233,10 @@
       updateCallUI();
     });
 
-    const MAX_LESSON_INPUT_LENGTH = 120;
+    const MAX_LESSON_INPUT_LENGTH = 120; // Keep entries short for compact lesson list display.
+    const LESSON_DATE_LOCALE = 'en-US';
+    const POINTER_COLOR = '#ef4444';
+    const POINTER_WIDTH = 3;
     function isAllowedStudent(student) {
       return Array.from(studentSelect.options).some(function (option) {
         const value = option.value.trim();
@@ -258,8 +261,16 @@
       }
 
       const savedAt = new Date();
-      const savedDate = savedAt.toLocaleDateString();
-      const savedTime = savedAt.toLocaleTimeString();
+      const savedDate = savedAt.toLocaleDateString(LESSON_DATE_LOCALE, {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric'
+      });
+      const savedTime = savedAt.toLocaleTimeString(LESSON_DATE_LOCALE, {
+        hour: 'numeric',
+        minute: '2-digit',
+        second: '2-digit'
+      });
       const item = document.createElement('li');
       item.setAttribute(
         'aria-label',
@@ -297,8 +308,8 @@
       const p = positionFromEvent(event);
       ctx.beginPath();
       ctx.moveTo(p.x, p.y);
-      ctx.strokeStyle = '#ef4444';
-      ctx.lineWidth = 3;
+      ctx.strokeStyle = POINTER_COLOR;
+      ctx.lineWidth = POINTER_WIDTH;
       ctx.lineCap = 'round';
       if (event.cancelable) event.preventDefault();
     }
