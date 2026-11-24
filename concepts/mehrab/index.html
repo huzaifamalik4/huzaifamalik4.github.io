@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mehrab Studio | Website concept by Huzaifa Malik</title>
+  <meta name="description" content="A design concept for an architecture studio's website. Mehrab Studio is not a real company.">
+  <meta name="robots" content="noindex">
+  <link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
+  <style>
+    @font-face { font-family: "Instrument Serif"; src: url("../fonts/instrument-serif-latin-400-normal.woff2") format("woff2"); font-weight: 400; font-display: swap; }
+    @font-face { font-family: "Instrument Serif"; src: url("../../assets/fonts/instrument-serif-latin-400-italic.woff2") format("woff2"); font-weight: 400; font-style: italic; font-display: swap; }
+    @font-face { font-family: "Geist"; src: url("../../assets/fonts/geist-latin-wght-normal.woff2") format("woff2"); font-weight: 100 900; font-display: swap; }
+
+    :root { --night: #161513; --stone: #ece5d6; --mute: rgba(236, 229, 214, 0.58); --clay: #c5613a; --sand: #dcc49d; --dusk: #2b3b52; --line: rgba(236, 229, 214, 0.18); --pad: clamp(18px, 3vw, 52px); }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--night); color: var(--stone); font-family: "Geist", Arial, sans-serif; font-size: clamp(0.9rem, 1vw, 1.05rem); line-height: 1.45; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+    a { color: inherit; text-decoration: none; }
+    ul { list-style: none; margin: 0; padding: 0; }
+    h1, p { margin: 0; }
+
+    .page { position: relative; min-height: 100vh; min-height: 100svh; display: grid; grid-template-rows: auto 1fr auto; overflow: hidden; }
+
+    .nav { grid-row: 1; grid-column: 1; position: relative; z-index: 3; display: flex; align-items: center; justify-content: space-between; padding: clamp(16px, 1.8vw, 28px) var(--pad); font-size: 0.8rem; letter-spacing: 0.1em; text-transform: uppercase; }
+    .brand { display: inline-flex; align-items: center; gap: 12px; font-weight: 600; letter-spacing: 0.22em; }
+    .brand i { width: 16px; height: 22px; border: 1.5px solid currentColor; border-radius: 999px 999px 0 0; border-bottom: 0; }
+    .nav ul { display: flex; gap: clamp(18px, 2.6vw, 44px); }
+    .nav li sup { margin-right: 6px; color: var(--clay); font-size: 0.8em; }
+    .nav li a { transition: color 0.3s; }
+    .nav li a:hover { color: var(--sand); }
+
+    .hero { grid-row: 2; grid-column: 1; position: relative; z-index: 2; display: flex; flex-direction: column; align-items: flex-start; justify-content: center; padding: 0 var(--pad) clamp(20px, 3vw, 44px); pointer-events: none; }
+    .hero > * { pointer-events: auto; }
+    .meta { display: flex; gap: 14px; align-items: center; margin-bottom: 1.6em; font-size: 0.8rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--mute); }
+    .meta::before { content: ""; width: 42px; height: 1px; background: var(--clay); }
+    h1 { max-width: 9.5ch; font-family: "Instrument Serif", Georgia, serif; font-size: clamp(3.4rem, 10.4vw, 12rem); font-weight: 400; line-height: 0.86; letter-spacing: -0.035em; }
+    h1 em { color: var(--sand); }
+    .lead { max-width: 34ch; margin-top: 1.8em; color: var(--mute); font-size: 1.1em; }
+    .cta { display: inline-flex; align-items: center; gap: 14px; margin-top: 2em; padding-bottom: 8px; border-bottom: 1px solid var(--stone); font-weight: 500; letter-spacing: 0.02em; transition: gap 0.4s cubic-bezier(0.16, 1, 0.3, 1), color 0.3s; }
+    .cta:hover { gap: 24px; color: var(--sand); }
+
+    /* The colonnade: arches nested inside one another, lit from the left. */
+    .scene { grid-row: 1 / 3; grid-column: 1; position: relative; z-index: 1; justify-self: end; width: 58%; }
+    .sun { position: absolute; right: 30%; top: 15%; width: min(15vw, 26vh); aspect-ratio: 1; border-radius: 50%; background: radial-gradient(circle at 35% 35%, #f3dcae, var(--sand) 60%, #c9a877); box-shadow: 0 0 120px 30px rgba(220, 196, 157, 0.16); animation: rise 9s ease-in-out infinite alternate; }
+    @keyframes rise { to { transform: translateY(-5%); } }
+    .arch { position: absolute; bottom: 0; border-radius: 999px 999px 0 0; }
+    .arch--1 { right: -4%; width: 54%; height: 90%; background: linear-gradient(100deg, #d87348, var(--clay) 45%, #8f3f22); }
+    .arch--2 { right: 3.5%; width: 39%; height: 74%; background: linear-gradient(100deg, #3a4e6b, var(--dusk) 50%, #18212f); }
+    .arch--3 { right: 9.5%; width: 27%; height: 57%; background: linear-gradient(100deg, #f0dab4, var(--sand) 50%, #b79769); }
+    .arch--4 { right: 14.5%; width: 17%; height: 40%; background: linear-gradient(100deg, #24231f, var(--night) 60%); }
+    .arch--left { right: 52%; width: 30%; height: 62%; background: linear-gradient(100deg, #24303f, #1b2330 60%, #131821); }
+    .arch--left2 { right: 57%; width: 20%; height: 46%; background: linear-gradient(100deg, #b85a35, #8c4126); }
+    .floor { position: absolute; left: -40%; right: 0; bottom: 0; height: 7%; background: linear-gradient(#211f1c, #131210); }
+    .shadow { position: absolute; right: 10%; bottom: 0; width: 70%; height: 7%; background: linear-gradient(100deg, transparent 20%, rgba(0, 0, 0, 0.5)); transform: skewX(-50deg); transform-origin: bottom right; }
+    .figure { position: absolute; right: 21.6%; bottom: 7%; width: 0.75%; height: 7.5%; border-radius: 999px 999px 2px 2px; background: var(--stone); }
+    .figure::before { content: ""; position: absolute; left: 50%; top: -42%; width: 130%; aspect-ratio: 1; border-radius: 50%; background: inherit; transform: translateX(-50%); }
+
+    .foot { grid-row: 3; grid-column: 1; position: relative; z-index: 3; background: var(--night); display: grid; grid-template-columns: 1fr auto 1fr; align-items: end; gap: 24px; padding: clamp(16px, 2vw, 30px) var(--pad) clamp(46px, 4vw, 56px); border-top: 1px solid var(--line); font-size: 0.8rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--mute); }
+    .foot b { display: block; margin-bottom: 4px; color: var(--stone); font-family: "Instrument Serif", Georgia, serif; font-size: 1.9em; font-weight: 400; letter-spacing: 0; text-transform: none; }
+    .count { font-family: "Instrument Serif", Georgia, serif; font-size: 2.2em; letter-spacing: 0; color: var(--stone); }
+    .count span { color: var(--mute); }
+    .foot div:last-child { text-align: right; }
+
+    .credit { position: fixed; left: 50%; bottom: 10px; z-index: 10; padding: 0.5em 1em; border-radius: 999px; background: rgba(236, 229, 214, 0.92); color: var(--night); font-size: 0.72rem; letter-spacing: 0.04em; transform: translateX(-50%); white-space: nowrap; }
+    .credit a { text-decoration: underline; text-underline-offset: 3px; }
+
+    @media (max-width: 860px) {
+      .nav ul { display: none; }
+      .hero { justify-content: flex-start; padding-top: 6vh; }
+      .scene { width: 100%; height: 52%; align-self: end; opacity: 0.9; }
+      .arch--left, .arch--left2 { display: none; }
+      .foot { grid-template-columns: 1fr auto; }
+      .foot div:last-child { display: none; }
+    }
+    @media (prefers-reduced-motion: reduce) { .sun { animation: none; } }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header class="nav">
+      <a class="brand" href="#"><i></i>Mehrab</a>
+      <ul>
+        <li><a href="#"><sup>01</sup>Projects</a></li>
+        <li><a href="#"><sup>02</sup>Studio</a></li>
+        <li><a href="#"><sup>03</sup>Journal</a></li>
+        <li><a href="#"><sup>04</sup>Contact</a></li>
+      </ul>
+    </header>
+
+    <div class="scene" aria-hidden="true">
+      <div class="sun"></div>
+      <div class="arch arch--left"></div>
+      <div class="arch arch--left2"></div>
+      <div class="arch arch--1"></div>
+      <div class="arch arch--2"></div>
+      <div class="arch arch--3"></div>
+      <div class="arch arch--4"></div>
+      <div class="floor"></div>
+      <div class="shadow"></div>
+      <div class="figure"></div>
+    </div>
+
+    <main class="hero">
+      <p class="meta">Architecture and interiors</p>
+      <h1>Spaces that <em>hold the light.</em></h1>
+      <p class="lead">Homes, courtyards and quiet public rooms, drawn around the way the sun moves through them.</p>
+      <a class="cta" href="#">View selected projects <span aria-hidden="true">&rarr;</span></a>
+    </main>
+
+    <footer class="foot">
+      <div><b>Courtyard House</b>Private residence, 2026</div>
+      <div class="count">01 <span>/ 12</span></div>
+      <div>Scroll to walk through</div>
+    </footer>
+  </div>
+
+  <p class="credit">Design concept by <a href="/">Huzaifa Malik</a>. Mehrab Studio is not a real company.</p>
+</body>
+</html>

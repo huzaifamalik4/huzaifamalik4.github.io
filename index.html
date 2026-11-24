@@ -18,9 +18,15 @@
   <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
   <link rel="preload" href="assets/fonts/geist-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="assets/fonts/instrument-serif-latin-400-italic.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="assets/img/hero-portrait.webp" as="image" type="image/webp">
   <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/variants.css">
 
   <script>
+    // Use the theme chosen on an earlier visit before anything is drawn.
+    try {
+      if (localStorage.getItem('hm-theme') === 'dark') document.documentElement.dataset.theme = 'dark';
+    } catch (e) {}
     // Animations hide content until the script is ready. If the script never arrives, show everything.
     document.documentElement.classList.add('js');
     setTimeout(function () {
@@ -72,6 +78,12 @@
         <span class="pill__dot"></span>
         <span class="pill__label" data-text="Let's talk">Let's talk</span>
       </a>
+      <button class="pill pill--light theme-btn" type="button" aria-label="Switch to the dark theme" aria-pressed="false" data-theme-toggle data-magnetic>
+        <svg class="theme-btn__icon" viewBox="0 0 24 24" aria-hidden="true">
+          <path class="theme-btn__moon" d="M20 14.2A8 8 0 0 1 9.8 4a8 8 0 1 0 10.2 10.2z"/>
+          <g class="theme-btn__sun"><circle cx="12" cy="12" r="4"/><path d="M12 2.6v2.3M12 19.1v2.3M2.6 12h2.3M19.1 12h2.3M5.4 5.4 7 7M17 17l1.6 1.6M18.6 5.4 17 7M7 17l-1.6 1.6"/></g>
+        </svg>
+      </button>
       <button class="pill pill--light menu-btn" type="button" aria-expanded="false" aria-controls="menu" data-menu-btn data-magnetic>
         <span class="menu-btn__label">
           <span>Menu</span>
@@ -90,6 +102,12 @@
         <li><a href="#experience"><span>Experience</span><i></i></a></li>
         <li><a href="#pricing"><span>Pricing</span><i></i></a></li>
         <li><a href="#contact"><span>Contact</span><i></i></a></li>
+        <li class="menu__theme">
+          <button type="button" aria-label="Switch to the dark theme" aria-pressed="false" data-theme-toggle>
+            <span>Theme</span>
+            <span class="menu__theme-state"><b data-theme-name>Light</b><i></i></span>
+          </button>
+        </li>
       </ul>
       <a class="menu__cta" href="https://wa.me/923370758987" target="_blank" rel="noopener">
         <span class="menu__cta-kicker">Have a project?</span>
@@ -118,13 +136,14 @@
         </div>
       </div>
 
-      <div class="hero__stage" data-hero-stage>
+      <div class="hero__stage" data-hero-stage role="img" aria-label="Portrait of Huzaifa Malik drawn in blue and covered in lines of code. Moving the pointer wipes the code away to show the photograph.">
         <div class="hero__canvas" data-hero-canvas></div>
         <span class="cross cross--tl"></span>
         <span class="cross cross--tr"></span>
         <span class="cross cross--bl"></span>
         <span class="cross cross--br"></span>
-        <p class="hero__hint"><span class="hint-fine">Move your cursor through it</span><span class="hint-touch">Drag across it</span></p>
+        <p class="hero__label" aria-hidden="true"><i></i>Code view</p>
+        <p class="hero__hint" aria-hidden="true"><span class="hint-fine">Move your cursor to meet the person behind the code</span><span class="hint-touch">Drag to wipe the code away</span></p>
       </div>
 
       <div class="hero__foot" data-hero-fade>
@@ -135,7 +154,7 @@
     </section>
 
     <!-- About -->
-    <section class="about section" id="about">
+    <section class="about section" id="about" data-section="about">
       <div class="sec-head"><span>01</span><span>About</span></div>
 
       <p class="about__lead" data-words>I'm Huzaifa, a web developer and designer from Pakistan. Since 2020 I have been building WordPress sites, online stores and web apps for clients, and I still sweat the small details most people skip.</p>
@@ -169,7 +188,7 @@
     </section>
 
     <!-- Services -->
-    <section class="services section" id="services">
+    <section class="services section" id="services" data-section="services">
       <div class="sec-head"><span>02</span><span>Services</span></div>
       <h2 class="h2" data-lines>What I can <em>do for you</em></h2>
 
@@ -232,19 +251,21 @@
     </section>
 
     <!-- Work -->
-    <section class="work section" id="work">
+    <section class="work section" id="work" data-section="work">
       <div class="sec-head"><span>03</span><span>Work</span></div>
       <div class="work__head">
         <h2 class="h2" data-lines>Selected <em>work</em></h2>
-        <p data-fade>Products I designed and built myself, end to end. Client projects are shared on request.</p>
+        <p data-fade>Products I built end to end, and design concepts made to show a style. Client projects are shared on request.</p>
       </div>
 
-      <div class="work__grid">
-        <article class="card" data-cursor="Own project">
+      <div class="work__viewport" data-work-viewport>
+      <div class="work__grid" data-work-track>
+        <article class="card" data-project="salvo" data-cursor="Own project">
           <div class="card__media media" data-media>
             <img src="assets/img/work-salvo.webp" width="1284" height="724" loading="lazy" alt="Four screenshots from SALVO: a freefall over an island, a parachute over a town, a harbour and a forest">
           </div>
           <div class="card__info">
+            <span class="card__type">Browser game</span>
             <div class="card__row">
               <h3>SALVO</h3>
               <span class="tag">2026</span>
@@ -254,11 +275,27 @@
           </div>
         </article>
 
-        <article class="card card--offset" data-cursor="In development">
+        <a class="card card--link card--offset" href="concepts/morra/" target="_blank" rel="noopener" data-project="morra" data-cursor="Open concept">
+          <div class="card__media media" data-media>
+            <img src="assets/img/work-morra.webp" width="1440" height="810" loading="lazy" alt="Morra Coffee store home page with three coffee bags and the headline Slow roasted, up in the hills">
+          </div>
+          <div class="card__info">
+            <span class="card__type">Online store</span>
+            <div class="card__row">
+              <h3>Morra Coffee</h3>
+              <span class="tag tag--concept">Concept</span>
+            </div>
+            <p>A store concept for a small-batch coffee roaster: the product comes first, with subscriptions and a one-tap add to cart.</p>
+            <ul class="card__tags"><li>Store design</li><li>HTML</li><li>CSS</li></ul>
+          </div>
+        </a>
+
+        <article class="card" data-project="dingline" data-cursor="In development">
           <div class="card__media media" data-media>
             <img src="assets/img/work-dingline.webp" width="1440" height="810" loading="lazy" alt="Dingline landing page with the headline Nobody should have to stand in line">
           </div>
           <div class="card__info">
+            <span class="card__type">SaaS product</span>
             <div class="card__row">
               <h3>Dingline</h3>
               <span class="tag">In development</span>
@@ -268,11 +305,27 @@
           </div>
         </article>
 
-        <article class="card" data-cursor="In development">
+        <a class="card card--link card--offset" href="concepts/mehrab/" target="_blank" rel="noopener" data-project="mehrab" data-cursor="Open concept">
+          <div class="card__media media" data-media>
+            <img src="assets/img/work-mehrab.webp" width="1440" height="810" loading="lazy" alt="Mehrab Studio home page with nested arches in clay, blue and sand and the headline Spaces that hold the light">
+          </div>
+          <div class="card__info">
+            <span class="card__type">Studio website</span>
+            <div class="card__row">
+              <h3>Mehrab Studio</h3>
+              <span class="tag tag--concept">Concept</span>
+            </div>
+            <p>A website concept for an architecture studio, built around one calm image and very large type.</p>
+            <ul class="card__tags"><li>Web design</li><li>HTML</li><li>CSS</li></ul>
+          </div>
+        </a>
+
+        <article class="card" data-project="quran" data-cursor="In development">
           <div class="card__media media" data-media>
             <img src="assets/img/work-quran.webp" width="1076" height="605" loading="lazy" alt="Quran Classroom teacher view with a page of the Mushaf, a pointer stick and a highlighted reading line">
           </div>
           <div class="card__info">
+            <span class="card__type">Web app</span>
             <div class="card__row">
               <h3>Quran Classroom</h3>
               <span class="tag">In development</span>
@@ -282,19 +335,73 @@
           </div>
         </article>
 
-        <a class="card card--offset card--link" href="/web-tech-exam-guide/" target="_blank" rel="noopener" data-cursor="Open site">
+        <a class="card card--link card--offset" href="concepts/ginti/" target="_blank" rel="noopener" data-project="ginti" data-cursor="Open concept">
           <div class="card__media media" data-media>
-            <img src="assets/img/work-examguide.webp" width="1440" height="810" loading="lazy" alt="Web Tech Exam Guide home screen listing eight lectures on HTML, CSS3 and Bootstrap 5">
+            <img src="assets/img/work-ginti.webp" width="1440" height="810" loading="lazy" alt="Ginti app landing page with two phone screens and the headline Know where every rupee went">
           </div>
           <div class="card__info">
+            <span class="card__type">App landing page</span>
             <div class="card__row">
-              <h3>Web Tech Exam Guide</h3>
-              <span class="tag tag--live">Live</span>
+              <h3>Ginti</h3>
+              <span class="tag tag--concept">Concept</span>
             </div>
-            <p>A visual revision guide for Web Technology students, covering HTML, CSS3 and Bootstrap 5 with live examples and a quiz.</p>
-            <ul class="card__tags"><li>HTML</li><li>CSS3</li><li>Bootstrap 5</li></ul>
+            <p>A landing page and app screens for a money tracker made for freelancers.</p>
+            <ul class="card__tags"><li>App design</li><li>HTML</li><li>CSS</li></ul>
           </div>
         </a>
+
+        <a class="card card--next" href="#contact" data-cursor="Let's talk">
+          <div class="card__media card__media--next" data-media>
+            <span class="card__next-kicker">Next project</span>
+            <span class="card__next-title">Yours<em>?</em></span>
+            <svg class="arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 19 19 5M8 5h11v11"/></svg>
+          </div>
+          <div class="card__info">
+            <span class="card__type">Open slot</span>
+            <div class="card__row">
+              <h3>Your project</h3>
+              <span class="tag tag--live">Open slot</span>
+            </div>
+            <p>A website, a store or a web app. Tell me what you need and I will show you how I would build it.</p>
+          </div>
+        </a>
+      </div>
+      </div>
+    </section>
+
+    <!-- Screens wall: every tile is a screen from one of the projects above -->
+    <section class="wall" id="screens" aria-label="Screens from the projects">
+      <div class="wall__stage" data-wall-stage>
+        <div class="wall__canvas" data-wall-canvas role="img" aria-label="A dark wall of small tiles, each one a screen from the projects above. A lens follows the pointer and enlarges the screens under it."></div>
+        <div class="wall__still" aria-hidden="true"></div>
+
+        <div class="wall__head">
+          <p class="wall__kicker"><i></i>Up close</p>
+          <h2 class="wall__title">Look <em>closer.</em></h2>
+          <p class="wall__sub">Thirty-two screens from the projects above.</p>
+        </div>
+
+        <p class="wall__hint" aria-hidden="true"><span class="hint-fine">Move to look around / Click a screen to open it</span><span class="hint-touch">Drag to look around / Tap a screen to open it</span></p>
+
+        <div class="wall__label" data-wall-label aria-hidden="true">
+          <span data-wall-caption></span>
+          <strong data-wall-project></strong>
+          <i data-wall-type></i>
+        </div>
+
+        <article class="wall__card" data-wall-card aria-hidden="true" hidden>
+          <header>
+            <span data-card-type></span>
+            <span class="tag" data-card-status></span>
+          </header>
+          <h3 data-card-title></h3>
+          <p class="wall__card-screen">Screen: <span data-card-screen></span></p>
+          <p data-card-text></p>
+          <div class="wall__card-actions">
+            <a class="btn btn--light" href="#work" data-card-link><span>Show it in Work</span><svg class="arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 19 19 5M8 5h11v11"/></svg></a>
+            <button class="btn wall__card-close" type="button" data-card-close>Close</button>
+          </div>
+        </article>
       </div>
     </section>
 
@@ -323,7 +430,7 @@
     </section>
 
     <!-- Experience -->
-    <section class="exp section" id="experience">
+    <section class="exp section" id="experience" data-section="experience">
       <div class="sec-head"><span>04</span><span>Experience</span></div>
 
       <div class="exp__grid">
@@ -370,7 +477,7 @@
     </section>
 
     <!-- Pricing -->
-    <section class="pricing section" id="pricing">
+    <section class="pricing section" id="pricing" data-section="pricing">
       <div class="sec-head"><span>05</span><span>Pricing</span></div>
       <div class="work__head">
         <h2 class="h2" data-lines>Simple, <em>per project</em></h2>
@@ -431,7 +538,7 @@
     </section>
 
     <!-- Contact -->
-    <section class="contact" id="contact">
+    <section class="contact" id="contact" data-section="contact">
       <div class="contact__inner">
         <div class="sec-head"><span>06</span><span>Contact</span></div>
 
@@ -486,6 +593,7 @@
       <div class="footer__col footer__col--time">
         <h3>Local time</h3>
         <p><span data-time>--:--</span> in Pakistan</p>
+        <p class="footer__diff" data-time-diff></p>
       </div>
       <a class="footer__top-btn" href="#top" aria-label="Back to top" data-magnetic>
         <svg class="arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20V4M5 11l7-7 7 7"/></svg>
@@ -499,6 +607,9 @@
       <span>Designed and built by me</span>
     </div>
   </footer>
+
+  <!-- Turns as the page scrolls; a click goes back to the top -->
+  <a class="scroll-pill" href="#top" aria-label="Back to top" data-scroll-pill><i></i></a>
 
   <script type="module" src="assets/js/app.js"></script>
 </body>

@@ -1,0 +1,5 @@
+// Written by tools/build-wall.mjs. One entry per tile of assets/img/wall-atlas.webp,
+// in reading order: the project it belongs to and what the screen shows.
+export const WALL_COLS = 8;
+export const WALL_ROWS = 4;
+export const WALL_TILES = [["salvo","Parachute drop"],["dingline","Landing page"],["quran","Live pointer"],["morra","Coffee bags"],["salvo","The island from above"],["dingline","It is your turn"],["quran","Teacher lobby"],["mehrab","Arches"],["salvo","Neon city map"],["dingline","Waiting room TV"],["quran","Class list"],["ginti","App screens"],["salvo","Flying in"],["dingline","Staff console"],["quran","Invite a student"],["morra","Store home page"],["salvo","Harbour"],["dingline","Order tracking"],["quran","Student lobby"],["mehrab","Studio home page"],["salvo","Snow base map"],["dingline","Insights"],["quran","Settings"],["ginti","Landing page"],["salvo","Village"],["dingline","Door poster"],["salvo","Desert town map"],["dingline","Queue ticket in Urdu"],["salvo","Forest"],["dingline","You are next"],["salvo","Neon alley"],["dingline","Staff console on a phone"]];

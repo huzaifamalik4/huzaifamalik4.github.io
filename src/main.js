@@ -2,6 +2,9 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { SplitText } from 'gsap/SplitText';
 import Lenis from 'lenis';
+import { applyVariants, initPicker, initWorkVariant } from './variants.js';
+import { initTheme } from './theme.js';
+import { initTypedLabels, initScrollPill, initTimeDifference } from './details.js';
 
 gsap.registerPlugin(ScrollTrigger, SplitText);
 
@@ -57,8 +60,17 @@ function initAnchors() {
   });
 }
 
-function initAccordion() {
+function initAccordion(interactive) {
   const items = $$('[data-accordion] .svc__item');
+  if (!interactive) {
+    // Layouts that show every service at once: the rows are no longer controls.
+    items.forEach((item) => {
+      const head = $('.svc__head', item);
+      head.setAttribute('aria-expanded', 'true');
+      head.setAttribute('tabindex', '-1');
+    });
+    return;
+  }
   const setOpen = (item, open) => {
     item.classList.toggle('is-open', open);
     $('.svc__head', item).setAttribute('aria-expanded', String(open));
@@ -128,7 +140,37 @@ function loadHero() {
   if (!container) return Promise.resolve(null);
   return import('./hero.js')
     .then((module) => module.createHero(container, { reducedMotion }))
-    .catch(() => null);
+    .catch(() => null)
+    .then((hero) => {
+      // Without WebGL the stage falls back to the still photo set in the stylesheet.
+      if (!hero) container.parentElement.classList.add('is-still');
+      return hero;
+    });
+}
+
+// The screens wall is only fetched once the visitor is getting close to it.
+function initWall() {
+  const stage = $('[data-wall-stage]');
+  if (!stage || root.dataset.wall === 'b' || !('IntersectionObserver' in window)) return;
+  const showProject = (card) => {
+    if (lenis) lenis.scrollTo(card, { offset: -110, duration: 1.4 });
+    else card.scrollIntoView({ block: 'center' });
+  };
+  const observer = new IntersectionObserver(
+    ([entry]) => {
+      if (!entry.isIntersecting) return;
+      observer.disconnect();
+      import('./wall.js')
+        .then((module) => module.createWall(stage, { reducedMotion, onOpen: showProject }))
+        .catch(() => null)
+        .then((wall) => {
+          // Without WebGL the stage falls back to the still sheet set in the stylesheet.
+          if (!wall) stage.classList.add('is-still');
+        });
+    },
+    { rootMargin: '120% 0px' },
+  );
+  observer.observe(stage);
 }
 
 /* ---------- Scroll-driven motion ---------- */
@@ -312,7 +354,55 @@ function initContact() {
 
 /* ---------- Intro ---------- */
 
-function runIntro(heroPromise) {
+// The loader breaks up into blocks from the middle outwards, a few flashing blue as they go.
+function createDissolve(loader) {
+  const canvas = document.createElement('canvas');
+  canvas.className = 'loader__blocks';
+  const ctx = canvas.getContext('2d');
+  if (!ctx) return null;
+  const width = window.innerWidth;
+  const height = window.innerHeight;
+  canvas.width = width;
+  canvas.height = height;
+  loader.appendChild(canvas);
+
+  const cols = width > 900 ? 16 : width > 560 ? 10 : 7;
+  const size = Math.ceil(width / cols);
+  const rows = Math.ceil(height / size);
+  const ink = getComputedStyle(loader).backgroundColor;
+  const flashes = ['#2238ff', '#2238ff', '#8f9bff', '#ffffff'];
+  const far = Math.hypot(cols / 2, rows / 2);
+  const cells = [];
+  for (let row = 0; row < rows; row++) {
+    for (let col = 0; col < cols; col++) {
+      const distance = Math.hypot(col + 0.5 - cols / 2, row + 0.5 - rows / 2) / far;
+      cells.push({
+        x: col * size,
+        y: row * size,
+        at: distance * 0.55 + Math.random() * 0.3,
+        flash: Math.random() < 0.22 ? flashes[Math.floor(Math.random() * flashes.length)] : null,
+      });
+    }
+  }
+
+  return {
+    draw(progress) {
+      ctx.clearRect(0, 0, width, height);
+      cells.forEach((cell) => {
+        if (progress < cell.at) ctx.fillStyle = ink;
+        else if (cell.flash && progress < cell.at + 0.1) ctx.fillStyle = cell.flash;
+        else return;
+        ctx.fillRect(cell.x, cell.y, size + 1, size + 1);
+      });
+    },
+    start() {
+      this.draw(0);
+      loader.style.background = 'transparent';
+    },
+  };
+}
+
+function runIntro(heroPromise, quick, blocks) {
   const loader = $('.loader');
   const countEl = $('[data-loader-count]');
   const bar = $('[data-loader-bar]');
@@ -329,7 +419,7 @@ function runIntro(heroPromise) {
   const counting = new Promise((resolve) => {
     gsap.to(counter, {
       value: 100,
-      duration: 1.9,
+      duration: quick ? 0.3 : 1.9,
       ease: 'power2.inOut',
       onUpdate: () => {
         countEl.textContent = String(Math.round(counter.value));
@@ -369,13 +459,22 @@ function runIntro(heroPromise) {
         ScrollTrigger.refresh();
       },
     });
-    tl.to(countEl, { yPercent: -108, duration: 0.7, ease: 'power3.in' })
-      .to(bar, { opacity: 0, duration: 0.3 }, '<')
-      .to(loader, { yPercent: -100, duration: 1.15, ease: 'expo.inOut' }, '-=0.2')
-      .add(() => {
-        if (hero) hero.start();
-        if (lenis) lenis.start();
-      }, '-=0.95')
+    tl.to(countEl, { yPercent: -108, duration: 0.7, ease: 'power3.in' }).to(bar, { opacity: 0, duration: 0.3 }, '<');
+
+    const dissolve = blocks ? createDissolve(loader) : null;
+    if (dissolve) {
+      const state = { progress: 0 };
+      tl.add(() => dissolve.start(), '-=0.12')
+        .to('.loader__top', { opacity: 0, duration: 0.3 }, '<')
+        .to(state, { progress: 1, duration: 1.15, ease: 'power1.inOut', onUpdate: () => dissolve.draw(state.progress) }, '<');
+    } else {
+      tl.to(loader, { yPercent: -100, duration: 1.15, ease: 'expo.inOut' }, '-=0.2');
+    }
+
+    tl.add(() => {
+      if (hero) hero.start();
+      if (lenis) lenis.start();
+    }, '-=0.95')
       .add(() => {
         titleReleased = true;
         if (titleTween) titleTween.play();
@@ -386,8 +485,10 @@ function runIntro(heroPromise) {
 
     // A link like /#work should still land on its section once the page has opened.
     if (location.hash && $(location.hash)) {
-      tl.add(() => (lenis ? lenis.scrollTo($(location.hash), { duration: 1.4 }) : $(location.hash).scrollIntoView()));
+      tl.add(() => (lenis ? lenis.scrollTo($(location.hash), quick ? { immediate: true } : { duration: 1.4 }) : $(location.hash).scrollIntoView()));
     }
+    // While comparing layouts the page reloads often, so the opening plays fast.
+    if (quick) tl.timeScale(3);
   });
 }
 
@@ -395,10 +496,27 @@ function runIntro(heroPromise) {
 
 function start() {
   root.classList.add('is-ready');
+  const design = applyVariants();
   initMenu();
   initAnchors();
-  initAccordion();
+  initAccordion(design.choices.services === 'a');
   initClock();
+  initTimeDifference();
+  if (design.pick) initPicker(design);
+
+  // While the theme changes the page holds still, then scrolls again if it could before.
+  let scrollWasFree = false;
+  initTheme({
+    reducedMotion,
+    pause: () => {
+      scrollWasFree = Boolean(lenis) && !lenis.isStopped;
+      if (scrollWasFree) lenis.stop();
+    },
+    resume: () => {
+      if (scrollWasFree) lenis.start();
+    },
+  });
+  initWall();
 
   const heroPromise = loadHero();
 
@@ -416,7 +534,7 @@ function start() {
   lenis.stop();
   initCursor();
   initMagnetic();
-  runIntro(heroPromise);
+  runIntro(heroPromise, design.pick, design.choices.intro === 'a');
 
   const afterFonts = document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve();
   Promise.race([afterFonts, new Promise((resolve) => setTimeout(resolve, 2500))]).then(() => {
@@ -424,11 +542,18 @@ function start() {
     initWords();
     initFades();
     initMedia();
+    initTypedLabels();
     initHeroScroll();
+    initWorkVariant(design.choices.work, { finePointer });
     initAngles();
     initMarquee();
     initContact();
+    initScrollPill(lenis);
     ScrollTrigger.refresh();
+    // The dial adds a long scroll of its own, so everything below it is measured again.
+    if (design.choices.experience === 'd') {
+      import('./dial.js').then((module) => module.initDial()).catch(() => null);
+    }
   });
 
   window.addEventListener('load', () => ScrollTrigger.refresh());

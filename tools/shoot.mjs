@@ -68,8 +68,28 @@ try {
   await send('Page.enable');
   await send('Emulation.setDeviceMetricsOverride', { width: W, height: H, deviceScaleFactor: mobile ? 2 : 1, mobile });
   if (mobile) await send('Emulation.setTouchEmulationEnabled', { enabled: true });
+  // SHOOT_THEME=dark photographs the dark theme.
+  const theme = process.env.SHOOT_THEME === 'dark' ? `localStorage.setItem('hm-theme', 'dark')` : `localStorage.removeItem('hm-theme')`;
+  await send('Page.addScriptToEvaluateOnNewDocument', { source: `try { ${theme}; } catch (e) {}` });
   await send('Page.navigate', { url: URL_ });
   await sleep(6500);
+
+  // Optional: sweep the pointer across the hero stage and capture the result mid-stroke.
+  if (process.env.SHOOT_HERO) {
+    const box = await evaluate(`(() => { const s = document.querySelector('[data-hero-stage]'); s.scrollIntoView({ block: 'center' }); const r = s.getBoundingClientRect(); return { x: r.left, y: r.top, w: r.width, h: r.height }; })()`);
+    await sleep(900);
+    const r = await evaluate(`(() => { const r = document.querySelector('[data-hero-stage]').getBoundingClientRect(); return { x: r.left, y: r.top, w: r.width, h: r.height }; })()`);
+    for (let i = 0; i <= 40; i++) {
+      const k = i / 40;
+      const x = r.x + r.w * (0.25 + 0.55 * k);
+      const y = r.y + r.h * (0.5 + 0.28 * Math.sin(k * Math.PI * 2));
+      await send('Input.dispatchMouseEvent', { type: 'mouseMoved', x, y });
+      await sleep(22);
+    }
+    const shot = await send('Page.captureScreenshot', { format: 'png' });
+    await writeFile(path.join(OUT, `${name}-hero-stroke.png`), Buffer.from(shot.result.data, 'base64'));
+    void box;
+  }
 
   const total = await evaluate('document.documentElement.scrollHeight');
   const frames = [];

@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ginti | App concept by Huzaifa Malik</title>
+  <meta name="description" content="A design concept for a money tracking app for freelancers. Ginti is not a real product.">
+  <meta name="robots" content="noindex">
+  <link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
+  <style>
+    @font-face { font-family: "Bricolage"; src: url("../fonts/bricolage-grotesque-latin-wght-normal.woff2") format("woff2"); font-weight: 200 800; font-display: swap; }
+    @font-face { font-family: "Geist"; src: url("../../assets/fonts/geist-latin-wght-normal.woff2") format("woff2"); font-weight: 100 900; font-display: swap; }
+
+    :root { --black: #0c0e0b; --panel: #171a14; --lime: #c8f352; --white: #f4f6ee; --mute: rgba(244, 246, 238, 0.6); --line: rgba(244, 246, 238, 0.12); --pad: clamp(18px, 3vw, 52px); }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--black); color: var(--white); font-family: "Geist", Arial, sans-serif; font-size: clamp(0.92rem, 1.02vw, 1.08rem); line-height: 1.45; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+    a { color: inherit; text-decoration: none; }
+    ul { list-style: none; margin: 0; padding: 0; }
+    h1, p { margin: 0; }
+
+    .page { position: relative; min-height: 100vh; min-height: 100svh; display: grid; grid-template-rows: auto 1fr; overflow: hidden; }
+    .glow { position: absolute; right: 8%; top: 18%; width: 46vw; aspect-ratio: 1; border-radius: 50%; background: radial-gradient(circle, rgba(200, 243, 82, 0.2), transparent 62%); pointer-events: none; }
+
+    .nav { position: relative; z-index: 2; display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: clamp(16px, 1.8vw, 28px) var(--pad); }
+    .brand { display: inline-flex; align-items: center; gap: 10px; font-family: "Bricolage", Arial, sans-serif; font-size: clamp(1.3rem, 1.7vw, 1.7rem); font-weight: 700; letter-spacing: -0.04em; }
+    .brand i { display: grid; place-items: center; width: 1.5em; height: 1.5em; border-radius: 0.45em; background: var(--lime); color: var(--black); font-style: normal; font-size: 0.8em; }
+    .nav ul { display: flex; gap: clamp(16px, 2.4vw, 38px); color: var(--mute); font-weight: 500; }
+    .nav li a:hover { color: var(--white); }
+    .pill { padding: 0.7em 1.25em; border-radius: 999px; box-shadow: inset 0 0 0 1px var(--line); font-weight: 500; }
+
+    .hero { position: relative; z-index: 1; display: grid; grid-template-columns: minmax(0, 1.08fr) minmax(0, 1fr); align-items: center; gap: var(--pad); padding: 0 var(--pad) clamp(46px, 5vw, 70px); }
+    .tagline { display: inline-flex; align-items: center; gap: 10px; margin-bottom: 1.5em; padding: 0.45em 0.95em 0.45em 0.5em; border-radius: 999px; background: var(--panel); font-size: 0.82rem; font-weight: 500; }
+    .tagline b { padding: 0.25em 0.7em; border-radius: 999px; background: var(--lime); color: var(--black); font-weight: 600; }
+    h1 { font-family: "Bricolage", Arial, sans-serif; font-size: clamp(3rem, 7.4vw, 8.6rem); font-weight: 700; line-height: 0.9; letter-spacing: -0.055em; }
+    h1 span { color: var(--lime); }
+    .lead { max-width: 38ch; margin-top: 1.5em; color: var(--mute); font-size: 1.12em; }
+    .actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 2em; }
+    .btn { display: inline-flex; align-items: center; gap: 0.7em; padding: 1.05em 1.7em; border-radius: 16px; font-weight: 600; transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
+    .btn:hover { transform: translateY(-3px); }
+    .btn--lime { background: var(--lime); color: var(--black); }
+    .btn--ghost { box-shadow: inset 0 0 0 1px var(--line); }
+    .points { display: flex; flex-wrap: wrap; gap: 10px 28px; margin-top: 2.2em; color: var(--mute); font-size: 0.92em; }
+    .points li { display: flex; align-items: center; gap: 9px; }
+    .points li::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--lime); }
+
+    /* Phones */
+    .phones { position: relative; height: min(78vh, 52vw); min-height: 420px; }
+    .phone { position: absolute; top: 50%; left: 50%; width: min(34vh, 22.5vw); aspect-ratio: 0.49; padding: 3.2% 3%; border-radius: min(4.6vh, 3vw); background: #050604; box-shadow: 0 0 0 1.5px #2a2e24, 0 50px 80px -30px rgba(0, 0, 0, 0.9), 0 0 0 9px #11130f; font-size: min(1.5vh, 1vw); }
+    .phone--back { transform: translate(-108%, -44%) rotate(-8deg); }
+    .phone--front { transform: translate(-28%, -52%) rotate(5deg); z-index: 2; }
+    .screen { height: 100%; display: flex; flex-direction: column; gap: 4.5%; padding: 13% 7% 7%; border-radius: min(3.6vh, 2.35vw); background: var(--panel); overflow: hidden; }
+    .phone::before { content: ""; position: absolute; left: 50%; top: 3.6%; z-index: 2; width: 30%; height: 3%; border-radius: 999px; background: #050604; transform: translateX(-50%); }
+    .row { display: flex; align-items: center; justify-content: space-between; }
+    .hello { color: var(--mute); }
+    .hello b { display: block; color: var(--white); font-family: "Bricolage", Arial, sans-serif; font-size: 1.5em; letter-spacing: -0.03em; }
+    .avatar { width: 2.6em; height: 2.6em; border-radius: 50%; background: linear-gradient(135deg, var(--lime), #6fae2a); }
+    .balance { padding: 8% 7%; border-radius: 1.5em; background: var(--lime); color: var(--black); }
+    .balance small { font-size: 0.95em; font-weight: 500; opacity: 0.7; }
+    .balance strong { display: block; margin-top: 0.15em; font-family: "Bricolage", Arial, sans-serif; font-size: 2.7em; line-height: 1; letter-spacing: -0.05em; }
+    .balance em { display: inline-block; margin-top: 0.9em; padding: 0.3em 0.75em; border-radius: 999px; background: rgba(12, 14, 11, 0.12); font-style: normal; font-size: 0.9em; font-weight: 600; }
+    .title { color: var(--mute); font-size: 0.95em; font-weight: 500; }
+    .bars { flex: 1; display: flex; align-items: flex-end; gap: 6%; min-height: 0; padding-top: 4%; }
+    .bars i { flex: 1; border-radius: 0.5em 0.5em 0.2em 0.2em; background: #2a3020; }
+    .bars i.on { background: var(--lime); }
+    .list { display: grid; gap: 0.75em; }
+    .list li { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 0.9em; padding: 0.8em; border-radius: 1.1em; background: #1f241a; }
+    .list i { width: 2.3em; height: 2.3em; border-radius: 0.8em; background: #2f3725; }
+    .list li:nth-child(odd) i { background: rgba(200, 243, 82, 0.28); }
+    .list b { display: block; font-weight: 600; line-height: 1.2; }
+    .list small { color: var(--mute); font-size: 0.85em; }
+    .list em { font-style: normal; font-weight: 600; }
+    .list em.in { color: var(--lime); }
+    .ring { position: relative; width: 62%; aspect-ratio: 1; margin: 2% auto; border-radius: 50%; background: conic-gradient(var(--lime) 0 68%, #2a3020 68% 100%); }
+    .ring::before { content: ""; position: absolute; inset: 13%; border-radius: 50%; background: var(--panel); }
+    .ring span { position: absolute; inset: 0; display: grid; place-content: center; text-align: center; font-family: "Bricolage", Arial, sans-serif; font-size: 2.3em; font-weight: 700; letter-spacing: -0.04em; line-height: 1; }
+    .ring small { display: block; margin-top: 0.4em; color: var(--mute); font-family: "Geist", Arial, sans-serif; font-size: 0.4em; font-weight: 500; letter-spacing: 0; }
+    .toast { position: absolute; right: 0; top: 13%; z-index: 3; display: flex; align-items: center; gap: 12px; padding: 12px 18px 12px 12px; border-radius: 18px; background: var(--white); color: var(--black); box-shadow: 0 24px 40px -18px rgba(0, 0, 0, 0.8); font-size: min(1.7vh, 1.05vw); font-weight: 600; white-space: nowrap; animation: float 5s ease-in-out infinite alternate; }
+    .toast i { display: grid; place-items: center; width: 2.6em; height: 2.6em; border-radius: 0.9em; background: var(--lime); font-style: normal; }
+    .toast small { display: block; font-weight: 500; opacity: 0.6; }
+    @keyframes float { to { transform: translateY(-10px); } }
+
+    .credit { position: fixed; left: 50%; bottom: 10px; z-index: 10; padding: 0.5em 1em; border-radius: 999px; background: rgba(244, 246, 238, 0.92); color: var(--black); font-size: 0.72rem; letter-spacing: 0.04em; transform: translateX(-50%); white-space: nowrap; }
+    .credit a { text-decoration: underline; text-underline-offset: 3px; }
+
+    @media (max-width: 860px) {
+      .nav ul { display: none; }
+      .hero { grid-template-columns: 1fr; padding-top: 16px; }
+      .phones { height: 108vw; }
+      .phone { width: 46vw; font-size: 2vw; border-radius: 6vw; }
+      .screen { border-radius: 4.8vw; }
+      .toast { font-size: 2.6vw; right: 2%; }
+    }
+    @media (prefers-reduced-motion: reduce) { .toast { animation: none; } }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div class="glow"></div>
+
+    <header class="nav">
+      <a class="brand" href="#"><i>G</i>Ginti</a>
+      <ul>
+        <li><a href="#">Features</a></li>
+        <li><a href="#">For freelancers</a></li>
+        <li><a href="#">Pricing</a></li>
+      </ul>
+      <a class="pill" href="#">Get the app</a>
+    </header>
+
+    <main class="hero">
+      <div>
+        <p class="tagline"><b>New</b> Invoices now live inside the app</p>
+        <h1>Know where every <span>rupee</span> went.</h1>
+        <p class="lead">Ginti is a money tracker made for freelancers. Log income in three taps, see what each client really pays, and keep tax money aside without a spreadsheet.</p>
+        <div class="actions">
+          <a class="btn btn--lime" href="#">Download free <span aria-hidden="true">&darr;</span></a>
+          <a class="btn btn--ghost" href="#">See how it works</a>
+        </div>
+        <ul class="points">
+          <li>Works offline</li>
+          <li>Urdu and English</li>
+          <li>No bank login needed</li>
+        </ul>
+      </div>
+
+      <div class="phones" aria-label="Two phone screens from the Ginti app">
+        <div class="toast"><i>+</i><span>Rs 45,000 received<small>Landing page, final payment</small></span></div>
+
+        <div class="phone phone--back">
+          <div class="screen">
+            <div class="row"><span class="hello">Savings goal<b>New laptop</b></span></div>
+            <div class="ring"><span>68%<small>Rs 204,000 of 300,000</small></span></div>
+            <p class="title">This month by client</p>
+            <ul class="list">
+              <li><i></i><span><b>Store redesign</b><small>2 invoices</small></span><em class="in">+85,000</em></li>
+              <li><i></i><span><b>Logo and brand</b><small>1 invoice</small></span><em class="in">+30,000</em></li>
+              <li><i></i><span><b>Monthly care plan</b><small>Repeats on the 1st</small></span><em class="in">+15,000</em></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="phone phone--front">
+          <div class="screen">
+            <div class="row"><span class="hello">Good evening<b>Your money</b></span><span class="avatar"></span></div>
+            <div class="balance"><small>Earned this month</small><strong>Rs 184,500</strong><em>+22% on last month</em></div>
+            <p class="title">Last 7 days</p>
+            <div class="bars"><i style="height:38%"></i><i style="height:62%"></i><i style="height:30%"></i><i class="on" style="height:92%"></i><i style="height:54%"></i><i style="height:70%"></i><i style="height:24%"></i></div>
+            <ul class="list">
+              <li><i></i><span><b>Client payment</b><small>Today, 4:12 pm</small></span><em class="in">+45,000</em></li>
+              <li><i></i><span><b>Hosting renewal</b><small>Yesterday</small></span><em>-6,200</em></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <p class="credit">Design concept by <a href="/">Huzaifa Malik</a>. Ginti is not a real product.</p>
+</body>
+</html>

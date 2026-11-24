@@ -43,8 +43,6 @@ await sharp('D:/quran-classroom/test/out/04-teacher-quran.png')
   .webp({ quality: 86 })
   .toFile(path.join(OUT, 'work-quran.webp'));
 
-await sharp('tools/shots/exam-guide.png').webp({ quality: 86 }).toFile(path.join(OUT, 'work-examguide.webp'));
-
 // Social preview card.
 const og = Buffer.from(`<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630">
   <rect width="1200" height="630" fill="#ecebe7"/>

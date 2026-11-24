@@ -1,0 +1,1230 @@
+/* Alternative layouts for each section, chosen with data-variant on the section.
+   Variant "a" is the default and lives in style.css. Once the layouts are chosen,
+   the unused ones here can be deleted. */
+
+/* =====================================================================
+   WORK
+   ===================================================================== */
+
+/* ---------- Work B: index list with a picture that follows the pointer ---------- */
+
+.work[data-variant="b"] .work__grid {
+  display: block;
+  counter-reset: project;
+  border-top: 1px solid var(--line);
+}
+.work[data-variant="b"] .card {
+  position: relative;
+  display: grid;
+  grid-template-columns: 3.4em minmax(0, 1.5fr) minmax(0, 0.7fr) auto;
+  align-items: center;
+  gap: var(--gap);
+  margin: 0;
+  padding: clamp(16px, 2.1vw, 34px) 0;
+  border-bottom: 1px solid var(--line);
+  counter-increment: project;
+  transition: padding 0.6s var(--ease), color 0.35s var(--ease);
+}
+.work[data-variant="b"] .card::before {
+  content: counter(project, decimal-leading-zero);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  color: var(--mute);
+}
+.work[data-variant="b"] .card__media {
+  display: none;
+}
+.work[data-variant="b"] .card__info,
+.work[data-variant="b"] .card__row {
+  display: contents;
+}
+.work[data-variant="b"] .card h3 {
+  order: 1;
+  font-size: clamp(2rem, 5.6vw, 6.4rem);
+  line-height: 0.95;
+  letter-spacing: -0.05em;
+}
+.work[data-variant="b"] .card__type {
+  order: 2;
+  display: block;
+}
+.work[data-variant="b"] .card .tag {
+  order: 3;
+}
+.work[data-variant="b"] .card p,
+.work[data-variant="b"] .card__tags {
+  display: none;
+}
+.work[data-variant="b"] .card--next h3 {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 400;
+  color: var(--accent);
+}
+@media (hover: hover) {
+  .work[data-variant="b"] .card:hover {
+    padding-left: 1.4em;
+    color: var(--accent);
+  }
+}
+html[data-work="b"] .cursor {
+  display: none;
+}
+.work-preview {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 80;
+  width: clamp(280px, 30vw, 520px);
+  aspect-ratio: 16 / 9;
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: var(--paper-2);
+  box-shadow: 0 40px 70px -30px rgba(12, 12, 13, 0.5);
+  pointer-events: none;
+  opacity: 0;
+  scale: 0.8;
+  transition: opacity 0.35s var(--ease), scale 0.55s var(--ease);
+}
+.work-preview.is-on {
+  opacity: 1;
+  scale: 1;
+}
+.work-preview img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 0.35s;
+}
+.work-preview img.is-on {
+  opacity: 1;
+}
+@media (max-width: 700px) {
+  .work[data-variant="b"] .card {
+    grid-template-columns: 1fr auto;
+    gap: 10px 12px;
+    padding: 18px 0 22px;
+  }
+  .work[data-variant="b"] .card::before {
+    display: none;
+  }
+  .work[data-variant="b"] .card__media {
+    display: block;
+    grid-column: 1 / -1;
+  }
+  .work[data-variant="b"] .card__media--next {
+    display: flex;
+  }
+  .work[data-variant="b"] .card__type {
+    display: none;
+  }
+  .work[data-variant="b"] .card h3 {
+    font-size: 2rem;
+  }
+}
+
+/* ---------- Work C: sideways slider driven by the scroll ---------- */
+
+.work[data-variant="c"] {
+  overflow-x: clip;
+}
+.work[data-variant="c"] .work__viewport {
+  margin-top: clamp(28px, 4vw, 60px);
+}
+.work[data-variant="c"] .work__grid {
+  display: flex;
+  gap: var(--gap);
+  width: max-content;
+  margin-top: 0;
+  will-change: transform;
+}
+.work[data-variant="c"] .card {
+  flex: none;
+  width: min(54vw, 900px);
+  margin: 0;
+}
+.work[data-variant="c"] .card__type {
+  display: block;
+}
+@media (max-width: 700px) {
+  .work[data-variant="c"] .work__viewport {
+    margin-inline: calc(var(--pad) * -1);
+    padding-inline: var(--pad);
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+  }
+  .work[data-variant="c"] .work__viewport::-webkit-scrollbar {
+    display: none;
+  }
+  .work[data-variant="c"] .card {
+    width: 82vw;
+    scroll-snap-align: center;
+  }
+}
+
+/* ---------- Work D: large cards that stack as you scroll ---------- */
+
+.work[data-variant="d"] .work__grid {
+  display: block;
+}
+.work[data-variant="d"] .card {
+  position: sticky;
+  top: calc(clamp(76px, 7vw, 104px) + var(--i, 0) * 12px);
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+  align-items: center;
+  gap: clamp(18px, 3vw, 56px);
+  margin: 0 0 clamp(18px, 2.4vw, 40px);
+  padding: clamp(12px, 1.3vw, 22px);
+  border-radius: calc(var(--radius) + 8px);
+  background: var(--card);
+  box-shadow: 0 -18px 50px -34px rgba(12, 12, 13, 0.45), inset 0 0 0 1px var(--hairline);
+}
+.work[data-variant="d"] .card:nth-child(1) { --i: 0; }
+.work[data-variant="d"] .card:nth-child(2) { --i: 1; }
+.work[data-variant="d"] .card:nth-child(3) { --i: 2; }
+.work[data-variant="d"] .card:nth-child(4) { --i: 3; }
+.work[data-variant="d"] .card:nth-child(5) { --i: 4; }
+.work[data-variant="d"] .card:nth-child(6) { --i: 5; }
+.work[data-variant="d"] .card:nth-child(7) { --i: 6; }
+.work[data-variant="d"] .card:nth-child(8) { --i: 7; }
+.work[data-variant="d"] .card__info {
+  gap: 14px;
+  padding: clamp(6px, 1.4vw, 24px) clamp(6px, 2vw, 40px) clamp(10px, 1.4vw, 24px) 0;
+}
+.work[data-variant="d"] .card__type {
+  display: block;
+  color: var(--accent);
+}
+.work[data-variant="d"] .card__row {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 14px;
+}
+.work[data-variant="d"] .card h3 {
+  font-size: clamp(2.2rem, 4.8vw, 5.4rem);
+  line-height: 0.95;
+  letter-spacing: -0.05em;
+}
+.work[data-variant="d"] .card p {
+  font-size: clamp(1rem, 1.25vw, 1.3rem);
+}
+@media (max-width: 700px) {
+  .work[data-variant="d"] .card {
+    grid-template-columns: 1fr;
+    gap: 6px;
+  }
+  .work[data-variant="d"] .card__info {
+    padding: 12px 8px 14px;
+  }
+}
+
+/* =====================================================================
+   ABOUT
+   ===================================================================== */
+
+/* ---------- About B: tall photo that stays put while the text scrolls ---------- */
+
+.about[data-variant="b"] {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: var(--gap);
+  align-items: start;
+}
+.about[data-variant="b"] .sec-head {
+  grid-column: 1 / -1;
+}
+.about[data-variant="b"] .about__grid {
+  display: contents;
+}
+.about[data-variant="b"] .about__photo-main {
+  grid-column: 1 / span 5;
+  grid-row: 2 / span 2;
+  position: sticky;
+  top: clamp(80px, 8vw, 120px);
+  aspect-ratio: 3 / 4;
+  max-height: calc(100svh - 140px);
+}
+.about[data-variant="b"] .about__lead {
+  grid-column: 7 / -1;
+  grid-row: 2;
+  width: auto;
+  font-size: clamp(1.7rem, 3.3vw, 3.8rem);
+}
+.about[data-variant="b"] .about__copy {
+  grid-column: 7 / -1;
+  grid-row: 3;
+  margin-top: clamp(36px, 5vw, 90px);
+  padding-top: 0;
+  max-width: 34rem;
+}
+.about[data-variant="b"] .about__photo-side {
+  display: none;
+}
+@media (max-width: 700px) {
+  .about[data-variant="b"] {
+    display: block;
+  }
+  .about[data-variant="b"] .about__grid {
+    display: grid;
+  }
+  .about[data-variant="b"] .about__photo-main {
+    position: relative;
+    top: 0;
+    max-height: none;
+  }
+  .about[data-variant="b"] .about__photo-main,
+  .about[data-variant="b"] .about__copy {
+    grid-column: 1 / -1;
+    grid-row: auto;
+    margin-top: 0;
+  }
+  .about[data-variant="b"] .about__lead {
+    font-size: clamp(1.9rem, 4.7vw, 5.4rem);
+  }
+}
+
+/* ---------- About C: centred statement, two photos, facts as tiles ---------- */
+
+.about[data-variant="c"] .about__lead {
+  width: min(100%, 19em);
+  margin-inline: auto;
+  text-align: center;
+}
+.about[data-variant="c"] .about__grid {
+  align-items: stretch;
+}
+.about[data-variant="c"] .about__photo-main {
+  grid-column: 1 / span 4;
+  grid-row: 1;
+  aspect-ratio: 3 / 4;
+}
+.about[data-variant="c"] .about__photo-side {
+  grid-column: 5 / span 4;
+  grid-row: 1;
+  aspect-ratio: 3 / 4;
+  margin-top: 0;
+}
+.about[data-variant="c"] .about__copy {
+  grid-column: 9 / span 4;
+  grid-row: 1;
+  align-content: start;
+  padding-top: 0;
+}
+.about[data-variant="c"] .facts {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  border: 0;
+}
+.about[data-variant="c"] .facts div {
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 1.6em;
+  min-height: 7.2em;
+  padding: 1em 1.1em;
+  border: 0;
+  border-radius: calc(var(--radius) * 0.7);
+  background: var(--card);
+}
+.about[data-variant="c"] .facts div:first-child {
+  background: var(--blue);
+  color: #fff;
+}
+.about[data-variant="c"] .facts div:first-child dt {
+  color: rgba(255, 255, 255, 0.75);
+}
+.about[data-variant="c"] .facts dd {
+  font-size: 1.2em;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  text-align: left;
+}
+@media (max-width: 1000px) {
+  .about[data-variant="c"] .about__photo-main {
+    grid-column: 1 / span 6;
+  }
+  .about[data-variant="c"] .about__photo-side {
+    display: block;
+    grid-column: 7 / span 6;
+  }
+  .about[data-variant="c"] .about__copy {
+    grid-column: 1 / -1;
+    grid-row: 2;
+  }
+}
+@media (max-width: 700px) {
+  .about[data-variant="c"] .about__lead {
+    text-align: left;
+  }
+  .about[data-variant="c"] .about__grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  .about[data-variant="c"] .about__photo-main {
+    grid-column: 1;
+  }
+  .about[data-variant="c"] .about__photo-side {
+    grid-column: 2;
+  }
+  .about[data-variant="c"] .about__copy {
+    margin-top: 20px;
+  }
+}
+
+/* =====================================================================
+   SERVICES
+   ===================================================================== */
+
+/* ---------- Services B: six cards ---------- */
+
+.services[data-variant="b"] .svc {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--gap);
+  border: 0;
+}
+.services[data-variant="b"] .svc__item {
+  display: flex;
+  flex-direction: column;
+  min-height: clamp(17rem, 24vw, 24rem);
+  padding: clamp(20px, 2.1vw, 34px);
+  border: 0;
+  border-radius: var(--radius);
+  background: var(--card);
+  transition: background-color 0.45s var(--ease), color 0.45s var(--ease), transform 0.6s var(--ease);
+}
+.services[data-variant="b"] .svc__item::before {
+  display: none;
+}
+.services[data-variant="b"] .svc__head {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0;
+  padding: 0;
+  color: inherit;
+  cursor: default;
+}
+.services[data-variant="b"] .svc__num {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: clamp(2.6rem, 4.2vw, 4.6rem);
+  line-height: 0.9;
+  letter-spacing: -0.02em;
+  color: var(--accent);
+}
+.services[data-variant="b"] .svc__title {
+  margin-top: auto;
+  padding-top: 1.2em;
+  font-size: clamp(1.5rem, 2.2vw, 2.5rem);
+  line-height: 1.02;
+}
+.services[data-variant="b"] .svc__tags {
+  display: block;
+  margin-top: 0.8em;
+  color: var(--mute);
+}
+.services[data-variant="b"] .svc__icon {
+  display: none;
+}
+.services[data-variant="b"] .svc__body {
+  grid-template-rows: 1fr;
+}
+.services[data-variant="b"] .svc__body p {
+  max-width: none;
+  margin: 1em 0 0;
+  padding: 0;
+  font-size: 1rem;
+  color: var(--ink-2);
+  transition: color 0.45s var(--ease);
+}
+@media (hover: hover) {
+  .services[data-variant="b"] .svc__item:hover {
+    background: var(--ink);
+    color: var(--on-ink);
+    transform: translateY(-6px);
+  }
+  .services[data-variant="b"] .svc__item:hover .svc__num {
+    color: var(--accent-on-ink);
+  }
+  .services[data-variant="b"] .svc__item:hover .svc__tags {
+    color: color-mix(in srgb, var(--on-ink) 60%, transparent);
+  }
+  .services[data-variant="b"] .svc__item:hover .svc__body p {
+    color: color-mix(in srgb, var(--on-ink) 75%, transparent);
+  }
+  .services[data-variant="b"] .svc__item:hover .svc__head {
+    padding: 0;
+  }
+}
+@media (max-width: 1000px) {
+  .services[data-variant="b"] .svc {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 700px) {
+  .services[data-variant="b"] .svc {
+    grid-template-columns: 1fr;
+  }
+  .services[data-variant="b"] .svc__item {
+    min-height: 0;
+  }
+  .services[data-variant="b"] .svc__title {
+    margin-top: 0.6em;
+    padding-top: 0;
+  }
+}
+
+/* ---------- Services C: heading on the left, everything open on the right ---------- */
+
+.services[data-variant="c"] {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: var(--gap);
+  align-items: start;
+}
+.services[data-variant="c"] .sec-head {
+  grid-column: 1 / -1;
+}
+.services[data-variant="c"] .h2 {
+  grid-column: 1 / span 5;
+  position: sticky;
+  top: clamp(90px, 9vw, 130px);
+  font-size: clamp(2.4rem, 5vw, 5.6rem);
+}
+.services[data-variant="c"] .svc {
+  grid-column: 7 / -1;
+  margin-top: 0;
+}
+.services[data-variant="c"] .svc__item::before {
+  display: none;
+}
+.services[data-variant="c"] .svc__head {
+  grid-template-columns: 2.6em minmax(0, 1fr);
+  align-items: baseline;
+  gap: 4px var(--gap);
+  padding: clamp(20px, 2.2vw, 34px) 0 0;
+  color: inherit;
+  cursor: default;
+}
+.services[data-variant="c"] .svc__num {
+  color: var(--accent);
+}
+.services[data-variant="c"] .svc__title {
+  font-size: clamp(1.6rem, 2.8vw, 3.2rem);
+}
+.services[data-variant="c"] .svc__tags {
+  display: block;
+  grid-column: 2;
+  color: var(--mute);
+}
+.services[data-variant="c"] .svc__icon {
+  display: none;
+}
+.services[data-variant="c"] .svc__body {
+  grid-template-rows: 1fr;
+}
+.services[data-variant="c"] .svc__body p {
+  margin: 0.9em 0 0 calc(2.6em + var(--gap));
+  padding-bottom: clamp(20px, 2.2vw, 34px);
+  color: var(--ink-2);
+}
+@media (hover: hover) {
+  .services[data-variant="c"] .svc__item .svc__head:hover {
+    padding-left: 0;
+  }
+}
+@media (max-width: 1000px) {
+  .services[data-variant="c"] {
+    display: block;
+  }
+  .services[data-variant="c"] .h2 {
+    position: static;
+  }
+  .services[data-variant="c"] .svc {
+    margin-top: clamp(28px, 5vw, 60px);
+  }
+}
+@media (max-width: 700px) {
+  .services[data-variant="c"] .svc__head {
+    grid-template-columns: 2em minmax(0, 1fr);
+  }
+  .services[data-variant="c"] .svc__body p {
+    margin-left: calc(2em + var(--gap));
+  }
+}
+
+/* =====================================================================
+   EXPERIENCE
+   ===================================================================== */
+
+/* ---------- Experience B: two cards side by side ---------- */
+
+.exp[data-variant="b"] .exp__photo {
+  display: none;
+}
+.exp[data-variant="b"] .exp__cols {
+  grid-column: 1 / -1;
+}
+.exp[data-variant="b"] .exp__lists {
+  grid-template-columns: 1fr 1fr;
+  gap: var(--gap);
+}
+.exp[data-variant="b"] .exp__lists > div {
+  padding: clamp(22px, 2.4vw, 40px);
+  border-radius: var(--radius);
+  background: var(--card);
+}
+.exp[data-variant="b"] .exp__lists > div:last-child {
+  background: var(--ink);
+  color: var(--on-ink);
+}
+.exp[data-variant="b"] .exp__lists > div:last-child .list-title,
+.exp[data-variant="b"] .exp__lists > div:last-child .timeline__year,
+.exp[data-variant="b"] .exp__lists > div:last-child .timeline__what small {
+  color: color-mix(in srgb, var(--on-ink) 60%, transparent);
+}
+.exp[data-variant="b"] .exp__lists > div:last-child .timeline,
+.exp[data-variant="b"] .exp__lists > div:last-child .timeline li {
+  border-color: var(--line-light);
+}
+.exp[data-variant="b"] .timeline li:last-child {
+  border-bottom: 0;
+  padding-bottom: 0;
+}
+.exp[data-variant="b"] .timeline li {
+  grid-template-columns: minmax(0, 7.5em) minmax(0, 1fr);
+}
+@media (max-width: 800px) {
+  .exp[data-variant="b"] .exp__lists {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ---------- Experience C: years set large, photo on the right ---------- */
+
+.exp[data-variant="c"] .exp__cols {
+  grid-column: 1 / span 8;
+  grid-row: 1;
+}
+.exp[data-variant="c"] .exp__photo {
+  grid-column: 10 / span 3;
+  grid-row: 1;
+}
+.exp[data-variant="c"] .timeline li {
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1fr);
+  align-items: center;
+}
+.exp[data-variant="c"] .timeline__year {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: clamp(1.8rem, 4vw, 4.6rem);
+  line-height: 1;
+  letter-spacing: -0.03em;
+  color: var(--accent);
+}
+.exp[data-variant="c"] .timeline__what {
+  font-size: clamp(1.1rem, 1.7vw, 1.8rem);
+  letter-spacing: -0.025em;
+}
+@media (max-width: 1000px) {
+  .exp[data-variant="c"] .exp__cols {
+    grid-column: 1 / span 8;
+  }
+  .exp[data-variant="c"] .exp__photo {
+    grid-column: 9 / span 4;
+  }
+}
+@media (max-width: 700px) {
+  .exp[data-variant="c"] .exp__cols,
+  .exp[data-variant="c"] .exp__photo {
+    grid-column: 1 / -1;
+    grid-row: auto;
+  }
+  .exp[data-variant="c"] .timeline li {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ---------- Experience D: a dial that turns through the years ---------- */
+/* Built by src/dial.js, which adds .is-dial. Until then (or with motion turned off)
+   this choice looks like the first layout. */
+
+.exp.is-dial .exp__photo {
+  display: none;
+}
+.exp.is-dial .exp__cols {
+  grid-column: 1 / -1;
+}
+/* The dial shows the freelance list, so the list itself is left for screen readers only. */
+.exp.is-dial .exp__lists > div:first-child {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+.exp.is-dial .exp__lists {
+  width: min(100%, 46rem);
+  margin: 0 0 0 auto;
+}
+.dial {
+  position: relative;
+  height: 260vh;
+  height: 260svh;
+}
+.dial__sticky {
+  position: sticky;
+  top: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: clamp(20px, 4vw, 80px);
+  height: 100vh;
+  height: 100svh;
+}
+.dial__side {
+  display: grid;
+  gap: clamp(16px, 2vw, 30px);
+}
+.dial__kicker {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: clamp(2.2rem, 4.6vw, 5rem);
+  line-height: 1;
+  letter-spacing: -0.03em;
+  color: var(--accent);
+}
+.dial__legend {
+  max-width: 31rem;
+  border-top: 1px solid var(--line);
+}
+.dial__legend li {
+  display: grid;
+  grid-template-columns: 10px 7.6em minmax(0, 1fr);
+  align-items: baseline;
+  gap: 14px;
+  padding: 0.85em 0;
+  border-bottom: 1px solid var(--line);
+  opacity: 0.26;
+  transition: opacity 0.5s var(--ease);
+}
+.dial__legend li.is-on {
+  opacity: 1;
+}
+.dial__legend i {
+  align-self: center;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--blue);
+}
+.dial__legend li.is-study i {
+  background: var(--ink);
+}
+.dial__legend span {
+  font-size: 0.875rem;
+  color: var(--mute);
+  font-variant-numeric: tabular-nums;
+}
+.dial__legend b {
+  font-size: clamp(1.05rem, 1.5vw, 1.5rem);
+  font-weight: 500;
+  line-height: 1.15;
+  letter-spacing: -0.03em;
+}
+.dial__face {
+  position: relative;
+  width: min(54vw, 84svh);
+  aspect-ratio: 1;
+}
+.dial__svg {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+.dial__ring {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 2.5;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+}
+.dial__ticks line {
+  stroke: var(--ink);
+  stroke-width: 1.5;
+  opacity: 0.3;
+}
+.dial__ticks line.is-year {
+  stroke-width: 2.5;
+  opacity: 0.85;
+}
+.dial__years text {
+  font-family: var(--sans);
+  font-size: 23px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  fill: var(--mute);
+}
+.dial__arc {
+  fill: none;
+  stroke: var(--blue);
+  stroke-width: 17;
+  stroke-linecap: round;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  opacity: 0;
+}
+.dial__arc.is-study {
+  stroke: var(--ink);
+}
+.dial__hand line {
+  stroke: var(--ink);
+  stroke-width: 5;
+  stroke-linecap: round;
+}
+.dial__hand circle {
+  fill: var(--ink);
+  stroke: var(--paper);
+  stroke-width: 5;
+}
+.dial__count {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  text-align: center;
+}
+/* The number is an outline while the hand is moving and fills in when it arrives. */
+.dial__count span {
+  font-size: min(15vw, 24svh);
+  font-weight: 500;
+  line-height: 0.8;
+  letter-spacing: -0.06em;
+  font-variant-numeric: tabular-nums;
+  color: transparent;
+  -webkit-text-stroke: 1.5px var(--ink);
+  transition: color 0.7s var(--ease);
+}
+.dial.is-full .dial__count span {
+  color: var(--ink);
+}
+.dial__count small {
+  margin-top: 1.2em;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--mute);
+}
+@media (max-width: 800px) {
+  .dial__sticky {
+    grid-template-columns: 1fr;
+    align-content: center;
+    justify-items: center;
+    gap: 14px;
+  }
+  .dial__face {
+    order: -1;
+    width: min(88vw, 50svh);
+  }
+  .dial__side {
+    width: 100%;
+  }
+  .dial__kicker {
+    display: none;
+  }
+  .dial__legend li {
+    padding: 0.5em 0;
+  }
+  .dial__count span {
+    font-size: min(17vw, 12svh);
+    -webkit-text-stroke-width: 1px;
+  }
+  .dial__years text {
+    font-size: 30px;
+  }
+}
+
+/* =====================================================================
+   PRICING
+   ===================================================================== */
+
+/* ---------- Pricing B: one row per plan ---------- */
+
+.pricing[data-variant="b"] .plans {
+  display: block;
+  border-top: 1px solid var(--line);
+}
+.pricing[data-variant="b"] .plan {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.5fr) auto auto;
+  grid-template-areas: "head desc price btn" "head list price btn";
+  align-items: center;
+  gap: 10px clamp(18px, 3vw, 56px);
+  padding: clamp(22px, 2.6vw, 44px) clamp(0px, 1.6vw, 28px);
+  border-radius: 0;
+  border-bottom: 1px solid var(--line);
+  background: none;
+}
+.pricing[data-variant="b"] .plan header {
+  grid-area: head;
+}
+.pricing[data-variant="b"] .plan__desc {
+  grid-area: desc;
+  align-self: end;
+}
+.pricing[data-variant="b"] .plan ul {
+  grid-area: list;
+  align-self: start;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0;
+  border: 0;
+  font-size: 0.8125rem;
+}
+.pricing[data-variant="b"] .plan li {
+  gap: 8px;
+  padding: 0.4em 0.85em;
+  border: 0;
+  border-radius: 999px;
+  box-shadow: inset 0 0 0 1px var(--line);
+}
+.pricing[data-variant="b"] .plan__price {
+  grid-area: price;
+  font-size: clamp(2.6rem, 4.6vw, 5.2rem);
+}
+.pricing[data-variant="b"] .plan__price span {
+  margin-top: 0.9em;
+}
+.pricing[data-variant="b"] .plan .btn {
+  grid-area: btn;
+  width: auto;
+  margin: 0;
+}
+.pricing[data-variant="b"] .plan--featured {
+  margin-block: -1px;
+  border-color: transparent;
+  border-radius: var(--radius);
+  background: var(--blue);
+  padding-inline: clamp(18px, 2.2vw, 36px);
+}
+.pricing[data-variant="b"] .plan--featured li {
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.35);
+}
+@media (max-width: 1000px) {
+  .pricing[data-variant="b"] .plan {
+    grid-template-columns: 1fr auto;
+    grid-template-areas: "head price" "desc desc" "list list" "btn btn";
+    align-items: start;
+  }
+  .pricing[data-variant="b"] .plan .btn {
+    width: 100%;
+    margin-top: 10px;
+  }
+}
+
+/* ---------- Pricing C: dark panel ---------- */
+
+.pricing[data-variant="c"] {
+  margin: clamp(90px, 12vw, 200px) clamp(6px, 0.8vw, 14px) 0;
+  padding: clamp(28px, 3.4vw, 60px) calc(var(--pad) - clamp(6px, 0.8vw, 14px)) clamp(28px, 3.4vw, 60px);
+  border-radius: var(--radius);
+  background: var(--ink);
+  color: var(--paper);
+}
+.pricing[data-variant="c"] .sec-head {
+  border-color: var(--line-light);
+}
+.pricing[data-variant="c"] .sec-head span:first-child {
+  color: var(--accent-on-ink);
+}
+.pricing[data-variant="c"] .work__head p,
+.pricing[data-variant="c"] .plans__note {
+  color: color-mix(in srgb, var(--paper) 65%, transparent);
+}
+.pricing[data-variant="c"] .plan {
+  background: color-mix(in srgb, var(--paper) 6%, var(--ink));
+  box-shadow: inset 0 0 0 1px var(--line-light);
+}
+.pricing[data-variant="c"] .plan__kicker,
+.pricing[data-variant="c"] .plan__price span {
+  color: color-mix(in srgb, var(--paper) 55%, transparent);
+}
+.pricing[data-variant="c"] .plan__desc {
+  color: color-mix(in srgb, var(--paper) 82%, transparent);
+}
+.pricing[data-variant="c"] .plan ul,
+.pricing[data-variant="c"] .plan li {
+  border-color: var(--line-light);
+}
+.pricing[data-variant="c"] .plan .btn--line {
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--paper) 35%, transparent);
+}
+.pricing[data-variant="c"] .plan .btn--line:hover {
+  background: var(--paper);
+  color: var(--ink);
+  box-shadow: none;
+}
+.pricing[data-variant="c"] .plan--featured {
+  background: var(--paper);
+  color: var(--ink);
+  box-shadow: none;
+}
+.pricing[data-variant="c"] .plan--featured .plan__kicker,
+.pricing[data-variant="c"] .plan--featured .plan__price span {
+  color: var(--mute);
+}
+.pricing[data-variant="c"] .plan--featured .plan__desc {
+  color: var(--ink-2);
+}
+.pricing[data-variant="c"] .plan--featured ul,
+.pricing[data-variant="c"] .plan--featured li {
+  border-color: var(--line);
+}
+.pricing[data-variant="c"] .plan--featured li::before {
+  background: var(--blue);
+}
+.pricing[data-variant="c"] .plan--featured .btn {
+  background: var(--blue);
+  color: #fff;
+}
+.pricing[data-variant="c"] .plan--featured .btn:hover {
+  background: var(--ink);
+  color: var(--on-ink);
+}
+
+/* =====================================================================
+   CONTACT
+   ===================================================================== */
+
+/* ---------- Contact B: everything centred, figure standing below ---------- */
+
+.contact[data-variant="b"] .contact__inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 0;
+  padding-bottom: 0;
+  text-align: center;
+}
+.contact[data-variant="b"] .sec-head {
+  align-self: stretch;
+}
+.contact[data-variant="b"] .contact__title {
+  max-width: none;
+  font-size: clamp(3.2rem, 13.4vw, 17rem);
+}
+.contact[data-variant="b"] .contact__body {
+  justify-items: center;
+  width: min(100%, 44rem);
+}
+.contact[data-variant="b"] .contact__actions {
+  justify-content: center;
+}
+.contact[data-variant="b"] .contact__list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  border: 0;
+}
+.contact[data-variant="b"] .contact__list div {
+  flex-direction: column;
+  gap: 2px;
+  padding: 0.8em 1.3em;
+  border: 0;
+  border-radius: calc(var(--radius) * 0.7);
+  background: var(--card);
+  text-align: left;
+}
+.contact[data-variant="b"] .contact__list dt {
+  font-size: 0.8125rem;
+}
+html[data-theme="dark"] .contact[data-variant="b"] .contact__inner::after {
+  right: auto;
+  left: 50%;
+  bottom: -30%;
+  width: min(96vw, 100svh);
+  transform: translateX(-50%);
+}
+.contact[data-variant="b"] .contact__figure {
+  position: relative;
+  right: auto;
+  bottom: -3px;
+  display: block;
+  width: auto;
+  height: min(70svh, 105vw);
+  margin: clamp(24px, 3vw, 50px) auto 0;
+}
+
+/* ---------- Contact C: blue panel ---------- */
+
+.contact[data-variant="c"] {
+  padding: 0 clamp(6px, 0.8vw, 14px);
+  margin-bottom: clamp(6px, 0.8vw, 14px);
+}
+.contact[data-variant="c"] .contact__inner {
+  overflow: hidden;
+  padding: clamp(24px, 3vw, 52px) calc(var(--pad) - clamp(6px, 0.8vw, 14px)) clamp(48px, 7vw, 120px);
+  border-radius: var(--radius);
+  background: var(--blue);
+  color: #fff;
+}
+html[data-theme="dark"] .contact[data-variant="c"] .contact__inner::after {
+  display: none;
+}
+.contact[data-variant="c"] .sec-head {
+  border-color: rgba(255, 255, 255, 0.3);
+}
+.contact[data-variant="c"] .sec-head span:first-child,
+.contact[data-variant="c"] .contact__title em {
+  color: #fff;
+}
+.contact[data-variant="c"] .btn--blue {
+  background: #fff;
+  color: #0c0c0d;
+}
+.contact[data-variant="c"] .btn--blue:hover {
+  background: #0c0c0d;
+  color: #fff;
+}
+.contact[data-variant="c"] .btn--ink {
+  background: #0c0c0d;
+  color: #fff;
+}
+.contact[data-variant="c"] .btn--ink:hover {
+  background: #fff;
+  color: #0c0c0d;
+}
+.contact[data-variant="c"] .contact__list,
+.contact[data-variant="c"] .contact__list div {
+  border-color: rgba(255, 255, 255, 0.3);
+}
+.contact[data-variant="c"] .contact__list dt {
+  color: rgba(255, 255, 255, 0.75);
+}
+.contact[data-variant="c"] .contact__list a:hover {
+  color: #0c0c0d;
+}
+.contact[data-variant="c"] .contact__figure {
+  right: clamp(-30px, 3vw, 80px);
+}
+@media (max-width: 700px) {
+  .contact[data-variant="c"] .contact__inner {
+    padding-bottom: 0;
+  }
+}
+
+/* =====================================================================
+   DESIGN PICKER (only shown with ?pick in the address)
+   ===================================================================== */
+
+.picker {
+  position: fixed;
+  left: 50%;
+  bottom: 14px;
+  z-index: 110;
+  width: min(760px, calc(100vw - 20px));
+  padding: 12px 14px 14px;
+  border-radius: 20px;
+  background: rgba(12, 12, 13, 0.94);
+  color: #fff;
+  box-shadow: 0 30px 60px -20px rgba(0, 0, 0, 0.6);
+  font-size: 0.8125rem;
+  transform: translateX(-50%);
+}
+.picker__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.picker__top strong {
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+.picker__top span {
+  color: rgba(255, 255, 255, 0.6);
+}
+.picker__toggle,
+.picker__copy {
+  padding: 0.5em 0.9em;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+.picker__copy {
+  background: var(--blue);
+}
+.picker__rows {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px 18px;
+  margin-top: 12px;
+}
+.picker.is-closed .picker__rows {
+  display: none;
+}
+.picker__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+.picker__row > span {
+  font-weight: 500;
+}
+.picker__row div {
+  display: flex;
+  gap: 4px;
+}
+.picker__row button {
+  padding: 0.45em 0.7em;
+  border-radius: 9px;
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.75rem;
+  white-space: nowrap;
+  transition: background-color 0.25s;
+}
+.picker__row button:hover {
+  background: rgba(255, 255, 255, 0.22);
+}
+.picker__row button[aria-pressed="true"] {
+  background: #fff;
+  color: #0c0c0d;
+  font-weight: 600;
+}
+@media (max-width: 700px) {
+  .picker {
+    max-height: calc(100svh - 28px);
+    overflow-y: auto;
+  }
+  .picker__rows {
+    grid-template-columns: 1fr;
+  }
+  .picker__row div {
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+  .picker__row button {
+    padding: 0.4em 0.5em;
+    font-size: 0.6875rem;
+  }
+}
