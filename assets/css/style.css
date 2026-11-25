@@ -655,6 +655,9 @@ em {
 /* ---------- Hero ---------- */
 
 .hero {
+  --stage-h: clamp(380px, 78svh, 940px);
+  /* How far the page scrolls while the stage is held in place. */
+  --hero-travel: 135svh;
   padding: clamp(88px, 7.6vw, 150px) var(--pad) 0;
 }
 
@@ -737,20 +740,38 @@ em {
   }
 }
 
+/* Once the script has the stage running, the track holds it in view while the page scrolls. */
+.hero__track.is-pinned {
+  height: calc(var(--stage-h) + var(--hero-travel));
+}
+.hero__track.is-pinned .hero__stage {
+  position: sticky;
+  top: calc((100svh - var(--stage-h)) / 2);
+}
 .hero__stage {
   position: relative;
-  height: clamp(380px, 78svh, 940px);
+  height: var(--stage-h);
   border-radius: var(--radius);
   overflow: hidden;
-  /* Still version of the picture, shown without scripts or WebGL: the photo printed in blue. */
-  background: var(--blue) url("../img/hero-portrait.webp") 66% center / cover no-repeat;
-  background-blend-mode: multiply;
+  /* Still version of the picture, shown without scripts or WebGL: the figure on the dark stage. */
+  background: #06071c url("../img/hero-figure.webp") 68% bottom / calc(var(--stage-h) * 1.054) 100% no-repeat;
   color: #fff;
   touch-action: pan-y;
   isolation: isolate;
 }
 .js:not(.is-fallback) .hero__stage:not(.is-still) {
   background-image: none;
+}
+/* The earlier hero ("Wipe" in the design picker): the photo printed in blue. */
+html[data-hero="b"] .hero__stage {
+  background: var(--blue) url("../img/hero-portrait.webp") 66% center / cover no-repeat;
+  background-blend-mode: multiply;
+}
+html[data-hero="b"].js:not(.is-fallback) .hero__stage:not(.is-still) {
+  background-image: none;
+}
+html[data-hero="b"] .hero__reveal {
+  display: none;
 }
 .hero__canvas {
   position: absolute;
@@ -864,6 +885,74 @@ em {
   max-width: calc(100% - 80px);
   overflow: hidden;
   text-overflow: ellipsis;
+}
+.hero__hint,
+.hero__label {
+  transition: opacity 0.6s var(--ease-io);
+}
+.hero__stage.is-decoded .hero__hint {
+  opacity: 0;
+}
+
+/* The words that arrive with the photograph. Hidden until the script turns the letters over. */
+.hero__reveal {
+  position: absolute;
+  left: clamp(22px, 4.6vw, 84px);
+  top: 50%;
+  transform: translateY(-50%);
+  max-width: min(38%, 30rem);
+  display: grid;
+  gap: 0.9em;
+  pointer-events: none;
+  visibility: hidden;
+  perspective: 700px;
+}
+/* A soft shadow behind the words keeps them clear of the code. */
+.hero__reveal::before {
+  content: "";
+  position: absolute;
+  inset: -34% -22%;
+  z-index: -1;
+  background: radial-gradient(closest-side, rgba(5, 6, 26, 0.86), rgba(5, 6, 26, 0.6) 60%, rgba(5, 6, 26, 0));
+  opacity: 0;
+  transition: opacity 0.8s var(--ease-io);
+}
+.hero__stage.is-decoded .hero__reveal::before,
+.is-fallback .hero__reveal::before,
+.hero__stage.is-still .hero__reveal::before {
+  opacity: 1;
+}
+.hero__stage.has-reveal .hero__reveal,
+.is-fallback .hero__reveal,
+.hero__stage.is-still .hero__reveal {
+  visibility: visible;
+}
+.hero__reveal-kicker {
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #a9b1ff;
+}
+.hero__reveal-name {
+  font-size: clamp(2.5rem, 5.4vw, 6rem);
+  font-weight: 500;
+  line-height: 0.95;
+  letter-spacing: -0.05em;
+}
+.hero__reveal-name em {
+  color: #a9b1ff;
+  letter-spacing: -0.03em;
+}
+.hero__reveal-meta {
+  max-width: 26ch;
+  font-size: clamp(0.95rem, 1.15vw, 1.15rem);
+  line-height: 1.4;
+  color: rgba(255, 255, 255, 0.72);
+}
+.hero__reveal .char {
+  display: inline-block;
+  backface-visibility: hidden;
 }
 .hint-touch {
   display: none;
@@ -2294,8 +2383,27 @@ html:not(.js) .wall__still,
   .hero__aside {
     grid-template-columns: 1fr;
   }
-  .hero__stage {
-    height: clamp(360px, 62svh, 620px);
+  .hero {
+    --stage-h: clamp(360px, 66svh, 620px);
+    --hero-travel: 120svh;
+  }
+  /* The figure fills the lower part of a tall stage, so the words sit above the head. */
+  .hero__reveal {
+    left: 18px;
+    right: 18px;
+    top: 54px;
+    transform: none;
+    max-width: none;
+    gap: 0.5em;
+  }
+  .hero__reveal-kicker {
+    font-size: 0.625rem;
+  }
+  .hero__reveal-name {
+    font-size: clamp(1.9rem, 9.6vw, 2.6rem);
+  }
+  .hero__reveal-meta {
+    display: none;
   }
   .cross--tl,
   .cross--tr {

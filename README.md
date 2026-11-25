@@ -13,13 +13,15 @@ A static site served by GitHub Pages from the root of `main`. No framework: one 
 | `assets/js/` | Built script bundle. Do not edit by hand. |
 | `assets/img/`, `assets/fonts/` | Photos, project covers and the two fonts. |
 | `src/main.js` | Scrolling, animations, menu, loader. |
-| `src/hero.js` | The picture at the top of the page: a portrait covered in code that the pointer wipes away (plain WebGL). |
+| `src/hero.js` | The stage at the top of the page: a wall of code with a person behind it. Every character is a particle. Scrolling flips the characters into a portrait drawn in code, then the photograph comes through; the pointer pushes the characters apart (plain WebGL). `src/code-lines.js` holds the code that is shown. |
+| `src/hero-wipe.js` | The earlier hero (the pointer wipes code off a blue print of the photo), kept as the "Wipe" option in the design picker. |
+| `src/archive.js`, `assets/css/archive.css` | The "Twelve projects" section. The list of projects is plain HTML in `index.html`; the script either flies the covers in as a ribbon that settles into a grid ("Reel") or files them into glass folders ("Folders"), and opens a sheet with a project's details. |
 | `src/theme.js`, `src/prism.js` | Light and dark themes. The switch is a ring of light that spreads from the button. Colours for both themes are variables at the top of `style.css`. |
 | `src/wall.js`, `src/wall-data.js` | The "Look closer" wall: small screens from the projects, with a lens that follows the pointer. `wall-data.js` and `assets/img/wall-atlas.webp` are written by `tools/build-wall.mjs`. |
 | `src/dial.js` | Experience layout 4: a dial that turns through the years, built from the timeline lists in `index.html`. |
 | `src/details.js` | Typed section labels, the capsule in the corner that turns with the scroll, and the time difference in the footer. |
 | `assets/css/variants.css`, `src/variants.js` | Alternative layouts for each section and the picker that compares them. Open the site with `?pick` in the address to use it. |
-| `concepts/` | Three one-page design concepts shown in the Work section. They are not real companies. |
+| `concepts/` | Six one-page design concepts shown in the Work and archive sections. They are not real companies, and each page says so. |
 | `tools/` | Build, preview and image scripts. `shoot.mjs`, `shoot-variants.mjs` and `probe.mjs` photograph the site in headless Chrome to check it. |
 | `CNAME` | Keeps the custom domain. Do not delete. |
 
@@ -36,6 +38,8 @@ npm run dev      # preview at http://localhost:4173
 ```
 
 Photos: `tools/build-images.mjs`, `tools/build-hero.mjs` and `tools/matte.mjs` turn the original pictures into the web images. The paths at the top of each file point at the originals on the author's computer.
+
+Project covers: a concept's cover is a picture of its own page (`node tools/snap.mjs /concepts/<name>/ 1440 810 tools/shots/concept-<name>.png .credit`, then saved as `assets/img/work-<name>.webp`). `tools/build-covers.mjs` makes the Print Run and Remote Radar covers from screenshots kept in `tools/shots`. To add a project to the archive, copy one `<li class="tile">` in `index.html`; `data-group` chooses its folder.
 
 Screens on the wall: the list is at the top of `tools/build-wall.mjs`. Add or change a screen there, run `node tools/build-wall.mjs --preview`, check `tools/shots/wall-preview.jpg`, then rebuild. Each screen is tied to a Work card through the card's `data-project` attribute, and the wall reads the project's name and text from that card.
 

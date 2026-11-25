@@ -1,0 +1,593 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Raag | App concept by Huzaifa Malik</title>
+  <meta name="description" content="A design concept for a streaming app for South Asian classical, qawwali and ghazal recordings. Raag is not a real product.">
+  <meta name="robots" content="noindex">
+  <link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
+  <style>
+    @font-face { font-family: "Fraunces"; src: url("../fonts/fraunces-latin-wght-normal.woff2") format("woff2"); font-weight: 100 900; font-display: swap; }
+    @font-face { font-family: "Fraunces"; src: url("../fonts/fraunces-latin-wght-italic.woff2") format("woff2"); font-weight: 100 900; font-style: italic; font-display: swap; }
+    @font-face { font-family: "Geist"; src: url("../../assets/fonts/geist-latin-wght-normal.woff2") format("woff2"); font-weight: 100 900; font-display: swap; }
+
+    :root { --night: #130716; --ink: #1b0716; --cream: #fdeee0; --mute: rgba(253, 238, 224, 0.66); --faint: rgba(253, 238, 224, 0.4); --line: rgba(253, 238, 224, 0.13); --saffron: #ffb52e; --coral: #ff5a4d; --magenta: #e6208e; --light: linear-gradient(100deg, #ffbe40, #ff5a4d 55%, #e6208e); --serif: "Fraunces", Georgia, serif; --pad: clamp(18px, 3vw, 52px); }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { margin: 0; background: var(--night); color: var(--cream); font-family: "Geist", Arial, sans-serif; font-size: clamp(0.94rem, 1.04vw, 1.08rem); line-height: 1.5; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+    a { color: inherit; text-decoration: none; }
+    ul, ol { list-style: none; margin: 0; padding: 0; }
+    h1, h2, h3, p { margin: 0; }
+    button { padding: 0; border: 0; background: none; color: inherit; font: inherit; cursor: pointer; }
+    :focus-visible { outline: 2px solid var(--saffron); outline-offset: 3px; }
+    .defs { position: absolute; }
+    .lit { font-style: italic; background: var(--light); -webkit-background-clip: text; background-clip: text; color: transparent; padding-right: 0.06em; }
+
+    /* First screen */
+    .page { --d: min(42vw, 76vh, 680px); position: relative; isolation: isolate; display: grid; grid-template-rows: auto auto minmax(0, 1fr); height: clamp(620px, 100vh, 1080px); height: clamp(620px, 100svh, 1080px); overflow: hidden; }
+    .sky { position: absolute; inset: 0; z-index: -1; background: radial-gradient(40% 50% at 2% -8%, rgba(230, 32, 142, 0.28), transparent 70%), radial-gradient(40% 50% at 100% -10%, rgba(255, 181, 46, 0.15), transparent 70%), linear-gradient(#130716, #1e0a23); }
+    .page::before { content: ""; position: absolute; inset: 0; z-index: 1; opacity: 0.09; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='240' height='240' filter='url(%23n)'/%3E%3C/svg%3E"); pointer-events: none; }
+    .page::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; z-index: 2; height: 1px; background: linear-gradient(90deg, transparent, rgba(255, 120, 100, 0.7) 28%, rgba(255, 200, 110, 0.95) 50%, rgba(255, 120, 100, 0.7) 72%, transparent); }
+
+    .nav { position: relative; z-index: 5; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 20px; padding: clamp(14px, 1.6vw, 24px) var(--pad); }
+    .brand { display: inline-flex; align-items: center; gap: 0.45em; font-family: var(--serif); font-size: clamp(1.45rem, 1.9vw, 1.95rem); font-weight: 500; letter-spacing: -0.03em; }
+    .brand svg { width: 1.05em; height: 1.05em; }
+    .nav ul { display: flex; gap: clamp(18px, 2.6vw, 42px); color: var(--mute); font-size: 0.95em; font-weight: 500; }
+    .nav li a { transition: color 0.3s; }
+    .nav li a:hover { color: var(--cream); }
+    .pill { justify-self: end; padding: 0.66em 1.25em; border-radius: 999px; background: rgba(253, 238, 224, 0.06); box-shadow: inset 0 0 0 1px var(--line); font-weight: 500; }
+
+    .copy { position: relative; z-index: 4; display: flex; flex-direction: column; align-items: center; padding: clamp(4px, 1.2vh, 20px) var(--pad) 0; text-align: center; }
+    .now { display: inline-flex; align-items: center; gap: 0.7em; margin-bottom: 1.2em; padding: 0.42em 1em 0.42em 0.85em; border-radius: 999px; background: rgba(253, 238, 224, 0.06); box-shadow: inset 0 0 0 1px var(--line); color: var(--mute); font-size: 0.82rem; font-weight: 500; }
+    .now b { color: var(--cream); font-weight: 600; }
+    .now i { width: 8px; height: 8px; border-radius: 50%; background: var(--coral); animation: ping 1.8s ease-out infinite; }
+    @keyframes ping { from { box-shadow: 0 0 0 0 rgba(255, 90, 77, 0.6); } to { box-shadow: 0 0 0 10px rgba(255, 90, 77, 0); } }
+    h1 { font-family: var(--serif); font-size: clamp(2.9rem, 7.8vw, 9rem); font-weight: 400; line-height: 0.98; letter-spacing: -0.045em; white-space: nowrap; }
+    h1 br { display: none; }
+    .lead { max-width: 54ch; margin-top: 0.85em; color: var(--mute); font-size: 1.1em; text-wrap: balance; }
+    .actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; margin-top: 1.4em; }
+    .btn { display: inline-flex; align-items: center; gap: 0.7em; padding: 0.95em 1.6em; border-radius: 999px; font-weight: 600; transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
+    .btn:hover { transform: translateY(-3px); }
+    .btn svg { width: 0.95em; height: 0.95em; fill: currentColor; }
+    .btn--light { background: var(--light); color: var(--ink); box-shadow: 0 16px 40px -16px rgba(255, 90, 77, 0.9); }
+    .btn--ghost { background: rgba(19, 7, 22, 0.45); box-shadow: inset 0 0 0 1px rgba(253, 238, 224, 0.24); }
+
+    /* The record rises like a sun. The rays around it are an equaliser. */
+    .stage { position: relative; min-height: 0; }
+    .sun { position: absolute; left: 50%; top: calc(var(--d) * 0.172); width: var(--d); aspect-ratio: 1; transform: translateX(-50%); }
+    .sun::before { content: ""; position: absolute; inset: -62%; border-radius: 50%; background: radial-gradient(circle closest-side, rgba(255, 130, 80, 0.62) 44%, rgba(236, 40, 150, 0.36) 60%, rgba(160, 30, 150, 0.12) 80%, transparent); }
+    .ripples { position: absolute; left: 50%; top: 50%; width: 380%; aspect-ratio: 1; border-radius: 50%; background: repeating-radial-gradient(circle, transparent 0, transparent calc(var(--d) * 0.15 - 1px), rgba(253, 238, 224, 0.1) calc(var(--d) * 0.15 - 1px), rgba(253, 238, 224, 0.1) calc(var(--d) * 0.15)); -webkit-mask-image: radial-gradient(circle closest-side, #000 22%, transparent 94%); mask-image: radial-gradient(circle closest-side, #000 22%, transparent 94%); transform: translate(-50%, -50%); pointer-events: none; }
+    .halo { position: absolute; inset: -4%; border-radius: 50%; background: conic-gradient(from 270deg, var(--magenta), var(--coral) 12%, var(--saffron) 25%, var(--coral) 38%, var(--magenta) 50%, #7b1b8f 75%, var(--magenta)); filter: blur(calc(var(--d) * 0.06)); opacity: 0.75; }
+    .rays { position: absolute; left: -33.333%; top: -33.333%; width: 166.667%; height: 166.667%; overflow: visible; fill: none; stroke-width: 9; stroke-linecap: round; }
+    .rays path { stroke-dasharray: 100; animation: level var(--t) ease-in-out var(--w) infinite alternate; }
+    @keyframes level { to { stroke-dashoffset: var(--o); } }
+    .vinyl { border-radius: 50%; background: conic-gradient(from 270deg, transparent 12deg, rgba(255, 190, 70, 0.5) 42deg, transparent 74deg, transparent 106deg, rgba(255, 96, 160, 0.46) 136deg, transparent 166deg), radial-gradient(circle closest-side, #160a1a 43%, transparent 43.5%), radial-gradient(circle closest-side, transparent 60.4%, rgba(0, 0, 0, 0.6) 61%, rgba(0, 0, 0, 0.6) 61.9%, transparent 62.5%, transparent 78.4%, rgba(0, 0, 0, 0.6) 79%, rgba(0, 0, 0, 0.6) 79.8%, transparent 80.4%), repeating-radial-gradient(circle closest-side, #0e0511 0, #2b1633 0.6%, #0e0511 1.2%), #0e0511; }
+    .record { position: absolute; inset: 0; box-shadow: inset 0 0 0 2px rgba(255, 214, 170, 0.8), inset 0 0 50px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(0, 0, 0, 0.5), 0 0 70px rgba(255, 90, 77, 0.5), 0 0 170px rgba(230, 32, 142, 0.45); }
+    .label { position: absolute; left: 50%; top: 50%; width: 37%; height: 37%; transform: translate(-50%, -50%); animation: spin 40s linear infinite; }
+    .label text { fill: var(--ink); font-family: "Geist", Arial, sans-serif; font-size: 10.5px; font-weight: 700; letter-spacing: 0.12em; }
+    @keyframes spin { to { transform: translate(-50%, -50%) rotate(360deg); } }
+
+    .card { position: absolute; z-index: 3; border-radius: 1.7em; background: linear-gradient(160deg, rgba(64, 26, 72, 0.74), rgba(24, 9, 30, 0.84)); box-shadow: inset 0 0 0 1px rgba(253, 238, 224, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.16), 0 40px 70px -30px rgba(0, 0, 0, 0.9); -webkit-backdrop-filter: blur(22px) saturate(1.5); backdrop-filter: blur(22px) saturate(1.5); font-size: clamp(11px, 0.98vw, 15.5px); line-height: 1.35; text-align: left; }
+    .player { right: calc(50% + var(--d) * 0.5 - 4em); bottom: 9%; width: 22.5em; padding: 1.25em; }
+    .track { display: grid; grid-template-columns: 4em minmax(0, 1fr); align-items: center; gap: 1em; }
+    .cover { width: 4em; height: 4em; border-radius: 1.1em; }
+    .track small { display: block; color: var(--saffron); font-size: 0.72em; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; }
+    .track b { display: block; margin-top: 0.1em; font-family: var(--serif); font-size: 1.45em; font-weight: 500; letter-spacing: -0.02em; line-height: 1.15; }
+    .track span { display: block; color: var(--mute); font-size: 0.92em; }
+    .wave { display: flex; align-items: center; gap: 0.19em; height: 3.3em; margin: 1.1em 0 0.5em; }
+    .wave i { flex: 1; min-width: 0; border-radius: 99px; background: rgba(253, 238, 224, 0.2); }
+    .times { display: flex; align-items: center; justify-content: space-between; color: var(--mute); font-size: 0.8em; font-variant-numeric: tabular-nums; }
+    .times em { padding: 0.2em 0.7em; border-radius: 99px; box-shadow: inset 0 0 0 1px rgba(255, 181, 46, 0.5); color: var(--saffron); font-style: normal; font-size: 0.9em; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; }
+    .controls { display: flex; align-items: center; justify-content: space-between; margin-top: 0.8em; padding: 0 0.4em; }
+    .controls button { display: grid; place-items: center; width: 2.4em; height: 2.4em; border-radius: 50%; color: var(--cream); }
+    .controls button:not(.play):hover { background: rgba(253, 238, 224, 0.09); }
+    .controls svg { width: 1.5em; height: 1.5em; fill: currentColor; }
+    .controls .thin svg { fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; opacity: 0.7; }
+    .controls .heart svg { fill: var(--coral); }
+    .controls .play { width: 3.7em; height: 3.7em; background: var(--light); color: var(--ink); box-shadow: 0 10px 30px -8px rgba(255, 90, 77, 0.9); }
+    .play svg { width: 1.7em; height: 1.7em; }
+    .play .i-play, .is-paused .play .i-pause { display: none; }
+    .is-paused .play .i-play { display: block; }
+
+    .queue { left: calc(50% + var(--d) * 0.5 - 4em); bottom: 16%; width: 20.5em; padding: 1.15em 1.1em 0.9em; }
+    .queue__head { display: flex; align-items: baseline; justify-content: space-between; padding: 0 0.3em; }
+    .queue__head b { font-family: var(--serif); font-size: 1.25em; font-weight: 500; letter-spacing: -0.02em; }
+    .queue__head span { color: var(--mute); font-size: 0.82em; }
+    .queue ol { display: grid; gap: 0.2em; margin-top: 0.7em; }
+    .queue li { display: grid; grid-template-columns: 2.5em minmax(0, 1fr) auto; align-items: center; gap: 0.8em; padding: 0.5em; border-radius: 1em; }
+    .queue li.on { background: rgba(253, 238, 224, 0.08); }
+    .queue li > i { display: grid; place-items: center; width: 2.5em; height: 2.5em; border-radius: 0.8em; background: var(--c, var(--coral)); }
+    .queue li b { display: block; overflow: hidden; font-weight: 600; text-overflow: ellipsis; white-space: nowrap; }
+    .queue li small { display: block; overflow: hidden; color: var(--mute); font-size: 0.86em; text-overflow: ellipsis; white-space: nowrap; }
+    .queue time { color: var(--mute); font-size: 0.84em; font-variant-numeric: tabular-nums; }
+    .eq { display: flex; align-items: flex-end; gap: 2px; height: 1.15em; }
+    .eq b { width: 3px; height: 100%; border-radius: 2px; background: var(--ink); transform-origin: bottom; animation: bounce 0.9s ease-in-out infinite alternate; }
+    .eq b:nth-child(1) { height: 55%; }
+    .eq b:nth-child(2) { animation-duration: 0.6s; animation-delay: -0.3s; }
+    .eq b:nth-child(3) { height: 70%; animation-duration: 0.75s; animation-delay: -0.5s; }
+    .eq b:nth-child(4) { height: 40%; animation-duration: 0.5s; }
+    @keyframes bounce { from { transform: scaleY(0.35); } to { transform: scaleY(1); } }
+    .is-paused .rays path, .is-paused .label, .is-paused .eq b { animation-play-state: paused; }
+
+    /* Sections */
+    .wrap { padding: clamp(72px, 9vw, 140px) var(--pad) 0; }
+    .head { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); align-items: end; gap: 22px var(--pad); margin-bottom: clamp(28px, 3.6vw, 56px); }
+    .eyebrow { grid-column: 1 / -1; display: flex; align-items: center; gap: 12px; color: var(--mute); font-size: 0.78rem; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; }
+    .eyebrow::before { content: ""; width: 34px; height: 2px; border-radius: 2px; background: var(--light); }
+    h2 { font-family: var(--serif); font-size: clamp(2.2rem, 5vw, 5.2rem); font-weight: 400; line-height: 1; letter-spacing: -0.04em; text-wrap: balance; }
+    .head__note { justify-self: end; max-width: 42ch; color: var(--mute); font-size: 1.08em; }
+
+    .features { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr) minmax(0, 1fr); gap: clamp(12px, 1.3vw, 20px); }
+    .feat { display: flex; flex-direction: column; gap: 1.6em; padding: clamp(20px, 2.1vw, 34px); border-radius: clamp(22px, 2.2vw, 34px); background: linear-gradient(170deg, rgba(253, 238, 224, 0.075), rgba(253, 238, 224, 0.02) 60%); box-shadow: inset 0 0 0 1px var(--line); }
+    .feat--hours { background: radial-gradient(90% 70% at 50% 0%, rgba(255, 90, 77, 0.22), transparent 72%), linear-gradient(170deg, rgba(253, 238, 224, 0.075), rgba(253, 238, 224, 0.02) 60%); }
+    .feat__art { flex: 1; display: grid; align-content: center; min-height: clamp(200px, 18vw, 270px); }
+    .feat h3 { font-family: var(--serif); font-size: clamp(1.55rem, 2.15vw, 2.2rem); font-weight: 450; line-height: 1.05; letter-spacing: -0.03em; }
+    .feat h3 + p { max-width: 42ch; margin-top: 0.6em; color: var(--mute); }
+
+    .dial { display: block; width: 100%; max-width: 470px; height: auto; margin: 0 auto; overflow: visible; }
+    .dial text { fill: var(--cream); font-family: "Geist", Arial, sans-serif; }
+    .dial .t { font-family: var(--serif); font-size: 50px; letter-spacing: -2px; }
+    .dial .s { fill: rgba(253, 238, 224, 0.66); font-size: 13.5px; }
+    .dial .l { fill: rgba(253, 238, 224, 0.5); font-size: 10.5px; font-weight: 600; letter-spacing: 1.6px; }
+
+    .hifi { display: grid; gap: 0.5em; }
+    .hifi p { display: flex; justify-content: space-between; color: var(--faint); font-size: 0.82em; font-weight: 500; }
+    .hifi p.on { margin-top: 1em; color: var(--cream); }
+    .hifi p.on span:last-child { color: var(--saffron); }
+    .hifi svg { display: block; width: 100%; height: auto; fill: none; stroke-linecap: round; }
+
+    .saved { display: grid; gap: 0.55em; }
+    .saved__top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.3em; color: var(--mute); font-size: 0.82em; }
+    .saved__top b { padding: 0.3em 0.85em; border-radius: 99px; background: rgba(253, 238, 224, 0.09); color: var(--cream); font-weight: 600; }
+    .saved li { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 0.9em; padding: 0.7em 0.9em; border-radius: 1.1em; background: rgba(253, 238, 224, 0.05); box-shadow: inset 0 0 0 1px rgba(253, 238, 224, 0.07); font-size: 0.92em; line-height: 1.3; }
+    .saved li > i { position: relative; display: grid; place-items: center; width: 2.3em; height: 2.3em; border-radius: 50%; }
+    .saved li > i svg { width: 1.2em; height: 1.2em; fill: none; stroke: currentColor; stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round; }
+    .saved .done > i { background: var(--light); color: var(--ink); }
+    .saved .going > i { background: conic-gradient(var(--saffron) 64%, rgba(253, 238, 224, 0.16) 0); }
+    .saved .going > i::after { content: ""; width: 1.65em; height: 1.65em; border-radius: 50%; background: #24122b; }
+    .saved .wait > i { box-shadow: inset 0 0 0 1.5px rgba(253, 238, 224, 0.28); color: var(--mute); }
+    .saved li b { display: block; font-weight: 600; }
+    .saved li small { color: var(--mute); font-size: 0.88em; }
+    .saved li em { color: var(--mute); font-size: 0.86em; font-style: normal; font-weight: 600; }
+    .saved .done em, .saved .going em { color: var(--saffron); }
+
+    .moods { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: clamp(10px, 1.1vw, 18px); }
+    .mood { position: relative; isolation: isolate; display: flex; flex-direction: column; justify-content: space-between; aspect-ratio: 3 / 4.2; padding: clamp(14px, 1.35vw, 22px); border-radius: clamp(18px, 1.8vw, 28px); overflow: hidden; transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1); }
+    .mood:hover { transform: translateY(-6px); }
+    .mood::after { content: ""; position: absolute; inset: 46% 0 0; z-index: -1; background: linear-gradient(transparent, var(--floor) 58%); }
+    .mood svg { position: absolute; inset: 0; z-index: -2; width: 100%; height: 100%; }
+    .mood small { font-size: 0.7rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; opacity: 0.85; }
+    .mood b { display: block; font-family: var(--serif); font-size: clamp(1.45rem, 2.1vw, 2.15rem); font-weight: 450; line-height: 1; letter-spacing: -0.03em; }
+    .mood span { display: block; margin-top: 0.45em; font-size: 0.86em; line-height: 1.3; opacity: 0.86; }
+    .mood--morning { --floor: #ffa434; background: linear-gradient(165deg, #ffe08a, #ffab3d 72%); color: #2a0f14; }
+    .mood--monsoon { --floor: #0f2f58; background: linear-gradient(165deg, #1b8f95, #123a66); }
+    .mood--dusk { --floor: #8d1264; background: linear-gradient(165deg, #ff7a4d, #e6208e); }
+    .mood--night { --floor: #120936; background: linear-gradient(165deg, #3d2a94, #140a3d); }
+    .mood--devotional { --floor: #083634; background: linear-gradient(165deg, #149268, #0a3f3d); }
+    .mood--mehfil { --floor: #3f0a29; background: linear-gradient(165deg, #b3184e, #470c2f); }
+
+    .plans { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border-radius: clamp(22px, 2.2vw, 34px); background: rgba(253, 238, 224, 0.03); box-shadow: inset 0 0 0 1px var(--line); overflow: hidden; }
+    .plan { position: relative; display: flex; flex-direction: column; padding: clamp(22px, 2.5vw, 42px); }
+    .plan + .plan { border-left: 1px solid var(--line); }
+    .plan--on { background: radial-gradient(120% 60% at 50% 0%, rgba(255, 90, 77, 0.26), transparent 72%), linear-gradient(rgba(230, 32, 142, 0.12), rgba(230, 32, 142, 0.03)); }
+    .plan h3 { font-family: var(--serif); font-size: clamp(1.6rem, 2.2vw, 2.2rem); font-weight: 450; letter-spacing: -0.03em; }
+    .plan__for { color: var(--mute); }
+    .tag { position: absolute; top: clamp(22px, 2.5vw, 42px); right: clamp(22px, 2.5vw, 42px); padding: 0.32em 0.85em; border-radius: 99px; background: var(--light); color: var(--ink); font-size: 0.72rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; }
+    .price { display: flex; align-items: baseline; gap: 0.5em; margin: 1.1em 0; padding-bottom: 1.1em; border-bottom: 1px solid var(--line); color: var(--mute); }
+    .price b { color: var(--cream); font-family: var(--serif); font-size: clamp(2.7rem, 4.5vw, 4.6rem); font-weight: 400; line-height: 1; letter-spacing: -0.045em; }
+    .plan ul { display: grid; gap: 0.6em; margin-bottom: 2em; }
+    .plan li { display: grid; grid-template-columns: auto 1fr; align-items: baseline; gap: 0.8em; }
+    .plan li::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--light); transform: translateY(-2px); }
+    .plan .btn { justify-content: center; margin-top: auto; }
+    .fine { margin-top: 1.3em; color: var(--mute); font-size: 0.92em; text-align: center; }
+
+    .cta { position: relative; isolation: isolate; display: grid; justify-items: start; gap: 1.3em; padding: clamp(30px, 5.4vw, 92px); border-radius: clamp(24px, 2.6vw, 40px); background: linear-gradient(105deg, #ffc247, #ff5a4d 55%, #e6208e); color: var(--ink); overflow: hidden; }
+    .cta h2 { max-width: 11ch; }
+    .cta > p { max-width: 40ch; font-size: 1.12em; font-weight: 500; }
+    .cta .actions { justify-content: flex-start; margin-top: 0.4em; }
+    .btn--dark { background: var(--ink); color: var(--cream); }
+    .btn--line { box-shadow: inset 0 0 0 1.5px rgba(27, 7, 22, 0.55); }
+    .cta ul { display: flex; flex-wrap: wrap; gap: 8px 26px; max-width: 54%; margin-top: 0.6em; font-size: 0.92em; font-weight: 500; }
+    .cta li { display: flex; align-items: center; gap: 9px; }
+    .cta li::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--ink); }
+    .cta__disc { position: absolute; right: -7%; top: 50%; z-index: -1; display: grid; place-items: center; width: min(50%, 640px); aspect-ratio: 1; box-shadow: 0 40px 90px -20px rgba(60, 5, 40, 0.75), inset 0 0 0 1.5px rgba(255, 220, 190, 0.35); transform: translateY(-50%); }
+    .cta__disc i { display: grid; place-items: center; width: 36%; aspect-ratio: 1; border-radius: 50%; background: var(--cream); box-shadow: inset 0 0 0 9px var(--cream), inset 0 0 0 10.5px rgba(27, 7, 22, 0.22); }
+    .cta__disc i::after { content: ""; width: 13%; aspect-ratio: 1; border-radius: 50%; background: var(--ink); }
+
+    .foot { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px 40px; margin-top: clamp(56px, 7vw, 110px); padding: 28px var(--pad) 78px; border-top: 1px solid var(--line); color: var(--mute); font-size: 0.92em; }
+    .foot .brand { color: var(--cream); }
+    .foot ul { display: flex; flex-wrap: wrap; gap: 8px 28px; }
+    .foot li a:hover { color: var(--cream); }
+
+    .credit { position: fixed; left: 50%; bottom: 10px; z-index: 10; padding: 0.5em 1em; border-radius: 999px; background: rgba(253, 238, 224, 0.93); color: var(--ink); font-size: 0.72rem; letter-spacing: 0.04em; transform: translateX(-50%); white-space: nowrap; }
+    .credit a { text-decoration: underline; text-underline-offset: 3px; }
+    @media (min-width: 861px) { .credit { left: auto; right: 14px; transform: none; } }
+    @media (max-width: 380px) { .credit { width: max-content; max-width: calc(100vw - 16px); border-radius: 14px; text-align: center; white-space: normal; } }
+
+    @media (max-width: 1100px) {
+      .features { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+      .feat--hours { grid-column: 1 / -1; }
+      .moods { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .mood { aspect-ratio: 4 / 3.6; }
+    }
+    @media (max-width: 860px) {
+      .page { --d: min(104vw, 560px); grid-template-rows: auto auto auto; height: auto; min-height: min(100vh, 900px); min-height: min(100svh, 900px); }
+      .nav { grid-template-columns: 1fr auto; }
+      .nav ul { display: none; }
+      .copy { padding-top: 14px; }
+      h1 { font-size: clamp(2.7rem, 13.4vw, 5.6rem); white-space: normal; }
+      h1 br { display: inline; }
+      .stage { display: grid; justify-items: center; padding: 34px var(--pad) calc(var(--d) * 0.4); }
+      .sun { top: auto; bottom: calc(var(--d) * -0.54); }
+      .card { font-size: clamp(12px, 3.7vw, 15px); }
+      .player { position: relative; right: auto; bottom: auto; width: min(100%, 23.5em); }
+      .queue { display: none; }
+      .head { grid-template-columns: minmax(0, 1fr); }
+      .head__note { justify-self: start; }
+      .features { grid-template-columns: minmax(0, 1fr); }
+      .feat--hours { grid-column: auto; }
+      .moods { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .mood { aspect-ratio: 1 / 1.12; }
+      .plans { grid-template-columns: minmax(0, 1fr); }
+      .plan + .plan { border-top: 1px solid var(--line); border-left: 0; }
+      .cta { padding-bottom: 58vw; }
+      .cta ul { max-width: none; }
+      .cta__disc { right: -18vw; top: auto; bottom: -44vw; width: 92vw; transform: none; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .rays path, .label, .eq b, .now i { animation: none; }
+      .btn, .mood { transition: none; }
+    }
+  </style>
+</head>
+<body>
+  <svg class="defs" width="0" height="0" aria-hidden="true" focusable="false">
+    <defs>
+      <linearGradient id="light" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffc247"/><stop offset="0.52" stop-color="#ff5a4d"/><stop offset="1" stop-color="#e6208e"/></linearGradient>
+    </defs>
+  </svg>
+
+  <main>
+    <div class="page">
+      <div class="sky"></div>
+
+      <header class="nav">
+        <a class="brand" href="#"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="none" stroke="url(#light)" stroke-width="2.6"/><circle cx="12" cy="12" r="4.2" fill="url(#light)"/></svg>Raag</a>
+        <ul>
+          <li><a href="#listen">Why Raag</a></li>
+          <li><a href="#moods">Moods</a></li>
+          <li><a href="#plans">Plans</a></li>
+        </ul>
+        <a class="pill" href="#get">Get the app</a>
+      </header>
+
+      <div class="copy">
+        <p class="now"><i></i><span><b>6:42 pm.</b> Dusk ragas are playing now</span></p>
+        <h1>Every hour <br>has its <em class="lit">raga.</em></h1>
+        <p class="lead">Raag streams South Asian classical, qawwali and ghazal in lossless sound, and lines up the right music for the hour on your clock.</p>
+        <div class="actions">
+          <a class="btn btn--light" href="#get"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4.5v15L20 12z"/></svg>Start listening free</a>
+          <a class="btn btn--ghost" href="#plans">Plans from Rs 449</a>
+        </div>
+      </div>
+
+      <div class="stage">
+        <div class="sun" aria-hidden="true">
+          <div class="ripples"></div>
+          <div class="halo"></div>
+          <svg class="rays" viewBox="-500 -500 1000 1000">
+            <path d="M0-322v-54" transform="rotate(-133)" pathLength="100" stroke="#ec2896" style="--o:51;--t:1.20s;--w:-0.94s"/>
+            <path d="M0-322v-64" transform="rotate(-129.4)" pathLength="100" stroke="#ed2b92" style="--o:52;--t:0.72s;--w:-0.85s"/>
+            <path d="M0-322v-54" transform="rotate(-125.8)" pathLength="100" stroke="#ee2e8e" style="--o:48;--t:1.08s;--w:-1.35s"/>
+            <path d="M0-322v-46" transform="rotate(-122.2)" pathLength="100" stroke="#ef318b" style="--o:57;--t:1.26s;--w:-0.26s"/>
+            <path d="M0-322v-39" transform="rotate(-118.6)" pathLength="100" stroke="#f03487" style="--o:40;--t:1.01s;--w:-0.60s"/>
+            <path d="M0-322v-57" transform="rotate(-115)" pathLength="100" stroke="#f13783" style="--o:34;--t:1.19s;--w:-0.92s"/>
+            <path d="M0-322v-57" transform="rotate(-111.4)" pathLength="100" stroke="#f23a7f" style="--o:65;--t:1.37s;--w:-1.23s"/>
+            <path d="M0-322v-58" transform="rotate(-107.8)" pathLength="100" stroke="#f33d7c" style="--o:55;--t:0.88s;--w:-0.09s"/>
+            <path d="M0-322v-73" transform="rotate(-104.2)" pathLength="100" stroke="#f44078" style="--o:71;--t:0.92s;--w:-0.23s"/>
+            <path d="M0-322v-69" transform="rotate(-100.6)" pathLength="100" stroke="#f54374" style="--o:43;--t:1.15s;--w:-0.92s"/>
+            <path d="M0-322v-66" transform="rotate(-97.1)" pathLength="100" stroke="#f64670" style="--o:34;--t:1.41s;--w:-1.31s"/>
+            <path d="M0-322v-44" transform="rotate(-93.5)" pathLength="100" stroke="#f7496c" style="--o:29;--t:0.72s;--w:-1.35s"/>
+            <path d="M0-322v-44" transform="rotate(-89.9)" pathLength="100" stroke="#f84c69" style="--o:51;--t:0.89s;--w:-0.80s"/>
+            <path d="M0-322v-51" transform="rotate(-86.3)" pathLength="100" stroke="#f94f65" style="--o:32;--t:1.23s;--w:-0.07s"/>
+            <path d="M0-322v-45" transform="rotate(-82.7)" pathLength="100" stroke="#fa5261" style="--o:56;--t:1.54s;--w:-0.69s"/>
+            <path d="M0-322v-49" transform="rotate(-79.1)" pathLength="100" stroke="#fb555d" style="--o:44;--t:0.69s;--w:-1.17s"/>
+            <path d="M0-322v-49" transform="rotate(-75.5)" pathLength="100" stroke="#fc5859" style="--o:61;--t:0.92s;--w:-0.89s"/>
+            <path d="M0-322v-46" transform="rotate(-71.9)" pathLength="100" stroke="#fd5b56" style="--o:65;--t:0.79s;--w:-0.19s"/>
+            <path d="M0-322v-52" transform="rotate(-68.3)" pathLength="100" stroke="#fe5e52" style="--o:55;--t:0.76s;--w:-0.59s"/>
+            <path d="M0-322v-41" transform="rotate(-64.7)" pathLength="100" stroke="#ff6350" style="--o:69;--t:1.42s;--w:-1.01s"/>
+            <path d="M0-322v-41" transform="rotate(-61.1)" pathLength="100" stroke="#ff684f" style="--o:68;--t:1.18s;--w:-0.70s"/>
+            <path d="M0-322v-41" transform="rotate(-57.5)" pathLength="100" stroke="#ff6d4e" style="--o:51;--t:0.66s;--w:-1.41s"/>
+            <path d="M0-322v-47" transform="rotate(-53.9)" pathLength="100" stroke="#ff724d" style="--o:46;--t:0.76s;--w:-0.13s"/>
+            <path d="M0-322v-69" transform="rotate(-50.3)" pathLength="100" stroke="#ff774c" style="--o:52;--t:1.11s;--w:-0.17s"/>
+            <path d="M0-322v-67" transform="rotate(-46.7)" pathLength="100" stroke="#ff7c4b" style="--o:55;--t:1.45s;--w:-1.54s"/>
+            <path d="M0-322v-68" transform="rotate(-43.1)" pathLength="100" stroke="#ff814a" style="--o:55;--t:1.17s;--w:-0.78s"/>
+            <path d="M0-322v-47" transform="rotate(-39.5)" pathLength="100" stroke="#ff864a" style="--o:57;--t:1.24s;--w:-1.59s"/>
+            <path d="M0-322v-62" transform="rotate(-35.9)" pathLength="100" stroke="#ff8b49" style="--o:34;--t:0.77s;--w:-1.04s"/>
+            <path d="M0-322v-65" transform="rotate(-32.4)" pathLength="100" stroke="#ff9048" style="--o:43;--t:1.48s;--w:-0.60s"/>
+            <path d="M0-322v-56" transform="rotate(-28.8)" pathLength="100" stroke="#ff9547" style="--o:57;--t:0.71s;--w:-0.46s"/>
+            <path d="M0-322v-54" transform="rotate(-25.2)" pathLength="100" stroke="#ff9a46" style="--o:50;--t:1.22s;--w:-0.36s"/>
+            <path d="M0-322v-59" transform="rotate(-21.6)" pathLength="100" stroke="#ffa045" style="--o:42;--t:0.73s;--w:-0.89s"/>
+            <path d="M0-322v-49" transform="rotate(-18)" pathLength="100" stroke="#ffa544" style="--o:36;--t:1.38s;--w:-1.50s"/>
+            <path d="M0-322v-61" transform="rotate(-14.4)" pathLength="100" stroke="#ffaa43" style="--o:28;--t:1.04s;--w:-1.36s"/>
+            <path d="M0-322v-51" transform="rotate(-10.8)" pathLength="100" stroke="#ffaf43" style="--o:59;--t:1.22s;--w:-0.00s"/>
+            <path d="M0-322v-44" transform="rotate(-7.2)" pathLength="100" stroke="#ffb442" style="--o:50;--t:0.80s;--w:-1.29s"/>
+            <path d="M0-322v-26" transform="rotate(-3.6)" pathLength="100" stroke="#ffb941" style="--o:32;--t:1.55s;--w:-0.98s"/>
+            <path d="M0-322v-48" transform="rotate(0)" pathLength="100" stroke="#ffbe40" style="--o:65;--t:1.48s;--w:-1.57s"/>
+            <path d="M0-322v-31" transform="rotate(3.6)" pathLength="100" stroke="#ffb941" style="--o:35;--t:1.19s;--w:-0.63s"/>
+            <path d="M0-322v-50" transform="rotate(7.2)" pathLength="100" stroke="#ffb442" style="--o:51;--t:0.70s;--w:-0.10s"/>
+            <path d="M0-322v-58" transform="rotate(10.8)" pathLength="100" stroke="#ffaf43" style="--o:40;--t:1.03s;--w:-1.16s"/>
+            <path d="M0-322v-60" transform="rotate(14.4)" pathLength="100" stroke="#ffaa43" style="--o:43;--t:1.18s;--w:-0.60s"/>
+            <path d="M0-322v-78" transform="rotate(18)" pathLength="100" stroke="#ffa544" style="--o:41;--t:1.05s;--w:-0.39s"/>
+            <path d="M0-322v-65" transform="rotate(21.6)" pathLength="100" stroke="#ffa045" style="--o:42;--t:1.16s;--w:-1.03s"/>
+            <path d="M0-322v-38" transform="rotate(25.2)" pathLength="100" stroke="#ff9a46" style="--o:34;--t:0.80s;--w:-1.32s"/>
+            <path d="M0-322v-39" transform="rotate(28.8)" pathLength="100" stroke="#ff9547" style="--o:64;--t:0.82s;--w:-1.01s"/>
+            <path d="M0-322v-62" transform="rotate(32.4)" pathLength="100" stroke="#ff9048" style="--o:61;--t:1.38s;--w:-0.16s"/>
+            <path d="M0-322v-41" transform="rotate(35.9)" pathLength="100" stroke="#ff8b49" style="--o:61;--t:0.84s;--w:-0.18s"/>
+            <path d="M0-322v-52" transform="rotate(39.5)" pathLength="100" stroke="#ff864a" style="--o:32;--t:1.45s;--w:-1.02s"/>
+            <path d="M0-322v-64" transform="rotate(43.1)" pathLength="100" stroke="#ff814a" style="--o:53;--t:1.33s;--w:-1.13s"/>
+            <path d="M0-322v-50" transform="rotate(46.7)" pathLength="100" stroke="#ff7c4b" style="--o:62;--t:0.85s;--w:-0.33s"/>
+            <path d="M0-322v-36" transform="rotate(50.3)" pathLength="100" stroke="#ff774c" style="--o:56;--t:0.66s;--w:-0.90s"/>
+            <path d="M0-322v-57" transform="rotate(53.9)" pathLength="100" stroke="#ff724d" style="--o:66;--t:1.12s;--w:-1.40s"/>
+            <path d="M0-322v-24" transform="rotate(57.5)" pathLength="100" stroke="#ff6d4e" style="--o:51;--t:1.34s;--w:-0.40s"/>
+            <path d="M0-322v-56" transform="rotate(61.1)" pathLength="100" stroke="#ff684f" style="--o:34;--t:1.44s;--w:-0.76s"/>
+            <path d="M0-322v-59" transform="rotate(64.7)" pathLength="100" stroke="#ff6350" style="--o:72;--t:1.00s;--w:-0.74s"/>
+            <path d="M0-322v-50" transform="rotate(68.3)" pathLength="100" stroke="#fe5e52" style="--o:32;--t:0.82s;--w:-0.15s"/>
+            <path d="M0-322v-44" transform="rotate(71.9)" pathLength="100" stroke="#fd5b56" style="--o:69;--t:1.15s;--w:-0.91s"/>
+            <path d="M0-322v-50" transform="rotate(75.5)" pathLength="100" stroke="#fc5859" style="--o:69;--t:0.72s;--w:-1.34s"/>
+            <path d="M0-322v-50" transform="rotate(79.1)" pathLength="100" stroke="#fb555d" style="--o:31;--t:1.05s;--w:-0.61s"/>
+            <path d="M0-322v-43" transform="rotate(82.7)" pathLength="100" stroke="#fa5261" style="--o:44;--t:0.77s;--w:-1.44s"/>
+            <path d="M0-322v-55" transform="rotate(86.3)" pathLength="100" stroke="#f94f65" style="--o:48;--t:1.54s;--w:-0.56s"/>
+            <path d="M0-322v-55" transform="rotate(89.9)" pathLength="100" stroke="#f84c69" style="--o:52;--t:0.88s;--w:-0.81s"/>
+            <path d="M0-322v-70" transform="rotate(93.5)" pathLength="100" stroke="#f7496c" style="--o:41;--t:1.08s;--w:-0.65s"/>
+            <path d="M0-322v-47" transform="rotate(97.1)" pathLength="100" stroke="#f64670" style="--o:38;--t:1.22s;--w:-0.03s"/>
+            <path d="M0-322v-48" transform="rotate(100.6)" pathLength="100" stroke="#f54374" style="--o:61;--t:0.79s;--w:-0.34s"/>
+            <path d="M0-322v-58" transform="rotate(104.2)" pathLength="100" stroke="#f44078" style="--o:62;--t:1.19s;--w:-0.97s"/>
+            <path d="M0-322v-61" transform="rotate(107.8)" pathLength="100" stroke="#f33d7c" style="--o:45;--t:1.33s;--w:-1.48s"/>
+            <path d="M0-322v-42" transform="rotate(111.4)" pathLength="100" stroke="#f23a7f" style="--o:59;--t:0.73s;--w:-0.21s"/>
+            <path d="M0-322v-43" transform="rotate(115)" pathLength="100" stroke="#f13783" style="--o:58;--t:0.74s;--w:-1.47s"/>
+            <path d="M0-322v-53" transform="rotate(118.6)" pathLength="100" stroke="#f03487" style="--o:34;--t:1.46s;--w:-0.61s"/>
+            <path d="M0-322v-48" transform="rotate(122.2)" pathLength="100" stroke="#ef318b" style="--o:53;--t:1.36s;--w:-1.55s"/>
+            <path d="M0-322v-44" transform="rotate(125.8)" pathLength="100" stroke="#ee2e8e" style="--o:38;--t:0.94s;--w:-1.14s"/>
+            <path d="M0-322v-58" transform="rotate(129.4)" pathLength="100" stroke="#ed2b92" style="--o:30;--t:1.30s;--w:-0.20s"/>
+            <path d="M0-322v-52" transform="rotate(133)" pathLength="100" stroke="#ec2896" style="--o:61;--t:1.04s;--w:-1.52s"/>
+          </svg>
+          <div class="record vinyl">
+            <svg class="label" viewBox="0 0 200 200">
+              <defs><path id="label-arc" d="M100 100m-76 0a76 76 0 1 1 152 0a76 76 0 1 1-152 0"/></defs>
+              <circle cx="100" cy="100" r="99" fill="url(#light)"/>
+              <circle cx="100" cy="100" r="93" fill="none" stroke="#1b0716" stroke-opacity="0.3"/>
+              <circle cx="100" cy="100" r="62" fill="none" stroke="#1b0716" stroke-opacity="0.3"/>
+              <text><textPath href="#label-arc" textLength="470">RAAG &middot; EVENING RAGAS &middot; SIDE ONE &middot; LONG PLAY &middot; 33 RPM &middot; LOSSLESS &middot;</textPath></text>
+              <circle cx="100" cy="100" r="30" fill="#1b0716" fill-opacity="0.88"/>
+              <circle cx="100" cy="100" r="7" fill="#fdeee0"/>
+            </svg>
+          </div>
+        </div>
+
+        <article class="card player" aria-label="Now playing in the Raag app">
+          <div class="track">
+            <svg class="cover" viewBox="0 0 60 60" aria-hidden="true"><rect width="60" height="60" fill="url(#light)"/><g fill="none" stroke="#1b0716" stroke-opacity="0.45" stroke-width="1.6"><circle cx="30" cy="62" r="46"/><circle cx="30" cy="62" r="36"/><circle cx="30" cy="62" r="26"/></g><circle cx="30" cy="62" r="16" fill="#1b0716"/></svg>
+            <p><small>Now playing &middot; Dusk</small><b>Raag Yaman</b><span>Evening raga, sitar and tabla</span></p>
+          </div>
+          <div class="wave" aria-hidden="true"><i style="height:58%;background:#ffbe40"></i><i style="height:74%;background:#ffb142"></i><i style="height:60%;background:#ffa345"></i><i style="height:82%;background:#ff9647"></i><i style="height:57%;background:#ff8849"></i><i style="height:76%;background:#ff7b4b"></i><i style="height:73%;background:#ff6d4e"></i><i style="height:53%;background:#ff6050"></i><i style="height:49%;background:#fc585a"></i><i style="height:40%;background:#fa5064"></i><i style="height:67%;background:#f7486e"></i><i style="height:78%;background:#f44078"></i><i style="height:82%;background:#f13882"></i><i style="height:54%;background:#ef308c"></i><i style="height:73%;background:#ec2896"></i><i style="height:61%"></i><i style="height:73%"></i><i style="height:43%"></i><i style="height:44%"></i><i style="height:58%"></i><i style="height:54%"></i><i style="height:51%"></i><i style="height:90%"></i><i style="height:63%"></i><i style="height:63%"></i><i style="height:51%"></i><i style="height:53%"></i><i style="height:51%"></i><i style="height:40%"></i><i style="height:45%"></i><i style="height:81%"></i><i style="height:66%"></i><i style="height:73%"></i><i style="height:97%"></i><i style="height:60%"></i><i style="height:56%"></i><i style="height:42%"></i><i style="height:45%"></i><i style="height:58%"></i><i style="height:76%"></i><i style="height:72%"></i><i style="height:90%"></i><i style="height:83%"></i><i style="height:57%"></i><i style="height:70%"></i><i style="height:57%"></i></div>
+          <p class="times"><span>12:48</span><em>Lossless 24-bit</em><span>41:20</span></p>
+          <div class="controls">
+            <button class="thin" type="button" aria-label="Shuffle"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7h3l9 10h5M3 17h3l2.6-2.9M12.4 9.9 15 7h5M18 4.5 20.5 7 18 9.5M18 14.5l2.5 2.5-2.5 2.5"/></svg></button>
+            <button type="button" aria-label="Previous"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5.5 5h2.2v14H5.5zM19.5 5.5v13L9.5 12z"/></svg></button>
+            <button class="play" type="button" aria-label="Pause"><svg class="i-pause" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5h3.6v14H7zM13.4 5H17v14h-3.6z"/></svg><svg class="i-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11.5-7z"/></svg></button>
+            <button type="button" aria-label="Next"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16.3 5h2.2v14h-2.2zM4.5 5.5v13l10-6.5z"/></svg></button>
+            <button class="heart" type="button" aria-label="Saved to favourites"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20.5s-7.5-4.6-7.5-10A4.2 4.2 0 0 1 12 8a4.2 4.2 0 0 1 7.5 2.5c0 5.4-7.5 10-7.5 10z"/></svg></button>
+          </div>
+        </article>
+
+        <aside class="card queue" aria-label="Up next">
+          <p class="queue__head"><b>Up next</b><span>Tuned to dusk</span></p>
+          <ol>
+            <li class="on"><i style="--c: var(--light)"><span class="eq"><b></b><b></b><b></b><b></b></span></i><p><b>Raag Yaman</b><small>Sitar and tabla</small></p><time>41:20</time></li>
+            <li><i style="--c: linear-gradient(140deg, #ff5a4d, #e6208e)"></i><p><b>Night raga, khayal</b><small>Voice, sarangi, tanpura</small></p><time>38:05</time></li>
+            <li><i style="--c: linear-gradient(140deg, #e6208e, #7b1b8f)"></i><p><b>Qawwali, full mehfil</b><small>Harmonium and chorus</small></p><time>22:41</time></li>
+            <li><i style="--c: linear-gradient(140deg, #ffc247, #ff5a4d)"></i><p><b>Ghazal, late sitting</b><small>Voice and harmonium</small></p><time>9:12</time></li>
+          </ol>
+        </aside>
+      </div>
+    </div>
+
+    <section class="wrap" id="listen">
+      <div class="head">
+        <p class="eyebrow">Why Raag</p>
+        <h2>Built for music that <em class="lit">takes its time.</em></h2>
+        <p class="head__note">A khayal can run for an hour. A qawwali builds for twenty minutes before it lets go. Raag is made for listening like that, start to finish, with nothing rushing you to the next track.</p>
+      </div>
+
+      <div class="features">
+        <article class="feat feat--hours">
+          <div class="feat__art">
+            <svg class="dial" viewBox="0 0 400 244" role="img" aria-label="A dial that runs from dawn to night, set to dusk at 6:42 pm">
+              <defs><linearGradient id="day" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#ffe08a"/><stop offset="0.3" stop-color="#ffb52e"/><stop offset="0.6" stop-color="#ff5a4d"/><stop offset="0.85" stop-color="#e6208e"/><stop offset="1" stop-color="#6a2bd9"/></linearGradient></defs>
+              <path d="M30 206A170 170 0 0 1 370 206" fill="none" stroke="#fdeee0" stroke-opacity="0.1" stroke-width="22" stroke-linecap="round"/>
+              <path d="M30 206A170 170 0 0 1 370 206" fill="none" stroke="url(#day)" stroke-width="22" stroke-linecap="round" pathLength="100" stroke-dasharray="74 100"/>
+              <path d="M58 206A142 142 0 0 1 342 206" fill="none" stroke="#fdeee0" stroke-opacity="0.32" stroke-width="7" stroke-dasharray="1.5 17.021"/>
+              <circle cx="316.4" cy="82.1" r="16" fill="#fdeee0"/>
+              <circle cx="316.4" cy="82.1" r="6.5" fill="#ff5a4d"/>
+              <text class="l" x="200" y="96" text-anchor="middle">NOON</text>
+              <text class="t" x="200" y="166" text-anchor="middle">6:42 pm</text>
+              <text class="s" x="200" y="194" text-anchor="middle">Dusk. Evening ragas are on.</text>
+              <text class="l" x="30" y="240" text-anchor="middle">DAWN</text>
+              <text class="l" x="370" y="240" text-anchor="middle">NIGHT</text>
+            </svg>
+          </div>
+          <div>
+            <h3>Listen by the hour</h3>
+            <p>Every raga belongs to a part of the day. Raag reads your clock and plays dawn ragas at dawn, monsoon ragas when it rains and night ragas after the house goes quiet.</p>
+          </div>
+        </article>
+
+        <article class="feat">
+          <div class="feat__art">
+            <div class="hifi" role="img" aria-label="The same recording as a standard stream and as a lossless stream with far more detail">
+              <p><span>Standard stream</span><span>Compressed</span></p>
+              <svg viewBox="0 0 400 56" aria-hidden="true"><path d="M10 22V34M30 22V34M50 22V34M70 16V40M90 22V34M110 22V34M130 16V40M150 16V40M170 22V34M190 16V40M210 16V40M230 22V34M250 16V40M270 16V40M290 22V34M310 16V40M330 22V34M350 22V34M370 16V40M390 22V34" stroke="#fdeee0" stroke-opacity="0.3" stroke-width="12"/></svg>
+              <p class="on"><span>Raag Lossless</span><span>24-bit / 96 kHz</span></p>
+              <svg viewBox="0 0 400 72" aria-hidden="true"><defs><linearGradient id="fine" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="400" y2="0"><stop offset="0" stop-color="#ffc247"/><stop offset="0.55" stop-color="#ff5a4d"/><stop offset="1" stop-color="#e6208e"/></linearGradient></defs><path d="M2 27.2V44.8M6 26V46M10 22.4V49.6M14 25.4V46.6M18 26.6V45.4M22 28.4V43.6M26 26.2V45.8M30 21.5V50.5M34 21V51M38 26.8V45.2M42 19V53M46 24.2V47.8M50 27.6V44.4M54 22.2V49.8M58 29.1V42.9M62 21.8V50.2M66 19.6V52.4M70 8V64M74 11.2V60.8M78 14.7V57.3M82 21.8V50.2M86 16.4V55.6M90 28.3V43.7M94 23.5V48.5M98 24.4V47.6M102 28.8V43.2M106 22.7V49.3M110 29V43M114 24.2V47.8M118 27.7V44.3M122 23.3V48.7M126 20.2V51.8M130 12V60M134 5.8V66.2M138 5.4V66.6M142 4V68M146 4.8V67.2M150 16.4V55.6M154 21.4V50.6M158 25.2V46.8M162 25.6V46.4M166 28.9V43.1M170 28V44M174 25.8V46.2M178 22.3V49.7M182 28.4V43.6M186 22.1V49.9M190 23.4V48.6M194 26.2V45.8M198 11.9V60.1M202 15V57M206 14.7V57.3M210 11.8V60.2M214 4V68M218 15.7V56.3M222 22.1V49.9M226 27.4V44.6M230 25.7V46.3M234 21V51M238 21.5V50.5M242 21.8V50.2M246 20.7V51.3M250 17V55M254 27.7V44.3M258 22.1V49.9M262 16.7V55.3M266 18.4V53.6M270 23V49M274 20.9V51.1M278 12.3V59.7M282 16.3V55.7M286 23.5V48.5M290 28.2V43.8M294 29.5V42.5M298 23.1V48.9M302 19.1V52.9M306 14.3V57.7M310 5.4V66.6M314 9.3V62.7M318 19.1V52.9M322 22.8V49.2M326 21.4V50.6M330 26V46M334 24.7V47.3M338 24.2V47.8M342 26.7V45.3M346 30.1V41.9M350 21V51M354 29.9V42.1M358 29.7V42.3M362 29.2V42.8M366 17.2V54.8M370 17.5V54.5M374 15.1V56.9M378 13.1V58.9M382 16.7V55.3M386 19.7V52.3M390 27.6V44.4M394 29.6V42.4M398 29.4V42.6" stroke="url(#fine)" stroke-width="2.2"/></svg>
+            </div>
+          </div>
+          <div>
+            <h3>Lossless, note for note</h3>
+            <p>Up to 24-bit, 96 kHz. You hear the tanpura drone under the voice and the room around the tabla, with nothing squeezed out to save data.</p>
+          </div>
+        </article>
+
+        <article class="feat">
+          <div class="feat__art">
+            <div class="saved">
+              <p class="saved__top"><b>Offline</b><span>14 hr 20 min on this phone</span></p>
+              <ul>
+                <li class="done"><i><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 12.5l4 4 8-9"/></svg></i><p><b>Morning ragas, bansuri</b><small>3 hr 12 min</small></p><em>Saved</em></li>
+                <li class="going"><i></i><p><b>Qawwali night, full mehfil</b><small>2 hr 40 min</small></p><em>64%</em></li>
+                <li class="wait"><i><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v13M6.5 12.5 12 18l5.5-5.5"/></svg></i><p><b>Ghazal evenings</b><small>1 hr 05 min</small></p><em>Queued</em></li>
+              </ul>
+            </div>
+          </div>
+          <div>
+            <h3>Offline for the long road</h3>
+            <p>Save whole concerts to your phone. A three-hour mehfil plays from the first note to the last with no signal and no gaps between tracks.</p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="wrap" id="moods">
+      <div class="head">
+        <p class="eyebrow">Moods</p>
+        <h2>Pick a mood, <em class="lit">not a playlist.</em></h2>
+        <p class="head__note">Six doors into the catalogue. Each one is a long, unbroken stream that shifts with the hour and the season.</p>
+      </div>
+
+      <ul class="moods">
+        <li class="mood mood--morning">
+          <svg viewBox="0 0 300 400" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><g fill="none" stroke="#fff" stroke-opacity="0.55" stroke-width="2"><circle cx="150" cy="188" r="92"/><circle cx="150" cy="188" r="128"/><circle cx="150" cy="188" r="164"/><circle cx="150" cy="188" r="200"/></g><circle cx="150" cy="188" r="58" fill="#fff6d8"/></svg>
+          <small>Dawn to 10 am</small>
+          <p><b>Morning</b><span>Bansuri, santoor and first light</span></p>
+        </li>
+        <li class="mood mood--monsoon">
+          <svg viewBox="0 0 300 400" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><defs><pattern id="rain" width="38" height="88" patternUnits="userSpaceOnUse" patternTransform="rotate(16)"><path d="M8 6v36M27 50v28" stroke="#d8fbff" stroke-opacity="0.45" stroke-width="3" stroke-linecap="round"/></pattern></defs><rect x="-60" y="-40" width="420" height="330" fill="url(#rain)"/></svg>
+          <small>When it rains</small>
+          <p><b>Monsoon</b><span>Malhar ragas, sarod and thunder-low tabla</span></p>
+        </li>
+        <li class="mood mood--dusk">
+          <svg viewBox="0 0 300 400" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><defs><mask id="set"><rect width="300" height="400" fill="#fff"/><rect y="196" width="300" height="5"/><rect y="214" width="300" height="9"/><rect y="236" width="300" height="13"/><rect y="262" width="300" height="20"/></mask></defs><circle cx="150" cy="190" r="88" fill="#ffd36b" mask="url(#set)"/></svg>
+          <small>5 pm to 8 pm</small>
+          <p><b>Dusk</b><span>Sitar as the lamps come on</span></p>
+        </li>
+        <li class="mood mood--night">
+          <svg viewBox="0 0 300 400" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><defs><mask id="moon"><rect width="300" height="400" fill="#fff"/><circle cx="180" cy="150" r="52"/></mask></defs><circle cx="150" cy="166" r="58" fill="#f3e6ff" mask="url(#moon)"/><g fill="#fff"><circle cx="58" cy="112" r="2.6"/><circle cx="246" cy="108" r="2"/><circle cx="252" cy="222" r="3"/><circle cx="66" cy="246" r="2"/><circle cx="214" cy="278" r="2.4"/><circle cx="38" cy="168" r="1.8"/><circle cx="112" cy="300" r="1.8"/></g></svg>
+          <small>After 10 pm</small>
+          <p><b>Night</b><span>Slow khayal, sarangi and tanpura</span></p>
+        </li>
+        <li class="mood mood--devotional">
+          <svg viewBox="0 0 300 400" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><g fill="none" stroke="#ffd36b" stroke-width="2.5"><path d="M40 400V200a110 110 0 0 1 220 0v200" stroke-opacity="0.85"/><path d="M70 400V206a80 80 0 0 1 160 0v194" stroke-opacity="0.6"/><path d="M100 400V212a50 50 0 0 1 100 0v188" stroke-opacity="0.4"/></g></svg>
+          <small>Thursday nights</small>
+          <p><b>Devotional</b><span>Qawwali, harmonium and chorus</span></p>
+        </li>
+        <li class="mood mood--mehfil">
+          <svg viewBox="0 0 300 400" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><g fill="none" stroke="#ffb7c9" stroke-opacity="0.38" stroke-width="2"><circle cx="150" cy="176" r="70"/><circle cx="150" cy="176" r="104"/><circle cx="150" cy="176" r="138"/></g><path d="M150 112c26 34 34 56 34 72a34 34 0 0 1-68 0c0-16 8-38 34-72z" fill="#ffc247"/><path d="M150 156c12 16 16 26 16 34a16 16 0 0 1-32 0c0-8 4-18 16-34z" fill="#fff3d6"/></svg>
+          <small>Late sittings</small>
+          <p><b>Mehfil</b><span>Ghazal, close and unhurried</span></p>
+        </li>
+      </ul>
+    </section>
+
+    <section class="wrap" id="plans">
+      <div class="head">
+        <p class="eyebrow">Plans</p>
+        <h2>Start free. <em class="lit">Stay for the sound.</em></h2>
+        <p class="head__note">Prices are in Pakistani rupees and billed monthly. Change or cancel your plan from inside the app whenever you like.</p>
+      </div>
+
+      <div class="plans">
+        <article class="plan">
+          <h3>Free</h3>
+          <p class="plan__for">For getting to know the catalogue</p>
+          <p class="price"><b>Rs 0</b></p>
+          <ul>
+            <li>Every recording in standard quality</li>
+            <li>Listen by the hour</li>
+            <li>A short break between sets</li>
+          </ul>
+          <a class="btn btn--ghost" href="#get">Start free</a>
+        </article>
+        <article class="plan plan--on">
+          <span class="tag">Best sound</span>
+          <h3>Lossless</h3>
+          <p class="plan__for">For one careful listener</p>
+          <p class="price"><b>Rs 449</b> a month</p>
+          <ul>
+            <li>24-bit lossless, up to 96 kHz</li>
+            <li>Offline listening on three devices</li>
+            <li>Gapless concerts with no breaks</li>
+            <li>Notes on the raga, taal and instruments</li>
+          </ul>
+          <a class="btn btn--light" href="#get">Try 30 days free</a>
+        </article>
+        <article class="plan">
+          <h3>Gharana</h3>
+          <p class="plan__for">For the whole household</p>
+          <p class="price"><b>Rs 749</b> a month</p>
+          <ul>
+            <li>Six separate accounts</li>
+            <li>Everything in Lossless</li>
+            <li>One shared queue for the living room</li>
+          </ul>
+          <a class="btn btn--ghost" href="#get">Choose Gharana</a>
+        </article>
+      </div>
+      <p class="fine">Students get Lossless for Rs 249 a month with a valid student card.</p>
+    </section>
+
+    <section class="wrap" id="get">
+      <div class="cta">
+        <div class="cta__disc vinyl" aria-hidden="true"><i></i></div>
+        <h2>Tonight&rsquo;s raga is already playing.</h2>
+        <p>Raag is free to start, and Lossless is free for your first 30 days. Bring your good headphones.</p>
+        <div class="actions">
+          <a class="btn btn--dark" href="#">Get the app <span aria-hidden="true">&darr;</span></a>
+          <a class="btn btn--line" href="#">Open the web player</a>
+        </div>
+        <ul>
+          <li>Phone, tablet and web</li>
+          <li>Urdu, Hindi and English</li>
+          <li>No card needed for Free</li>
+        </ul>
+      </div>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <a class="brand" href="#"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="none" stroke="url(#light)" stroke-width="2.6"/><circle cx="12" cy="12" r="4.2" fill="url(#light)"/></svg>Raag</a>
+    <p>South Asian classical, qawwali and ghazal. Made for long listening.</p>
+    <ul>
+      <li><a href="#listen">Why Raag</a></li>
+      <li><a href="#moods">Moods</a></li>
+      <li><a href="#plans">Plans</a></li>
+      <li><a href="#get">Get the app</a></li>
+    </ul>
+  </footer>
+
+  <p class="credit">Design concept by <a href="/">Huzaifa Malik</a>. Raag is not a real product.</p>
+
+  <script>
+    // Play and pause button: freezes the record and the equaliser.
+    (function () {
+      var button = document.querySelector('.play');
+      if (!button) return;
+      button.addEventListener('click', function () {
+        var paused = document.documentElement.classList.toggle('is-paused');
+        button.setAttribute('aria-label', paused ? 'Play' : 'Pause');
+      });
+    })();
+  </script>
+</body>
+</html>

@@ -9,12 +9,14 @@ const PICK_KEY = 'hm-design-picker';
 // "root" entries are page-wide switches, set on <html> instead of on a section;
 // "anchor" is where the page returns to after the choice reloads it.
 export const SECTIONS = [
+  { id: 'hero', label: 'Hero', options: { a: 'Decode', b: 'Wipe' }, root: true, anchor: 'top' },
   { id: 'work', label: 'Work', options: { a: 'Grid', b: 'List', c: 'Slider', d: 'Stack' } },
   { id: 'about', label: 'About', options: { a: 'Classic', b: 'Sticky photo', c: 'Centred' } },
   { id: 'services', label: 'Services', options: { a: 'Accordion', b: 'Cards', c: 'Open list' } },
   { id: 'experience', label: 'Experience', options: { a: 'Photo left', b: 'Two cards', c: 'Big years', d: 'Dial' } },
   { id: 'pricing', label: 'Pricing', options: { a: 'Cards', b: 'Rows', c: 'Dark' } },
   { id: 'contact', label: 'Contact', options: { a: 'Classic', b: 'Centred', c: 'Blue' } },
+  { id: 'archive', label: 'All projects', options: { a: 'Reel', b: 'Folders', c: 'Off' } },
   { id: 'wall', label: 'Screens wall', options: { a: 'On', b: 'Off' }, root: true, anchor: 'screens' },
   { id: 'intro', label: 'Opening', options: { a: 'Blocks', b: 'Slide' }, root: true, anchor: 'top' },
 ];

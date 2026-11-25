@@ -74,6 +74,82 @@ const scenarios = {
     return file;
   },
 
+  // The hero from a wall of code to the photograph, in steps (PROBE_AT = one step, 0 to 1,
+  // saved full size), then the pointer opening the code and a click sending a ripple.
+  async hero(page) {
+    await page.goto(URL_, 6500);
+    const end = await page.evaluate(`(() => { const t = document.querySelector('[data-hero-track]'); const s = document.querySelector('[data-hero-stage]'); return t.getBoundingClientRect().top + scrollY + t.offsetHeight - s.offsetHeight - (parseFloat(getComputedStyle(s).top) || 0); })()`);
+    console.log('pinned', await page.evaluate(`document.querySelector('[data-hero-track]').className`), 'scroll length', Math.round(end));
+    if (process.env.PROBE_AT) {
+      await page.scrollTo(end * Number(process.env.PROBE_AT));
+      await sleep(2600);
+      return page.save(`probe-hero-at-${process.env.PROBE_AT}-${tag}.png`);
+    }
+    const frames = [];
+    for (const k of [0, 0.14, 0.28, 0.42, 0.56, 0.7, 0.84, 1]) {
+      await page.scrollTo(end * k);
+      await sleep(2200);
+      frames.push(await page.shot());
+    }
+    // Back near the start, with the pointer over the figure.
+    await page.scrollTo(end * 0.1);
+    await sleep(1800);
+    const box = await page.evaluate(`(() => { const r = document.querySelector('[data-hero-stage]').getBoundingClientRect(); return { x: r.left, y: r.top, w: r.width, h: r.height }; })()`);
+    const fx = mobile ? 0.5 : 0.63;
+    for (let i = 0; i <= 14; i++) {
+      await page.move(box.x + box.w * (fx - 0.12 + 0.12 * (i / 14)), box.y + box.h * 0.42);
+      await sleep(40);
+    }
+    await sleep(900);
+    frames.push(await page.shot());
+    await page.save(`probe-hero-${tag}-peek.png`);
+    await page.click(box.x + box.w * (fx - 0.2), box.y + box.h * 0.6);
+    await sleep(260);
+    frames.push(await page.shot());
+    await sleep(240);
+    frames.push(await page.shot());
+    await page.scrollTo(end + H * 0.7);
+    await sleep(1800);
+    frames.push(await page.shot());
+    return sheet(`probe-hero-${tag}.jpg`, frames, { perRow: mobile ? 6 : 3, tileWidth: mobile ? 260 : 700 });
+  },
+
+  // The archive: the ribbon of covers settling into the grid (or the folders filling),
+  // then a cover pointed at and opened.
+  async archive(page) {
+    await page.goto(URL_, 5500);
+    const info = await page.evaluate(`(() => { const t = document.querySelector('[data-archive-track]'); const s = document.querySelector('[data-section="archive"]'); return { top: t.getBoundingClientRect().top + scrollY, height: t.offsetHeight, cls: s.className, variant: s.dataset.variant }; })()`);
+    console.log('archive', JSON.stringify(info));
+    const frames = [];
+    const reel = info.cls.includes('is-reel');
+    const steps = reel ? [-0.5, -0.22, 0, 0.14, 0.28, 0.42, 0.56, 0.72, 1] : [-0.75, -0.45, -0.2, 0, 0.3];
+    for (const k of steps) {
+      await page.scrollTo(info.top + (reel ? (info.height - H) * k : H * k));
+      await sleep(reel ? 1500 : 1300);
+      frames.push(await page.shot());
+    }
+    if (process.env.PROBE_AT) {
+      await page.scrollTo(info.top + (info.height - H) * Number(process.env.PROBE_AT));
+      await sleep(2000);
+      return page.save(`probe-archive-at-${process.env.PROBE_AT}-${tag}.png`);
+    }
+    await sleep(reel ? 400 : 4200);
+    // Point at one cover, then open it.
+    const target = await page.evaluate(`(() => { const el = document.querySelector('.archive[data-variant="b"] .folder:nth-child(2) .file:nth-child(3)') || document.querySelectorAll('.tile__open')[5]; const r = el.getBoundingClientRect(); return { x: r.left + r.width / 2, y: r.top + r.height * 0.3 }; })()`);
+    await page.move(target.x - 40, target.y + 4);
+    await page.move(target.x, target.y);
+    await sleep(1100);
+    frames.push(await page.shot());
+    await page.save(`probe-archive-${tag}-rest.png`);
+    if (mobile) await page.evaluate(`(document.querySelector('.archive[data-variant="b"] .folder:nth-child(2) .file:nth-child(3)') || document.querySelectorAll('.tile__open')[5]).click()`);
+    else await page.click(target.x, target.y - (reel ? 0 : H * 0.05));
+    await sleep(1100);
+    frames.push(await page.shot());
+    console.log('sheet', await page.evaluate(`JSON.stringify({ open: document.querySelector('[data-sheet]').open, title: document.querySelector('[data-sheet-title]').textContent, button: document.querySelector('[data-sheet-link] span').textContent })`));
+    await page.save(`probe-archive-${tag}-sheet.png`);
+    return sheet(`probe-archive-${tag}.jpg`, frames, { perRow: mobile ? 6 : 3, tileWidth: mobile ? 260 : 700 });
+  },
+
   // Scroll to the wall, move the pointer across it, then click a screen.
   async wall(page) {
     await page.goto(URL_, 6500);
@@ -127,7 +203,9 @@ const scenarios = {
 
 // "novt" hides the browser's view transitions, to check the fallback for older browsers.
 // "reduced" asks for reduced motion, the way a visitor's system setting would.
-const preload = presets({ theme, choices: what === 'dial' ? { experience: 'd' } : null })
+// PROBE_CHOICES sets layout choices the way the picker would, for example "archive=b,hero=b".
+const chosen = process.env.PROBE_CHOICES ? Object.fromEntries(process.env.PROBE_CHOICES.split(',').map((pair) => pair.split('='))) : null;
+const preload = presets({ theme, choices: what === 'dial' ? { experience: 'd', ...chosen } : chosen })
   + (flags.includes('novt') ? '\ntry { Object.defineProperty(Document.prototype, "startViewTransition", { value: undefined }); } catch (e) {}' : '');
 const file = await withPage({ width: W, height: H, mobile, preload, port: 9341 }, async (page) => {
   if (flags.includes('reduced')) {

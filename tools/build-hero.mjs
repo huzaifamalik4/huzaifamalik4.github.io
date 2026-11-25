@@ -56,3 +56,66 @@ await sharp({ create: { width: W, height: H, channels: 3, background: '#e6e6e6' 
 
 const { size } = await sharp(OUT).metadata();
 console.log(`hero-portrait.webp ${W}x${H}`, size ? `${Math.round(size / 1024)} kB` : '');
+
+// The figure on its own, with the wall cut away, for the "decode" hero. The wall is found by
+// flooding inward from the image border through light, colourless pixels. The result is a
+// square power-of-two texture (so WebGL 1 can mipmap it); the page stretches it back.
+const FIGURE_OUT = path.resolve('assets/img/hero-figure.webp');
+const FIGURE_SIZE = 1024;
+{
+  const { data, info } = await sharp(photo).removeAlpha().raw().toBuffer({ resolveWithObject: true });
+  const { width: w, height: h } = info;
+  const wall = new Uint8Array(w * h);
+  for (let i = 0, p = 0; i < w * h; i++, p += 3) {
+    const lo = Math.min(data[p], data[p + 1], data[p + 2]);
+    const hi = Math.max(data[p], data[p + 1], data[p + 2]);
+    wall[i] = lo >= 198 && hi - lo <= 22 ? 1 : 0;
+  }
+  const bg = new Uint8Array(w * h);
+  const stack = [];
+  const push = (x, y) => {
+    const i = y * w + x;
+    if (wall[i] && !bg[i]) { bg[i] = 1; stack.push(i); }
+  };
+  // The bottom edge is the sweater, so the flood starts from the other three sides only.
+  for (let x = 0; x < w; x++) push(x, 0);
+  for (let y = 0; y < h; y++) { push(0, y); push(w - 1, y); }
+  while (stack.length) {
+    const i = stack.pop();
+    const x = i % w, y = (i - x) / w;
+    if (x > 0) push(x - 1, y);
+    if (x < w - 1) push(x + 1, y);
+    if (y > 0) push(x, y - 1);
+    if (y < h - 1) push(x, y + 1);
+  }
+  const alpha = Buffer.alloc(w * h);
+  for (let i = 0; i < w * h; i++) alpha[i] = bg[i] ? 0 : 255;
+  // Pull the edge in a little: the stage is dark, so any wall-coloured fringe would glow.
+  const soft = await sharp(alpha, { raw: { width: w, height: h, channels: 1 } })
+    .blur(1.5)
+    .linear(2.6, -205)
+    .extractChannel(0)
+    .raw()
+    .toBuffer();
+  if (soft.length !== w * h) throw new Error(`alpha is ${soft.length} bytes, expected ${w * h}`);
+  // Joined first and resized second: in one pipeline sharp would resize before joining.
+  const cut = await sharp(data, { raw: { width: w, height: h, channels: 3 } })
+    .joinChannel(soft, { raw: { width: w, height: h, channels: 1 } })
+    .png()
+    .toBuffer();
+  await sharp(cut)
+    .resize(FIGURE_SIZE, FIGURE_SIZE, { fit: 'fill' })
+    .webp({ quality: 84, alphaQuality: 92 })
+    .toFile(FIGURE_OUT);
+  // Preview on the stage colour, for checking the cut by eye.
+  const onStage = await sharp({ create: { width: FIGURE_SIZE, height: FIGURE_SIZE, channels: 3, background: '#07081f' } })
+    .composite([{ input: await sharp(FIGURE_OUT).png().toBuffer() }])
+    .png()
+    .toBuffer();
+  await sharp(onStage)
+    .resize(Math.round((FIGURE_SIZE * w) / h / 1.3), Math.round(FIGURE_SIZE / 1.3), { fit: 'fill' })
+    .jpeg({ quality: 84 })
+    .toFile(path.resolve('tools/shots/hero-figure-check.jpg'));
+  const { size: bytes } = await (await import('node:fs/promises')).stat(FIGURE_OUT);
+  console.log(`hero-figure.webp ${FIGURE_SIZE}x${FIGURE_SIZE} (shown at ${w}:${h})`, `${Math.round(bytes / 1024)} kB`);
+}

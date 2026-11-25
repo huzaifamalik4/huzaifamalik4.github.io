@@ -1,0 +1,567 @@
+/* The archive: every project in one place. Three layouts share the same list:
+   the plain grid (phones, reduced motion, no script), the reel (covers fly in as a ribbon
+   and settle into the grid) and the folders (covers filed into glass folders). */
+
+.archive {
+  position: relative;
+}
+.archive[data-variant="c"] {
+  display: none;
+}
+
+.archive__head {
+  display: grid;
+  gap: clamp(12px, 1.4vw, 22px);
+  margin-bottom: clamp(28px, 3.4vw, 56px);
+}
+.archive__kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.archive__kicker i {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+.archive__title {
+  font-size: clamp(2.6rem, 6.6vw, 7.4rem);
+  font-weight: 500;
+  line-height: 0.95;
+  letter-spacing: -0.05em;
+  text-wrap: balance;
+}
+.archive__title em {
+  font-size: 1.06em;
+  letter-spacing: -0.035em;
+  color: var(--accent);
+}
+.archive__note {
+  max-width: 46ch;
+  color: var(--mute);
+}
+
+/* The line above the grid that names the project under the pointer. */
+.archive__bar {
+  display: none;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.7fr) auto;
+  align-items: center;
+  gap: var(--gap);
+  min-height: 68px;
+  padding: 10px 0;
+  margin-bottom: clamp(10px, 1vw, 16px);
+  border-top: 1px solid var(--line);
+}
+.archive__bar-name {
+  font-size: clamp(1.15rem, 1.6vw, 1.6rem);
+  font-weight: 500;
+  letter-spacing: -0.025em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.archive__bar-name span {
+  margin-right: 0.3em;
+  font-size: 0.62em;
+  letter-spacing: 0.02em;
+  color: var(--mute);
+  font-variant-numeric: tabular-nums;
+  vertical-align: 0.25em;
+}
+.archive__bar-line {
+  max-width: 48ch;
+  font-size: 0.9375rem;
+  line-height: 1.35;
+  color: var(--ink-2);
+}
+.archive__bar-open:disabled {
+  opacity: 0.35;
+  cursor: default;
+  pointer-events: none;
+}
+@media (hover: hover) and (pointer: fine) {
+  .archive[data-variant="a"] .archive__bar {
+    display: grid;
+  }
+}
+
+.archive__grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: clamp(10px, 1vw, 16px) clamp(8px, 0.9vw, 14px);
+}
+.tile {
+  position: relative;
+  min-width: 0;
+}
+.tile__open {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: calc(var(--radius) * 0.45);
+  overflow: hidden;
+  background: var(--paper-2);
+  box-shadow: 0 0 0 1px var(--hairline);
+}
+.tile__open img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+  transition: transform 0.9s var(--ease), opacity 0.5s var(--ease);
+}
+.tile__open:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+.tile__text {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 8px 2px 0;
+  min-height: 34px;
+}
+.tile__text h3 {
+  font-size: 0.875rem;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.tile__text .tag {
+  flex: none;
+  padding: 0.3em 0.7em;
+  font-size: 0.625rem;
+}
+/* Kept in the page for the project sheet, which copies them. */
+.tile__kind,
+.tile__line,
+.tile__more,
+.tile__stack,
+.tile__link {
+  display: none;
+}
+@media (hover: hover) and (pointer: fine) {
+  .tile__open:hover img {
+    transform: scale(1.05);
+  }
+  .archive__grid.has-pick .tile:not(.is-picked) .tile__open img {
+    opacity: 0.55;
+  }
+}
+
+/* ---------- Reel: set by the script on wide screens ---------- */
+
+.archive.is-reel {
+  padding-top: 0;
+  /* Covers wait beyond the right edge; they must not make the page scroll sideways. */
+  overflow-x: clip;
+}
+.archive.is-reel .archive__track {
+  height: 330vh;
+}
+.archive.is-reel .archive__pin {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  height: 100svh;
+  display: grid;
+  grid-template-rows: auto auto;
+  align-content: center;
+  padding: clamp(78px, 9vh, 104px) 0 24px;
+  /* Covers may fly in from beyond the sides, but not over the sections above and below. */
+  clip-path: inset(0 -100vw);
+}
+.archive.is-reel .archive__head {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  margin: 0;
+  align-content: center;
+  justify-items: center;
+  text-align: center;
+  pointer-events: none;
+}
+.archive.is-reel .archive__title {
+  font-size: clamp(3rem, 8.6vw, 10rem);
+  max-width: 11ch;
+}
+.archive.is-reel .archive__bar,
+.archive.is-reel .archive__grid {
+  width: min(100%, calc((100svh - 330px) * 2.37));
+  margin-inline: auto;
+}
+.archive.is-reel .archive__bar {
+  position: relative;
+  z-index: 1;
+  opacity: 0;
+}
+.archive.is-reel .archive__grid {
+  position: relative;
+  z-index: 2;
+  perspective: 1700px;
+}
+.archive.is-reel .tile {
+  will-change: transform;
+  backface-visibility: hidden;
+}
+.archive.is-reel .archive__pin:not(.is-settled) .tile {
+  pointer-events: none;
+}
+.archive.is-reel .tile.is-picked {
+  z-index: 40 !important;
+}
+
+/* ---------- Folders: built by the script from the same list ---------- */
+
+.archive[data-variant="b"] .archive__grid,
+.archive[data-variant="b"] .archive__bar {
+  display: none;
+}
+.folders {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: clamp(16px, 2vw, 36px);
+  padding: clamp(60px, 8vw, 130px) 0 clamp(20px, 3vw, 48px);
+}
+.folder {
+  --lift: 0;
+  position: relative;
+  aspect-ratio: 1 / 0.86;
+  min-width: 0;
+}
+/* The back plate, with a tab on its left shoulder. */
+.folder__back {
+  position: absolute;
+  inset: 12% 0 0;
+  border-radius: 9% / 11%;
+  background: var(--folder-back);
+  box-shadow: 0 40px 60px -34px rgba(20, 20, 50, 0.55);
+}
+.folder__back::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: calc(100% - 14%);
+  width: 46%;
+  height: 26%;
+  border-radius: 22% 22% 0 0 / 60% 60% 0 0;
+  background: inherit;
+}
+.folder__files {
+  position: absolute;
+  inset: 0 6% 8%;
+}
+.file {
+  position: absolute;
+  left: 0;
+  top: 14%;
+  width: 78%;
+  aspect-ratio: 16 / 10.5;
+  border-radius: 7% / 10%;
+  overflow: hidden;
+  background: var(--card);
+  box-shadow: 0 14px 26px -14px rgba(10, 10, 30, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.16);
+  /* --drop and --spin are driven by the script while a file falls into its folder. */
+  transform: translate(var(--x), calc(var(--y) - var(--rise) * var(--lift) + var(--drop, 0%))) rotate(calc(var(--r) * (0.35 + var(--lift) * 0.65) + var(--spin, 0deg)));
+  transition: transform 0.75s var(--ease);
+  will-change: transform;
+}
+.folders.is-filing .file {
+  transition: none;
+}
+.file img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+}
+.file__name {
+  position: absolute;
+  left: 7%;
+  top: 8%;
+  z-index: 1;
+  padding: 0.3em 0.7em;
+  border-radius: 999px;
+  background: rgba(12, 12, 14, 0.62);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+  color: #fff;
+  font-family: ui-monospace, "Cascadia Mono", Consolas, Menlo, monospace;
+  font-size: clamp(0.5625rem, 0.72vw, 0.75rem);
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+}
+.file:nth-child(1) { --x: 0%; --y: 0%; --r: -5deg; --rise: 34%; }
+.file:nth-child(2) { --x: 28%; --y: 9%; --r: 4deg; --rise: 40%; }
+.file:nth-child(3) { --x: 12%; --y: 24%; --r: -2deg; --rise: 50%; }
+.file:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}
+/* The frosted front: whatever is filed behind it shows through as blurred colour. */
+.folder__front {
+  position: absolute;
+  inset: 44% -2% -1%;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-content: end;
+  align-items: end;
+  gap: 2px 10px;
+  padding: 8% 9% 8%;
+  border-radius: 10% / 19%;
+  background: var(--folder-front);
+  -webkit-backdrop-filter: blur(16px) saturate(1.5);
+  backdrop-filter: blur(16px) saturate(1.5);
+  box-shadow: inset 0 1px 0 var(--folder-edge), inset 0 0 0 1px var(--folder-line), 0 26px 44px -26px rgba(20, 20, 50, 0.5);
+  color: var(--folder-ink);
+  pointer-events: none;
+}
+/* The raised lip in the middle of the front's top edge. */
+.folder__front::before {
+  content: "";
+  position: absolute;
+  left: 34%;
+  right: 34%;
+  bottom: calc(100% - 1px);
+  height: 9%;
+  border-radius: 40% 40% 0 0 / 100% 100% 0 0;
+  background: var(--folder-front);
+  -webkit-backdrop-filter: blur(16px) saturate(1.5);
+  backdrop-filter: blur(16px) saturate(1.5);
+  box-shadow: inset 0 1px 0 var(--folder-edge);
+}
+.folder__front strong {
+  grid-column: 1;
+  font-size: clamp(1rem, 1.5vw, 1.5rem);
+  font-weight: 500;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+}
+.folder__front span {
+  grid-column: 1;
+  font-family: ui-monospace, "Cascadia Mono", Consolas, Menlo, monospace;
+  font-size: clamp(0.625rem, 0.78vw, 0.8125rem);
+  opacity: 0.66;
+}
+.folder__dots {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  display: flex;
+  gap: 5px;
+  padding-bottom: 0.3em;
+}
+.folder__dots i {
+  width: clamp(6px, 0.62vw, 9px);
+  aspect-ratio: 1;
+  border-radius: 2px;
+  box-shadow: inset 0 0 0 1.5px currentColor;
+  opacity: 0.5;
+  transition: background-color 0.3s, opacity 0.3s;
+}
+.folder__dots i.is-on {
+  background: currentColor;
+  opacity: 1;
+}
+
+.folder--frost {
+  --folder-back: linear-gradient(180deg, #ffffff, #ecebe6);
+  --folder-front: linear-gradient(180deg, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.86));
+  --folder-edge: rgba(255, 255, 255, 0.95);
+  --folder-line: rgba(255, 255, 255, 0.55);
+  --folder-ink: #0c0c0d;
+}
+.folder--smoke {
+  --folder-back: linear-gradient(180deg, #3a3a40, #202024);
+  --folder-front: linear-gradient(180deg, rgba(64, 64, 72, 0.5), rgba(16, 16, 20, 0.86));
+  --folder-edge: rgba(255, 255, 255, 0.28);
+  --folder-line: rgba(255, 255, 255, 0.1);
+  --folder-ink: #fff;
+}
+.folder--indigo {
+  --folder-back: linear-gradient(180deg, #8f84ff, #5a3fe0);
+  --folder-front: linear-gradient(180deg, rgba(150, 132, 255, 0.5), rgba(70, 44, 214, 0.86));
+  --folder-edge: rgba(255, 255, 255, 0.5);
+  --folder-line: rgba(255, 255, 255, 0.16);
+  --folder-ink: #fff;
+}
+/* Fluted glass: fine vertical ribs over a clear front. */
+.folder--fluted {
+  --folder-back: linear-gradient(180deg, #f4f6ff, #dfe3f6);
+  --folder-front: repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.62) 0 2px, rgba(255, 255, 255, 0.14) 2px 7px, rgba(120, 132, 210, 0.16) 7px 9px), linear-gradient(180deg, rgba(240, 243, 255, 0.34), rgba(240, 243, 255, 0.78));
+  --folder-edge: rgba(255, 255, 255, 0.95);
+  --folder-line: rgba(255, 255, 255, 0.6);
+  --folder-ink: #0c0c0d;
+}
+.folder--fluted .folder__front,
+.folder--fluted .folder__front::before {
+  -webkit-backdrop-filter: blur(7px) saturate(1.6);
+  backdrop-filter: blur(7px) saturate(1.6);
+}
+html[data-theme="dark"] .folder__back {
+  box-shadow: 0 40px 60px -34px rgba(0, 0, 0, 0.9);
+}
+
+/* A folder opens when pointed at, focused, or tapped: its files rise and fan out. */
+.folder.is-open,
+.folder:focus-within {
+  --lift: 1;
+}
+@media (hover: hover) and (pointer: fine) {
+  .folder:hover {
+    --lift: 1;
+  }
+  .file:hover {
+    z-index: 3;
+    transform: translate(var(--x), calc(var(--y) - var(--rise) * var(--lift) - 9%)) rotate(0deg) scale(1.05);
+  }
+}
+
+/* ---------- Project sheet ---------- */
+
+.sheet {
+  width: min(1120px, calc(100vw - 24px));
+  max-width: none;
+  max-height: calc(100vh - 24px);
+  max-height: calc(100svh - 24px);
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius);
+  background: var(--card);
+  color: var(--ink);
+  overflow: hidden;
+  box-shadow: 0 60px 120px -40px rgba(0, 0, 0, 0.7);
+}
+.sheet[open] {
+  display: grid;
+  grid-template-columns: minmax(0, 1.62fr) minmax(0, 1fr);
+  animation: sheet-in 0.55s var(--ease);
+}
+.sheet::backdrop {
+  background: rgba(6, 7, 20, 0.62);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  animation: sheet-fade 0.4s ease;
+}
+@keyframes sheet-in {
+  from {
+    opacity: 0;
+    transform: translateY(26px) scale(0.975);
+  }
+}
+@keyframes sheet-fade {
+  from {
+    opacity: 0;
+  }
+}
+.sheet__media {
+  min-height: 100%;
+  background: var(--paper-2);
+}
+.sheet__media img {
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  object-position: center;
+}
+.sheet__body {
+  display: grid;
+  align-content: center;
+  gap: 14px;
+  padding: clamp(22px, 2.8vw, 46px);
+  overflow: auto;
+}
+.sheet__top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+  font-size: 0.8125rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--mute);
+}
+.sheet__title {
+  font-size: clamp(2rem, 3.5vw, 3.7rem);
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: -0.045em;
+}
+.sheet__line {
+  font-size: 1.12em;
+  line-height: 1.3;
+  letter-spacing: -0.015em;
+}
+.sheet__more {
+  color: var(--ink-2);
+}
+.sheet__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+/* ---------- Smaller screens ---------- */
+
+@media (max-width: 1100px) {
+  .folders {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    row-gap: clamp(70px, 12vw, 130px);
+  }
+}
+@media (max-width: 899px) {
+  .archive__grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+@media (max-width: 700px) {
+  .archive__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .tile__text {
+    flex-wrap: wrap;
+    gap: 4px 8px;
+  }
+  .folders {
+    gap: 76px 14px;
+    padding-inline: 0;
+  }
+  .folder__front {
+    padding: 8% 8% 9%;
+  }
+  .sheet[open] {
+    grid-template-columns: 1fr;
+    overflow: auto;
+  }
+  .sheet__media {
+    min-height: 0;
+    aspect-ratio: 16 / 9;
+  }
+  .sheet__body {
+    overflow: visible;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .sheet[open],
+  .sheet::backdrop {
+    animation: none;
+  }
+  .file,
+  .tile__open img {
+    transition: none;
+  }
+}

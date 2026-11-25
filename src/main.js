@@ -5,6 +5,7 @@ import Lenis from 'lenis';
 import { applyVariants, initPicker, initWorkVariant } from './variants.js';
 import { initTheme } from './theme.js';
 import { initTypedLabels, initScrollPill, initTimeDifference } from './details.js';
+import { initArchive } from './archive.js';
 
 gsap.registerPlugin(ScrollTrigger, SplitText);
 
@@ -138,12 +139,25 @@ function initMagnetic() {
 function loadHero() {
   const container = $('[data-hero-canvas]');
   if (!container) return Promise.resolve(null);
-  return import('./hero.js')
+  const stage = container.parentElement;
+  // "Wipe" is the earlier hero, still offered in the design picker.
+  const wipe = root.dataset.hero === 'b';
+  if (wipe) {
+    $('[data-hero-label]').textContent = 'Code view';
+    $('.hint-fine', stage).textContent = 'Move your cursor to meet the person behind the code';
+    $('.hint-touch', stage).textContent = 'Drag to wipe the code away';
+  }
+  return (wipe ? import('./hero-wipe.js') : import('./hero.js'))
     .then((module) => module.createHero(container, { reducedMotion }))
     .catch(() => null)
     .then((hero) => {
-      // Without WebGL the stage falls back to the still photo set in the stylesheet.
-      if (!hero) container.parentElement.classList.add('is-still');
+      // Without WebGL the stage falls back to the still picture set in the stylesheet.
+      if (!hero) stage.classList.add('is-still');
+      // The decode hero is held on screen while the page scrolls through it.
+      else if (hero.setProgress && !reducedMotion) {
+        $('[data-hero-track]').classList.add('is-pinned');
+        ScrollTrigger.refresh();
+      }
       return hero;
     });
 }
@@ -263,7 +277,7 @@ function initMedia() {
   });
 }
 
-function initHeroScroll() {
+function initHeroScroll(heroPromise) {
   const stage = $('[data-hero-stage]');
   if (!stage) return;
   gsap.to('.hero__top', {
@@ -271,6 +285,42 @@ function initHeroScroll() {
     opacity: 0.2,
     ease: 'none',
     scrollTrigger: { trigger: '.hero', start: 'top top', end: () => `+=${$('.hero__top').offsetHeight + 120}`, scrub: true },
+  });
+
+  // The decode hero: scrolling from the top of the page to the end of the held stretch
+  // takes the stage from a wall of code to the photograph.
+  heroPromise.then((hero) => {
+    const track = $('[data-hero-track]');
+    if (!hero || !hero.setProgress || !track.classList.contains('is-pinned')) return;
+    const label = $('[data-hero-label]');
+
+    // The words on the stage turn over letter by letter as the photograph arrives.
+    const split = SplitText.create($$('.hero__reveal p', stage), { type: 'words,chars', charsClass: 'char' });
+    const words = gsap.timeline({ paused: true });
+    words.from(split.chars, { rotationX: -92, yPercent: 46, opacity: 0, duration: 0.5, ease: 'power2.out', stagger: 0.016, transformOrigin: '50% 50% -0.35em' });
+    stage.classList.add('has-reveal');
+
+    let phase = '';
+    ScrollTrigger.create({
+      start: 0,
+      end: () => {
+        const top = track.getBoundingClientRect().top + window.scrollY;
+        return top + track.offsetHeight - stage.offsetHeight - (parseFloat(getComputedStyle(stage).top) || 0);
+      },
+      invalidateOnRefresh: true,
+      onUpdate(self) {
+        const p = self.progress;
+        hero.setProgress(p);
+        gsap.to(words, { progress: gsap.utils.clamp(0, 1, (p - 0.7) / 0.24), duration: 0.45, ease: 'power2.out', overwrite: true });
+        const decoded = Math.round(gsap.utils.clamp(0, 1, (p - 0.03) / 0.57) * 100);
+        const next = p < 0.035 ? 'Code view' : p < 0.62 ? `Decoding ${decoded}%` : 'Huzaifa Malik';
+        if (next !== phase) {
+          phase = next;
+          label.textContent = next;
+          stage.classList.toggle('is-decoded', p >= 0.5);
+        }
+      },
+    });
   });
 }
 
@@ -523,7 +573,16 @@ function start() {
   if (reducedMotion) {
     // No scroll effects: show the page as it is and keep the scene still but alive.
     root.classList.add('is-fallback', 'no-motion');
-    heroPromise.then((hero) => hero && hero.start());
+    heroPromise.then((hero) => {
+      if (!hero) return;
+      hero.start();
+      // The decode hero stands still on its last picture, so its labels say so.
+      if (hero.setProgress) {
+        $('[data-hero-label]').textContent = 'Huzaifa Malik';
+        $('[data-hero-stage]').classList.add('is-decoded');
+      }
+    });
+    initArchive({ variant: design.choices.archive, reducedMotion: true });
     return;
   }
 
@@ -543,8 +602,9 @@ function start() {
     initFades();
     initMedia();
     initTypedLabels();
-    initHeroScroll();
+    initHeroScroll(heroPromise);
     initWorkVariant(design.choices.work, { finePointer });
+    initArchive({ variant: design.choices.archive, lenis });
     initAngles();
     initMarquee();
     initContact();

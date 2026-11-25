@@ -18,9 +18,10 @@
   <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
   <link rel="preload" href="assets/fonts/geist-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="assets/fonts/instrument-serif-latin-400-italic.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="preload" href="assets/img/hero-portrait.webp" as="image" type="image/webp">
+  <link rel="preload" href="assets/img/hero-figure.webp" as="image" type="image/webp">
   <link rel="stylesheet" href="assets/css/style.css">
   <link rel="stylesheet" href="assets/css/variants.css">
+  <link rel="stylesheet" href="assets/css/archive.css">
 
   <script>
     // Use the theme chosen on an earlier visit before anything is drawn.
@@ -136,14 +137,22 @@
         </div>
       </div>
 
-      <div class="hero__stage" data-hero-stage role="img" aria-label="Portrait of Huzaifa Malik drawn in blue and covered in lines of code. Moving the pointer wipes the code away to show the photograph.">
-        <div class="hero__canvas" data-hero-canvas></div>
-        <span class="cross cross--tl"></span>
-        <span class="cross cross--tr"></span>
-        <span class="cross cross--bl"></span>
-        <span class="cross cross--br"></span>
-        <p class="hero__label" aria-hidden="true"><i></i>Code view</p>
-        <p class="hero__hint" aria-hidden="true"><span class="hint-fine">Move your cursor to meet the person behind the code</span><span class="hint-touch">Drag to wipe the code away</span></p>
+      <!-- The track is the distance the stage stays on screen while scrolling turns the code into the portrait -->
+      <div class="hero__track" data-hero-track>
+        <div class="hero__stage" data-hero-stage role="img" aria-label="A wall of code with a portrait of Huzaifa Malik behind it. Scrolling turns the code, character by character, into the portrait.">
+          <div class="hero__canvas" data-hero-canvas></div>
+          <span class="cross cross--tl"></span>
+          <span class="cross cross--tr"></span>
+          <span class="cross cross--bl"></span>
+          <span class="cross cross--br"></span>
+          <p class="hero__label" aria-hidden="true"><i></i><span data-hero-label>Code view</span></p>
+          <div class="hero__reveal" aria-hidden="true" data-hero-reveal>
+            <p class="hero__reveal-kicker">The person behind the code</p>
+            <p class="hero__reveal-name">Hi, I'm <em>Huzaifa.</em></p>
+            <p class="hero__reveal-meta">Web developer and designer in Pakistan, building for clients since 2020.</p>
+          </div>
+          <p class="hero__hint" aria-hidden="true" data-hero-hint><span class="hint-fine">Scroll to decode. Move your cursor to look behind the code.</span><span class="hint-touch">Scroll to decode</span></p>
+        </div>
       </div>
 
       <div class="hero__foot" data-hero-fade>
@@ -403,6 +412,189 @@
           </div>
         </article>
       </div>
+    </section>
+
+    <!-- Archive: every project in one place. The script flies the covers in as a ribbon and
+         settles them into this grid, or files them into folders (see the design picker). -->
+    <section class="archive section" id="archive" data-section="archive">
+      <div class="archive__track" data-archive-track>
+        <div class="archive__pin" data-archive-pin>
+          <div class="archive__head" data-archive-head>
+            <p class="archive__kicker"><i></i>The full list</p>
+            <h2 class="archive__title">Twelve projects, <em>one pair of hands.</em></h2>
+            <p class="archive__note">Six I built to use or to launch. Six are design concepts for made-up brands, and each one says so.</p>
+          </div>
+
+          <div class="archive__bar" data-archive-bar>
+            <p class="archive__bar-name"><span data-bar-index>[00]</span> <strong data-bar-name>All projects</strong></p>
+            <p class="archive__bar-line" data-bar-line>Point at a project to read about it. Click to open it.</p>
+            <button class="pill pill--ink archive__bar-open" type="button" data-bar-open disabled>
+              <span class="pill__label">See full</span>
+            </button>
+          </div>
+
+          <ul class="archive__grid" data-archive-grid>
+            <li class="tile" data-archive-item="salvo" data-group="products" data-file="salvo.png" data-work="salvo">
+              <button class="tile__open" type="button" aria-label="SALVO, browser game. Open details."><img src="assets/img/work-salvo.webp" width="1284" height="724" loading="lazy" alt=""></button>
+              <div class="tile__text">
+                <h3>SALVO</h3>
+                <span class="tag">Own project</span>
+                <span class="tile__kind">Browser game</span>
+                <p class="tile__line">A free multiplayer shooter that runs in the browser.</p>
+                <p class="tile__more">Up to 48 players drop onto a 2 km island and fight as the safe zone closes, with cars, grenades and voice chat. It runs in a browser tab with nothing to install.</p>
+                <ul class="tile__stack"><li>Three.js</li><li>Node.js</li><li>WebSockets</li></ul>
+              </div>
+            </li>
+            <li class="tile" data-archive-item="morra" data-group="concepts-1" data-file="morra.png" data-work="morra">
+              <button class="tile__open" type="button" aria-label="Morra Coffee, online store concept. Open details."><img src="assets/img/work-morra.webp" width="1440" height="810" loading="lazy" alt=""></button>
+              <div class="tile__text">
+                <h3>Morra Coffee</h3>
+                <span class="tag tag--concept">Concept</span>
+                <span class="tile__kind">Online store</span>
+                <p class="tile__line">A store concept for a small-batch coffee roaster.</p>
+                <p class="tile__more">The product comes first, with subscriptions and a one-tap add to cart. Morra is a made-up brand; the page is real and you can open it.</p>
+                <ul class="tile__stack"><li>Store design</li><li>HTML</li><li>CSS</li></ul>
+                <a class="tile__link" href="concepts/morra/" target="_blank" rel="noopener">Open the concept</a>
+              </div>
+            </li>
+            <li class="tile" data-archive-item="dingline" data-group="products" data-file="dingline.png" data-work="dingline">
+              <button class="tile__open" type="button" aria-label="Dingline, SaaS product. Open details."><img src="assets/img/work-dingline.webp" width="1440" height="810" loading="lazy" alt=""></button>
+              <div class="tile__text">
+                <h3>Dingline</h3>
+                <span class="tag">In development</span>
+                <span class="tile__kind">SaaS product</span>
+                <p class="tile__line">Live queues and order tracking for small businesses.</p>
+                <p class="tile__more">Customers scan a QR code, get a number on their phone and hear a ding when it is their turn. Built and tested, not launched yet.</p>
+                <ul class="tile__stack"><li>Node.js</li><li>SQLite</li><li>Web Push</li></ul>
+              </div>
+            </li>
+            <li class="tile" data-archive-item="safar" data-group="concepts-2" data-file="safar.png">
+              <button class="tile__open" type="button" aria-label="Safar, travel site concept. Open details."><img src="assets/img/work-safar.webp" width="1440" height="810" loading="lazy" alt=""></button>
+              <div class="tile__text">
+                <h3>Safar</h3>
+                <span class="tag tag--concept">Concept</span>
+                <span class="tile__kind">Travel site</span>
+                <p class="tile__line">A site concept for guided treks in northern Pakistan.</p>
+                <p class="tile__more">One wide mountain scene drawn in code, then the trips, the prices and how a trek runs. Safar is a made-up company; the page is real and you can open it.</p>
+                <ul class="tile__stack"><li>Web design</li><li>SVG</li><li>CSS</li></ul>
+                <a class="tile__link" href="concepts/safar/" target="_blank" rel="noopener">Open the concept</a>
+              </div>
+            </li>
+            <li class="tile" data-archive-item="quran" data-group="products" data-file="classroom.png" data-work="quran">
+              <button class="tile__open" type="button" aria-label="Quran Classroom, web app. Open details."><img src="assets/img/work-quran.webp" width="1076" height="605" loading="lazy" alt=""></button>
+              <div class="tile__text">
+                <h3>Quran Classroom</h3>
+                <span class="tag">In development</span>
+                <span class="tile__kind">Web app</span>
+                <p class="tile__line">An online classroom for Quran and Qaida teachers.</p>
+                <p class="tile__more">The video call, the page and a live pointer stick, all in one web page, so a teacher can point at the line being read.</p>
+                <ul class="tile__stack"><li>WebRTC</li><li>Node.js</li><li>Canvas</li></ul>
+              </div>
+            </li>
+            <li class="tile" data-archive-item="printrun" data-group="builds" data-file="print-run.apk">
+              <button class="tile__open" type="button" aria-label="Print Run, mobile game. Open details."><img src="assets/img/work-printrun.webp" width="1440" height="810" loading="lazy" alt=""></button>
+              <div class="tile__text">
+                <h3>Print Run</h3>
+                <span class="tag">Built, not released</span>
+                <span class="tile__kind">Mobile game</span>
+                <p class="tile__line">A block-stamping picture puzzle for phones, with 120 levels.</p>
+                <p class="tile__more">You send inked blocks along a rail and each one stamps its colour down the cloth until the picture is printed, without overfilling the drying rack. A signed Android build exists; it is not on a store yet.</p>
+                <ul class="tile__stack"><li>TypeScript</li><li>Canvas</li><li>Capacitor</li></ul>
+              </div>
+            </li>
+            <li class="tile" data-archive-item="mehrab" data-group="concepts-1" data-file="mehrab.png" data-work="mehrab">
+              <button class="tile__open" type="button" aria-label="Mehrab Studio, studio website concept. Open details."><img src="assets/img/work-mehrab.webp" width="1440" height="810" loading="lazy" alt=""></button>
+              <div class="tile__text">
+                <h3>Mehrab Studio</h3>
+                <span class="tag tag--concept">Concept</span>
+                <span class="tile__kind">Studio website</span>
+                <p class="tile__line">A website concept for an architecture studio.</p>
+                <p class="tile__more">Built around one calm image and very large type. Mehrab is a made-up studio; the page is real and you can open it.</p>
+                <ul class="tile__stack"><li>Web design</li><li>HTML</li><li>CSS</li></ul>
+                <a class="tile__link" href="concepts/mehrab/" target="_blank" rel="noopener">Open the concept</a>
+              </div>
+            </li>
+            <li class="tile" data-archive-item="radar" data-group="builds" data-file="radar.py">
+              <button class="tile__open" type="button" aria-label="Remote Radar, web tool. Open details."><img src="assets/img/work-radar.webp" width="1440" height="810" loading="lazy" alt=""></button>
+              <div class="tile__text">
+                <h3>Remote Radar</h3>
+                <span class="tag">Own tool</span>
+                <span class="tile__kind">Web tool</span>
+                <p class="tile__line">Finds remote jobs and gigs across 413 US Craigslist sites.</p>
+                <p class="tile__more">It scores each posting for whether the work is really remote, flags scams, merges cross-posts and sends alerts, with a dashboard to read it all. I built it for my own team.</p>
+                <ul class="tile__stack"><li>Python</li><li>SQLite</li><li>No dependencies</li></ul>
+              </div>
+            </li>
+            <li class="tile" data-archive-item="raag" data-group="concepts-2" data-file="raag.png">
+              <button class="tile__open" type="button" aria-label="Raag, music app concept. Open details."><img src="assets/img/work-raag.webp" width="1440" height="810" loading="lazy" alt=""></button>
+              <div class="tile__text">
+                <h3>Raag</h3>
+                <span class="tag tag--concept">Concept</span>
+                <span class="tile__kind">Music app</span>
+                <p class="tile__line">A landing page concept for a classical music streaming app.</p>
+                <p class="tile__more">South Asian classical, qawwali and ghazal, arranged by the time of day. Raag is a made-up product; the page is real and you can open it.</p>
+                <ul class="tile__stack"><li>App design</li><li>SVG</li><li>CSS</li></ul>
+                <a class="tile__link" href="concepts/raag/" target="_blank" rel="noopener">Open the concept</a>
+              </div>
+            </li>
+            <li class="tile" data-archive-item="ginti" data-group="concepts-1" data-file="ginti.png" data-work="ginti">
+              <button class="tile__open" type="button" aria-label="Ginti, app landing page concept. Open details."><img src="assets/img/work-ginti.webp" width="1440" height="810" loading="lazy" alt=""></button>
+              <div class="tile__text">
+                <h3>Ginti</h3>
+                <span class="tag tag--concept">Concept</span>
+                <span class="tile__kind">App landing page</span>
+                <p class="tile__line">A money tracker concept made for freelancers.</p>
+                <p class="tile__more">A landing page and app screens that show where every rupee went. Ginti is a made-up product; the page is real and you can open it.</p>
+                <ul class="tile__stack"><li>App design</li><li>HTML</li><li>CSS</li></ul>
+                <a class="tile__link" href="concepts/ginti/" target="_blank" rel="noopener">Open the concept</a>
+              </div>
+            </li>
+            <li class="tile" data-archive-item="chowk" data-group="concepts-2" data-file="chowk.png">
+              <button class="tile__open" type="button" aria-label="Chowk, restaurant site concept. Open details."><img src="assets/img/work-chowk.webp" width="1440" height="810" loading="lazy" alt=""></button>
+              <div class="tile__text">
+                <h3>Chowk</h3>
+                <span class="tag tag--concept">Concept</span>
+                <span class="tile__kind">Restaurant site</span>
+                <p class="tile__line">A loud, poster-like site concept for a street-food kitchen.</p>
+                <p class="tile__more">The menu, the prices and online ordering on one page. Chowk is a made-up kitchen; the page is real and you can open it.</p>
+                <ul class="tile__stack"><li>Web design</li><li>SVG</li><li>CSS</li></ul>
+                <a class="tile__link" href="concepts/chowk/" target="_blank" rel="noopener">Open the concept</a>
+              </div>
+            </li>
+            <li class="tile" data-archive-item="site" data-group="builds" data-file="index.html">
+              <button class="tile__open" type="button" aria-label="huzaifamalik.me, this portfolio. Open details."><img src="assets/img/work-site.webp" width="1440" height="810" loading="lazy" alt=""></button>
+              <div class="tile__text">
+                <h3>huzaifamalik.me</h3>
+                <span class="tag tag--live">Live</span>
+                <span class="tile__kind">Portfolio</span>
+                <p class="tile__line">The site you are on, built without a framework.</p>
+                <p class="tile__more">One page: plain WebGL for the code portrait at the top and the wall of screens, GSAP for the scrolling, and a light and dark theme.</p>
+                <ul class="tile__stack"><li>WebGL</li><li>GSAP</li><li>HTML and CSS</li></ul>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- One project, opened from the grid or from a folder -->
+      <dialog class="sheet" data-sheet aria-labelledby="sheet-title">
+        <div class="sheet__media"><img data-sheet-image src="" alt="" width="1440" height="810"></div>
+        <div class="sheet__body" data-lenis-prevent>
+          <header class="sheet__top">
+            <span data-sheet-index></span>
+            <span data-sheet-kind></span>
+            <span class="tag" data-sheet-status></span>
+          </header>
+          <h3 class="sheet__title" id="sheet-title" data-sheet-title></h3>
+          <p class="sheet__line" data-sheet-line></p>
+          <p class="sheet__more" data-sheet-more></p>
+          <ul class="card__tags" data-sheet-stack></ul>
+          <div class="sheet__actions">
+            <a class="btn btn--ink" href="#contact" data-sheet-link><span>Open the concept</span><svg class="arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 19 19 5M8 5h11v11"/></svg></a>
+            <button class="btn btn--line sheet__close" type="button" data-sheet-close>Close</button>
+          </div>
+        </div>
+      </dialog>
     </section>
 
     <!-- Showcase: the triptych with text passing behind it -->

@@ -1,0 +1,594 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Safar | Travel concept by Huzaifa Malik</title>
+  <meta name="description" content="A design concept for a small company that runs guided treks in northern Pakistan. Safar is not a real company.">
+  <meta name="robots" content="noindex">
+  <link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="preload" href="../fonts/fraunces-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="../fonts/fraunces-latin-wght-italic.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="../../assets/fonts/geist-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <style>
+    @font-face { font-family: "Fraunces"; src: url("../fonts/fraunces-latin-wght-normal.woff2") format("woff2"); font-weight: 100 900; font-display: swap; }
+    @font-face { font-family: "Fraunces"; src: url("../fonts/fraunces-latin-wght-italic.woff2") format("woff2"); font-weight: 100 900; font-style: italic; font-display: swap; }
+    @font-face { font-family: "Geist"; src: url("../../assets/fonts/geist-latin-wght-normal.woff2") format("woff2"); font-weight: 100 900; font-display: swap; }
+
+    :root { --night: #0d0620; --ink: #1c1035; --plum: #6b2168; --ember: #e4502f; --gold: #ffc45e; --pale: #ffe2a6; --cream: #fff3dc; --paper: #f8ecd8; --card: #fffaf0; --mute: rgba(28, 16, 53, 0.68); --line: rgba(28, 16, 53, 0.14); --pad: clamp(18px, 3.6vw, 52px); --wrap: 1240px; }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { margin: 0; background: var(--paper); color: var(--ink); font-family: "Geist", Arial, sans-serif; font-size: clamp(0.95rem, 1.05vw, 1.08rem); line-height: 1.5; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+    a { color: inherit; text-decoration: none; }
+    ul, ol { list-style: none; margin: 0; padding: 0; }
+    h1, h2, h3, p, dl, dd { margin: 0; }
+
+    /* First screen: the whole sunset is one inline SVG behind the type. */
+    .hero { position: relative; isolation: isolate; display: grid; grid-template-rows: auto 1fr auto; min-height: 100vh; min-height: max(100svh, 35vw); background: #100a2b; color: var(--cream); overflow: hidden; }
+    .scene { position: absolute; inset: 0; z-index: -1; overflow: hidden; pointer-events: none; }
+    .scene svg { position: absolute; left: 0; bottom: 0; display: block; width: 100%; height: 100%; }
+    .scene .sky-top { display: none; }
+    .twinkle { animation: twinkle 5s ease-in-out infinite alternate; }
+    .twinkle--b { animation-duration: 7s; animation-delay: -3s; }
+    @keyframes twinkle { from { opacity: 0.25; } to { opacity: 1; } }
+    .drift { animation: drift 50s ease-in-out infinite alternate; }
+    @keyframes drift { from { transform: translateX(-30px); } to { transform: translateX(30px); } }
+    /* Soft shade in the two bottom corners so the small copy stays readable at any crop. */
+    .scene::after { content: ""; position: absolute; inset: 0; background: radial-gradient(52% 34% at 0% 100%, rgba(13, 6, 32, 0.62), transparent 100%), radial-gradient(46% 30% at 100% 100%, rgba(13, 6, 32, 0.55), transparent 100%); }
+
+    .nav { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: clamp(16px, 1.8vw, 28px) var(--pad); }
+    .brand { display: inline-flex; align-items: center; gap: 10px; font-family: "Fraunces", Georgia, serif; font-size: clamp(1.45rem, 1.9vw, 1.9rem); font-weight: 600; letter-spacing: -0.03em; }
+    .brand svg { width: 1.15em; height: 1.15em; }
+    .nav ul { display: flex; gap: clamp(16px, 2.6vw, 42px); font-weight: 500; }
+    .nav li a { padding: 6px 0; border-bottom: 1.5px solid transparent; transition: border-color 0.3s; }
+    .nav li a:hover { border-color: currentColor; }
+    .pill { padding: 0.7em 1.25em; border-radius: 999px; box-shadow: inset 0 0 0 1px rgba(255, 243, 220, 0.45); font-weight: 500; transition: background-color 0.3s, color 0.3s; }
+    .pill:hover { background: var(--cream); color: var(--ink); }
+
+    .hero-copy { align-self: start; padding: clamp(6px, 3svh, 36px) var(--pad) 0; text-align: center; }
+    .kicker { display: inline-flex; align-items: center; gap: 14px; margin-bottom: 1.2em; color: var(--pale); font-size: 0.8rem; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; }
+    .kicker::before, .kicker::after { content: ""; width: 34px; height: 1px; background: currentColor; opacity: 0.7; }
+    h1 { font-family: "Fraunces", Georgia, serif; font-size: clamp(2.9rem, 9vw, 12rem); font-size: clamp(2.9rem, min(9vw, 16svh), 12rem); font-weight: 470; line-height: 0.95; letter-spacing: -0.04em; text-shadow: 0 2px 40px rgba(16, 10, 43, 0.4); }
+    h1 em { display: block; font-weight: 400; color: var(--gold); }
+
+    .hero-foot { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; padding: 0 var(--pad) clamp(38px, 6.2svh, 56px); }
+    .lead { max-width: min(39ch, 36vw); color: rgba(255, 243, 220, 0.9); font-size: 1.08em; text-wrap: pretty; }
+    .actions { display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-end; gap: 14px 26px; }
+    .btn { display: inline-flex; align-items: center; gap: 0.7em; padding: 1.05em 1.6em; border: 0; border-radius: 999px; font: inherit; font-weight: 600; cursor: pointer; transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.3s, color 0.3s; }
+    .btn:hover { transform: translateY(-2px); }
+    .btn--gold { background: var(--gold); color: var(--ink); }
+    .btn--gold:hover { background: var(--cream); }
+    .btn--ink { background: var(--ink); color: var(--cream); }
+    .btn--ink:hover { background: var(--ember); }
+    .link { padding-bottom: 3px; border-bottom: 1.5px solid currentColor; font-weight: 600; }
+
+    /* Shared section pieces */
+    .wrap { max-width: calc(var(--wrap) + 2 * var(--pad)); margin: 0 auto; padding-left: var(--pad); padding-right: var(--pad); }
+    section { padding-top: clamp(64px, 8.5vw, 124px); padding-bottom: clamp(64px, 8.5vw, 124px); }
+    .head { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr); align-items: end; gap: 18px var(--pad); margin-bottom: clamp(28px, 4vw, 56px); }
+    .eyebrow { display: block; margin-bottom: 1.1em; color: var(--ember); font-size: 0.78rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; }
+    h2 { font-family: "Fraunces", Georgia, serif; font-size: clamp(2.1rem, 4.7vw, 4.3rem); font-weight: 400; line-height: 1; letter-spacing: -0.035em; }
+    h2 em { font-weight: 340; color: var(--ember); }
+    .head p { justify-self: end; max-width: 42ch; color: var(--mute); }
+
+    /* Trek cards */
+    .cards { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: clamp(14px, 1.5vw, 22px); }
+    .card { display: flex; flex-direction: column; border-radius: 22px; background: var(--card); box-shadow: 0 0 0 1px var(--line); overflow: hidden; transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.5s; }
+    .card:hover { transform: translateY(-6px); box-shadow: 0 0 0 1px var(--line), 0 34px 50px -32px rgba(28, 16, 53, 0.5); }
+    .art { position: relative; aspect-ratio: 16 / 10; overflow: hidden; }
+    .art svg { position: absolute; inset: 0; display: block; width: 100%; height: 100%; }
+    .chip { position: absolute; left: 14px; top: 14px; padding: 0.4em 0.85em; border-radius: 999px; background: rgba(255, 250, 240, 0.92); color: var(--ink); font-size: 0.7rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; }
+    .card-body { flex: 1; display: flex; flex-direction: column; padding: clamp(18px, 1.6vw, 24px); }
+    .card h3 { font-family: "Fraunces", Georgia, serif; font-size: clamp(1.4rem, 1.7vw, 1.62rem); font-weight: 500; line-height: 1.08; letter-spacing: -0.025em; }
+    .desc { flex: 1; margin-top: 0.75em; color: var(--mute); font-size: 0.94em; }
+    .card dl { margin-top: 1.3em; font-size: 0.92em; }
+    .card dl div { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 0.6em 0; border-top: 1px solid var(--line); }
+    .card dt { color: var(--mute); }
+    .card dd { font-weight: 600; text-align: right; white-space: nowrap; }
+    .lvl { display: inline-flex; gap: 3px; margin-right: 8px; vertical-align: 1px; }
+    .lvl i { width: 7px; height: 7px; border-radius: 50%; box-shadow: inset 0 0 0 1.5px var(--ember); }
+    .lvl i.on { background: var(--ember); }
+    .card-foot { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 10px; padding-top: 1.1em; border-top: 1px solid var(--line); }
+    .price { font-family: "Fraunces", Georgia, serif; font-size: 1.34em; font-weight: 500; line-height: 1.1; letter-spacing: -0.02em; white-space: nowrap; }
+    .price small { display: block; color: var(--mute); font-family: "Geist", Arial, sans-serif; font-size: 0.58em; font-weight: 400; letter-spacing: 0; }
+    .go { padding: 0.72em 1em; border-radius: 999px; background: var(--ink); color: var(--cream); font-size: 0.88em; font-weight: 600; white-space: nowrap; transition: background-color 0.3s; }
+    .go:hover { background: var(--ember); }
+
+    /* How a trip runs */
+    .how { background: #170c30; color: var(--cream); }
+    .how .eyebrow { color: var(--gold); }
+    .how h2 em { color: var(--gold); }
+    .how .head p { color: rgba(255, 243, 220, 0.66); }
+    .steps { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .steps li { position: relative; padding: 38px clamp(18px, 2.4vw, 40px) 0 0; }
+    .steps li::before { content: ""; position: absolute; left: 0; top: 0; width: 13px; height: 13px; border-radius: 50%; background: var(--gold); box-shadow: 0 0 0 5px rgba(255, 196, 94, 0.18); }
+    .steps li::after { content: ""; position: absolute; left: 26px; right: 12px; top: 6px; height: 2px; background: repeating-linear-gradient(90deg, rgba(255, 196, 94, 0.75) 0 5px, transparent 5px 13px); }
+    .steps li:last-child::after { -webkit-mask-image: linear-gradient(90deg, #000, transparent); mask-image: linear-gradient(90deg, #000, transparent); }
+    .steps b { display: block; color: var(--gold); font-family: "Fraunces", Georgia, serif; font-size: 1.05em; font-style: italic; font-weight: 400; }
+    .steps h3 { margin: 0.25em 0 0.45em; font-family: "Fraunces", Georgia, serif; font-size: clamp(1.45rem, 1.9vw, 1.8rem); font-weight: 400; line-height: 1.1; letter-spacing: -0.025em; }
+    .steps p { max-width: 30ch; color: rgba(255, 243, 220, 0.7); font-size: 0.96em; }
+
+    /* Trust row */
+    .trust { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(22px, 3vw, 52px); }
+    .trust li { padding-top: clamp(16px, 1.8vw, 26px); border-top: 1px solid var(--line); }
+    .trust b { display: block; color: var(--ember); font-family: "Fraunces", Georgia, serif; font-size: clamp(4.6rem, 8.4vw, 8rem); font-weight: 300; line-height: 0.86; letter-spacing: -0.05em; }
+    .trust strong { display: block; margin: 0.55em 0 0.35em; font-family: "Fraunces", Georgia, serif; font-size: 1.5em; font-weight: 500; line-height: 1.1; letter-spacing: -0.02em; }
+    .trust p { max-width: 34ch; color: var(--mute); }
+    .incl { display: grid; grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr); gap: 1px; margin-top: clamp(36px, 5vw, 68px); border-radius: 22px; background: var(--line); box-shadow: 0 0 0 1px var(--line); overflow: hidden; }
+    .incl > div { padding: clamp(20px, 2.4vw, 34px); background: var(--card); }
+    .incl h3 { margin: 0 0 1.2em; font-size: 0.78rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; }
+    .incl ul { columns: 2; column-gap: 30px; }
+    .incl .not ul { columns: 1; }
+    .incl li { position: relative; margin-bottom: 0.6em; padding-left: 1.6em; break-inside: avoid; }
+    .incl li::before { content: ""; position: absolute; left: 0.1em; top: 0.42em; width: 0.68em; height: 0.36em; border-left: 2px solid var(--ember); border-bottom: 2px solid var(--ember); transform: rotate(-45deg); }
+    .incl .not li { color: var(--mute); }
+    .incl .not li::before { top: 0.72em; height: 0; border-left: 0; border-bottom-color: rgba(28, 16, 53, 0.4); transform: none; }
+
+    /* Booking */
+    .book { position: relative; isolation: isolate; padding-bottom: clamp(150px, 19vw, 280px); background: linear-gradient(180deg, #150c36 0%, #3a175c 30%, #7a225f 56%, #c33a45 76%, #f0692f 90%, #ffab4a 100%); color: var(--cream); overflow: hidden; }
+    .book .ridges { position: absolute; left: 0; bottom: -1px; z-index: -1; display: block; width: 100%; height: clamp(130px, 17.5vw, 260px); overflow: visible; }
+    .book-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 470px); align-items: center; gap: clamp(28px, 5vw, 80px); }
+    .book h2 em { display: block; color: var(--gold); }
+    .book-copy p { max-width: 40ch; margin-top: 1.4em; color: rgba(255, 243, 220, 0.86); font-size: 1.08em; }
+    .dates { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 1.8em; }
+    .dates li { padding: 0.5em 0.95em; border-radius: 999px; box-shadow: inset 0 0 0 1px rgba(255, 243, 220, 0.4); font-size: 0.88em; }
+    .dates b { font-weight: 600; }
+    form { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; padding: clamp(20px, 2.2vw, 30px); border-radius: 24px; background: var(--card); color: var(--ink); box-shadow: 0 44px 70px -34px rgba(13, 6, 32, 0.75); }
+    label { display: grid; gap: 6px; font-size: 0.8rem; font-weight: 600; letter-spacing: 0.02em; }
+    input, select { width: 100%; min-width: 0; padding: 0.82em 0.9em; border: 1px solid rgba(28, 16, 53, 0.22); border-radius: 12px; background: #fff; color: inherit; font: inherit; font-size: 1rem; font-weight: 400; }
+    input:focus, select:focus { outline: 2px solid var(--ember); outline-offset: 1px; }
+    .full { grid-column: 1 / -1; }
+    form .btn { align-self: end; justify-content: center; padding: 0.95em 1em; white-space: nowrap; }
+    .note { color: var(--mute); font-size: 0.82rem; }
+
+    .foot { padding: clamp(26px, 3vw, 44px) var(--pad) 74px; background: var(--night); color: rgba(255, 243, 220, 0.66); font-size: 0.9em; }
+    .foot-in { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 32px; max-width: var(--wrap); margin: 0 auto; }
+    .foot .brand { color: var(--cream); font-size: 1.5rem; }
+    .foot ul { display: flex; flex-wrap: wrap; gap: 8px 26px; }
+    .foot a:hover { color: var(--cream); }
+
+    .credit { position: fixed; left: 50%; bottom: 10px; z-index: 10; margin: 0; padding: 0.5em 1em; border-radius: 999px; background: rgba(255, 243, 220, 0.94); color: var(--ink); box-shadow: 0 6px 20px -8px rgba(13, 6, 32, 0.6); font-size: 0.72rem; letter-spacing: 0.04em; transform: translateX(-50%); white-space: nowrap; }
+    .credit a { text-decoration: underline; text-underline-offset: 3px; }
+
+    @media (max-width: 1280px) {
+      .cards { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .actions .link { display: none; }
+    }
+    @media (max-width: 900px) { .scene .camp { display: none; } }
+    @media (max-width: 1000px) {
+      .steps { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 44px; }
+      .steps li:nth-child(2)::after { -webkit-mask-image: linear-gradient(90deg, #000, transparent); mask-image: linear-gradient(90deg, #000, transparent); }
+    }
+    @media (max-width: 860px) {
+      .nav ul { display: none; }
+      .head { grid-template-columns: 1fr; }
+      .head p { justify-self: start; }
+      .trust { grid-template-columns: 1fr; }
+      .incl, .book-grid { grid-template-columns: 1fr; }
+    }
+    /* Phones and tall screens: copy stacks under the headline, the land sits in the lower part and is drawn narrower so both massifs still fit. */
+    @media (max-width: 640px), (max-aspect-ratio: 4/5) {
+      .hero { grid-template-rows: auto auto auto minmax(34svh, 1fr); min-height: 100vh; min-height: 100svh; }
+      h1 { font-size: clamp(2.7rem, 15.2vw, 5.4rem); }
+      h1 span { display: block; }
+      .kicker { gap: 10px; font-size: 0.68rem; letter-spacing: 0.14em; }
+      .kicker::before, .kicker::after { width: 16px; }
+      .hero-foot { flex-direction: column; align-items: center; padding-top: 1.5em; padding-bottom: 0; text-align: center; }
+      .lead { max-width: 36ch; text-wrap: balance; }
+      .actions { justify-content: center; }
+      .actions .link { display: inline; }
+      .scene::after { display: none; }
+      .scene .camp { display: inline; }
+      .scene .land { left: 50%; width: 143%; height: 68%; transform: translateX(-50%) scaleX(0.7); -webkit-mask-image: linear-gradient(transparent, #000 15%); mask-image: linear-gradient(transparent, #000 15%); }
+      .scene .round { transform: scaleX(1.4286); transform-box: fill-box; transform-origin: center; }
+      .scene .sky-top { display: block; top: 0; bottom: auto; height: 36%; }
+    }
+    @media (max-width: 640px) {
+      .cards, .steps { grid-template-columns: 1fr; }
+      .steps { row-gap: 0; }
+      .steps li { padding: 0 0 34px 34px; }
+      .steps li::after, .steps li:nth-child(2)::after { left: 5px; right: auto; top: 24px; bottom: 6px; width: 2px; height: auto; background: repeating-linear-gradient(180deg, rgba(255, 196, 94, 0.75) 0 5px, transparent 5px 13px); -webkit-mask-image: none; mask-image: none; }
+      .steps li:last-child { padding-bottom: 0; }
+      .steps li:last-child::after { display: none; }
+      .incl ul { columns: 1; }
+      form { grid-template-columns: 1fr; }
+      .credit { font-size: 0.66rem; }
+    }
+    @media (max-height: 520px) and (min-aspect-ratio: 4/5) { h1 { font-size: clamp(2.2rem, 12svh, 4rem); } }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { animation: none !important; transition: none !important; }
+    }
+  </style>
+</head>
+<body>
+  <header class="hero" id="top">
+    <div class="scene" aria-hidden="true">
+      <svg class="land" viewBox="-400 0 2240 810" preserveAspectRatio="xMidYMax slice" focusable="false">
+        <defs>
+          <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#100a2b"/><stop offset=".17" stop-color="#24114c"/><stop offset=".33" stop-color="#47195f"/><stop offset=".455" stop-color="#76205f"/><stop offset=".54" stop-color="#b03052"/><stop offset=".61" stop-color="#e4502f"/><stop offset=".672" stop-color="#fa8a30"/><stop offset=".73" stop-color="#ffbe55"/><stop offset=".8" stop-color="#ffdc8f"/>
+          </linearGradient>
+          <radialGradient id="halo"><stop offset="0" stop-color="#ffe9a8" stop-opacity=".9"/><stop offset=".24" stop-color="#ffc56e" stop-opacity=".52"/><stop offset=".55" stop-color="#ff9a55" stop-opacity=".2"/><stop offset="1" stop-color="#ff8c50" stop-opacity="0"/></radialGradient>
+          <radialGradient id="disc"><stop offset="0" stop-color="#fffef6"/><stop offset=".78" stop-color="#fff6cf"/><stop offset="1" stop-color="#ffeaa6"/></radialGradient>
+          <radialGradient id="bloom"><stop offset="0" stop-color="#ffd58c" stop-opacity=".5"/><stop offset="1" stop-color="#ffd58c" stop-opacity="0"/></radialGradient>
+          <radialGradient id="lamp"><stop offset="0" stop-color="#ffc45e" stop-opacity=".5"/><stop offset="1" stop-color="#ffc45e" stop-opacity="0"/></radialGradient>
+          <radialGradient id="valley" gradientUnits="userSpaceOnUse" cx="720" cy="590" r="400"><stop offset="0" stop-color="#ffc070" stop-opacity=".4"/><stop offset=".5" stop-color="#ff9a62" stop-opacity=".16"/><stop offset="1" stop-color="#ff8a5a" stop-opacity="0"/></radialGradient>
+          <radialGradient id="rim" gradientUnits="userSpaceOnUse" cx="720" cy="540" r="460"><stop offset="0" stop-color="#fff6cf" stop-opacity="1"/><stop offset=".45" stop-color="#ffd29a" stop-opacity=".6"/><stop offset="1" stop-color="#ffc08c" stop-opacity="0"/></radialGradient>
+          <linearGradient id="streak"><stop offset="0" stop-color="#ffa772" stop-opacity="0"/><stop offset=".5" stop-color="#ffb37c" stop-opacity=".75"/><stop offset="1" stop-color="#ffa772" stop-opacity="0"/></linearGradient>
+          <linearGradient id="mist"><stop offset="0" stop-color="#ffe6b4" stop-opacity="0"/><stop offset=".5" stop-color="#ffe6b4" stop-opacity=".62"/><stop offset="1" stop-color="#ffe6b4" stop-opacity="0"/></linearGradient>
+          <linearGradient id="mist2"><stop offset="0" stop-color="#f6a9b4" stop-opacity="0"/><stop offset=".5" stop-color="#f6a9b4" stop-opacity=".42"/><stop offset="1" stop-color="#f6a9b4" stop-opacity="0"/></linearGradient>
+          <filter id="soft" x="-10%" y="-300%" width="120%" height="700%"><feGaussianBlur stdDeviation="6"/></filter>
+          <linearGradient id="sh1" gradientUnits="userSpaceOnUse" x1="0" y1="330" x2="0" y2="560"><stop offset="0" stop-color="#4c1c6c" stop-opacity=".46"/><stop offset="1" stop-color="#4c1c6c" stop-opacity="0"/></linearGradient>
+          <linearGradient id="sh2" gradientUnits="userSpaceOnUse" x1="0" y1="455" x2="0" y2="640"><stop offset="0" stop-color="#3f1763" stop-opacity=".4"/><stop offset="1" stop-color="#3f1763" stop-opacity="0"/></linearGradient>
+          <linearGradient id="sh3" gradientUnits="userSpaceOnUse" x1="0" y1="472" x2="0" y2="660"><stop offset="0" stop-color="#32125a" stop-opacity=".42"/><stop offset="1" stop-color="#32125a" stop-opacity="0"/></linearGradient>
+          <linearGradient id="lit" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffc7ac" stop-opacity=".7"/><stop offset=".3" stop-color="#ffc7ac" stop-opacity=".5"/><stop offset="1" stop-color="#ffc7ac" stop-opacity="0"/></linearGradient>
+          <clipPath id="c-r1"><use href="#r1"/></clipPath>
+          <clipPath id="c-r2"><use href="#r2"/></clipPath>
+          <clipPath id="c-r3"><use href="#r3"/></clipPath>
+          <linearGradient id="g1" gradientUnits="userSpaceOnUse" x1="0" y1="326" x2="0" y2="660"><stop offset="0" stop-color="#a2467e"/><stop offset="1" stop-color="#f3a063"/></linearGradient>
+          <linearGradient id="g2" gradientUnits="userSpaceOnUse" x1="0" y1="455" x2="0" y2="740"><stop offset="0" stop-color="#883276"/><stop offset="1" stop-color="#e2775e"/></linearGradient>
+          <linearGradient id="g3" gradientUnits="userSpaceOnUse" x1="0" y1="472" x2="0" y2="760"><stop offset="0" stop-color="#6a2873"/><stop offset="1" stop-color="#c95d69"/></linearGradient>
+          <linearGradient id="g4" gradientUnits="userSpaceOnUse" x1="0" y1="540" x2="0" y2="790"><stop offset="0" stop-color="#501f68"/><stop offset="1" stop-color="#9c4775"/></linearGradient>
+          <linearGradient id="g5" gradientUnits="userSpaceOnUse" x1="0" y1="575" x2="0" y2="810"><stop offset="0" stop-color="#3b175a"/><stop offset="1" stop-color="#733272"/></linearGradient>
+          <linearGradient id="g6" gradientUnits="userSpaceOnUse" x1="0" y1="600" x2="0" y2="820"><stop offset="0" stop-color="#291048"/><stop offset="1" stop-color="#4c2066"/></linearGradient>
+          <linearGradient id="g7" gradientUnits="userSpaceOnUse" x1="0" y1="630" x2="0" y2="810"><stop offset="0" stop-color="#170b2e"/><stop offset="1" stop-color="#0d0620"/></linearGradient>
+          <path id="r1" d="M-420 430C-407.8 426.4 -388.8 421.7 -380 418C-370.4 413.9 -347.7 400 -340 396C-333.6 392.7 -310.3 380.1 -306 380C-302.6 379.9 -286.4 391.9 -280 394C-271.2 396.9 -247.7 402.6 -240 402C-232.7 401.4 -209.9 387.8 -204 388C-199.1 388.2 -182.5 400.6 -176 404C-165.7 409.3 -142.5 420.8 -130 426C-119.6 430.4 -99.6 438.6 -90 440C-83.2 441 -64.6 435.6 -60 436C-53.8 436.5 -31 446 -20 446C-6.4 446 19.2 440.3 30 436C40.1 432 60.7 415.6 70 410C77.5 405.5 99.6 392.5 104 392C106.8 391.7 121.3 403.2 126 404C130.6 404.8 145.8 402 150 400C157.1 396.6 175.9 380.9 184 376C188.7 373.1 202.4 366.5 206 366C208.8 365.6 220.7 371.3 224 370C230.3 367.5 249 348.3 252 348C254.1 347.8 265.9 363.5 270 366C273.7 368.2 289 370.3 292 372C296.4 374.4 310.8 390.1 318 392C323.9 393.6 341.1 385.2 344 386C346.8 386.8 357.2 400.7 362 404C370.1 409.5 390.3 418 400 424C410 430.2 426.9 445.6 436 450C443.2 453.5 465.2 455.8 470 458C474.8 460.2 490.3 473.1 498 478C511.1 486.4 532.6 499.2 548 508C565.5 518 585.5 530.4 606 540C625.2 549 641.2 556 664 562C684.8 567.5 698.5 570 720 570C740 570 752.9 567.7 772 562C791.2 556.2 806.1 548 820 540C830.5 533.9 845.5 519.9 852 516C856.2 513.4 873 506 876 506C878.5 506 890.9 516.2 896 516C902.9 515.7 919.4 507.4 924 504C931.3 498.6 949.8 477.2 958 470C964.9 464 983.5 449.9 990 446C994.2 443.4 1010.6 436.5 1014 436C1016.7 435.6 1030.5 441.7 1034 440C1040.7 436.6 1055.9 418.7 1062 412C1069.2 404.1 1084.8 383.9 1092 376C1097.6 369.8 1113.2 355 1118 350C1121.9 345.9 1135.7 327.9 1138 328C1140.2 328.1 1150.2 348 1154 352C1156.5 354.6 1167.9 360 1170 362C1173.1 365 1182.6 380.4 1188 384C1192.7 387.1 1209.2 388.3 1212 390C1215.7 392.2 1229.9 407.8 1236 412C1241.4 415.7 1256.6 424.4 1262 424C1268.1 423.5 1286.3 407.9 1290 408C1293.2 408.1 1306.4 422.7 1312 426C1320.2 430.9 1340.6 442.4 1350 444C1357.3 445.3 1377.1 437.4 1382 438C1387 438.6 1403.3 450.9 1412 452C1424.7 453.6 1449.5 451.1 1460 448C1470 445.1 1491.3 431.7 1500 426C1508.7 420.3 1529 403.2 1536 398C1540.8 394.4 1558.4 380.2 1562 380C1565.1 379.9 1578.2 393.8 1584 396C1591.8 399 1613.2 403.2 1620 402C1626.9 400.8 1647.1 383.8 1652 384C1656.6 384.2 1673.2 400.1 1680 404C1691 410.2 1716.1 423 1730 428C1742.9 432.6 1768.3 439.5 1780 440C1789.3 440.4 1812.2 432 1820 432C1827.8 432 1847.8 437.6 1860 440V840H-420Z"/>
+          <path id="r2" d="M-420 470C-404.8 464.5 -381.3 456.3 -370 452C-360.8 448.5 -336.5 436.2 -330 436C-324.4 435.8 -304.1 447.8 -296 450C-285.7 452.8 -258.8 458.6 -250 458C-242 457.4 -215.6 443.8 -210 444C-205.5 444.1 -187.1 457 -180 460C-168.8 464.7 -143.7 474.7 -130 478C-117 481.1 -89.4 482.1 -80 484C-68.4 486.3 -36.5 499.7 -20 500C-6.2 500.3 19 490.4 30 486C38.3 482.6 57.3 469.3 64 466C69.1 463.5 88.6 455.7 92 456C95.2 456.2 109.9 468.1 116 470C123.5 472.3 143.5 474.8 150 474C156.4 473.2 177.5 461.7 182 462C185.8 462.3 200.3 474.6 206 478C214.9 483.3 234.6 495.8 246 500C255.1 503.4 276.8 504.1 282 506C286.7 507.8 302.3 519.6 310 524C322 530.8 342.9 543.5 356 548C365.1 551.1 386.8 550.3 392 552C397.3 553.7 415 566.1 424 570C438.5 576.3 462.5 585.6 480 590C491.9 593 512.5 592.4 520 594C528.9 595.9 549.9 604.5 566 608C594.5 614.1 617.9 618 650 622C691.7 627.2 718.1 629 760 632C813.1 635.8 846.7 638.1 900 640C976 642.7 1024 643.2 1100 644C1236.8 645.5 1323.2 645.3 1460 646C1612 646.8 1708 647.2 1860 648V840H-420Z"/>
+          <path id="r3" d="M-420 670C-268 669.2 -172 669.3 -20 668C101.6 667 178.4 666.3 300 664C376 662.5 424 661.3 500 658C545.7 656 574.4 653.5 620 650C654.2 647.4 675.9 646.3 710 642C736.8 638.7 756.3 635.5 780 630C797.5 625.9 816.6 617.9 830 614C838.4 611.5 857 606.2 862 606C866.4 605.9 883.6 613.3 890 612C900 609.9 919.4 597.4 930 592C941.2 586.3 962.2 574.5 972 570C978.2 567.2 996 560.2 1000 560C1003.4 559.9 1018.2 568.4 1024 568C1032.6 567.4 1052.2 559.7 1060 556C1070.5 551 1093.8 535.6 1104 530C1112 525.6 1133.1 515.3 1140 512C1144.9 509.6 1162.7 500.1 1166 500C1169 499.9 1184.1 509.6 1190 510C1198.3 510.6 1219.5 506.4 1226 504C1233.4 501.3 1255 487.4 1262 484C1266.8 481.7 1285.4 473.7 1288 474C1290.6 474.3 1304.3 487.6 1310 490C1317.3 493.1 1337.4 498 1344 498C1351 498 1374.4 489.8 1380 490C1385.1 490.1 1404.5 498.5 1412 500C1422.8 502.2 1447.2 507.2 1460 506C1471.2 505 1492.5 494.8 1500 492C1507.7 489.1 1532.5 479.2 1540 476C1545.8 473.5 1566.2 462 1570 462C1573.4 462 1589.6 474 1596 476C1605.7 479.1 1631.5 484.6 1640 484C1648 483.4 1673.6 470 1680 470C1685 470 1702.9 481.3 1710 484C1721.2 488.2 1746.1 498.6 1760 500C1773.3 501.3 1800.4 493.6 1810 494C1819.7 494.4 1844.8 501 1860 504V840H-420Z"/>
+          <path id="r4" d="M-420 548C-401.8 545.6 -373.5 542.9 -360 540C-348.3 537.4 -318 524.4 -310 524C-305.1 523.8 -287.1 534.2 -280 536C-268.8 538.8 -239.6 544.4 -230 544C-222.1 543.6 -196.3 531.8 -190 532C-185 532.1 -167.1 543.5 -160 546C-148.8 549.9 -123.5 557.3 -110 560C-96.9 562.6 -69.5 564.7 -60 566C-52.4 567 -30.8 572 -20 572C-5 572 23.5 568.8 36 566C46.4 563.7 71.6 552.8 80 550C85.2 548.3 104.7 541.8 108 542C111.3 542.2 127.6 552.6 134 554C144.3 556.3 171.3 558.7 180 558C186.7 557.5 209.3 547.7 214 548C217.9 548.3 233.9 559.1 240 562C251.3 567.3 276.1 579.7 290 584C301.9 587.7 329.2 590 336 592C341.5 593.6 360.7 604.3 370 608C385.8 614.4 411.2 625.2 430 630C444.8 633.8 470.7 633.9 480 636C489.7 638.1 512.5 648 530 652C560.5 659 585.6 663.5 620 668C661.6 673.4 688.1 675.1 730 678C786.9 681.9 822.9 684.1 880 686C963.6 688.7 1016.4 688.8 1100 690C1236.8 691.9 1323.2 692.9 1460 694C1612 695.2 1708 695.2 1860 696V840H-420Z"/>
+          <path id="r5" d="M-420 724C-268 723.2 -172 723.1 -20 722C139.6 720.8 240.4 720.6 400 718C472.2 716.8 517.8 714.9 590 712C631.8 710.3 658.3 709.6 700 706C738.1 702.7 762.2 699.9 800 694C830.6 689.2 855.9 683.9 880 678C895.5 674.2 916.6 665.9 930 662C938.4 659.5 957 654.2 962 654C966.4 653.9 983.6 661.2 990 660C1002.1 657.8 1026.7 645.3 1040 640C1053.3 634.7 1078.5 624.4 1090 620C1097.7 617.1 1119.2 608.3 1124 608C1127.6 607.8 1143.8 616.2 1150 616C1161.6 615.7 1188.8 609.1 1200 606C1211.7 602.7 1240.4 591.2 1250 588C1256.4 585.9 1280 577.9 1284 578C1287.5 578.1 1305.2 588.6 1312 590C1322.7 592.3 1350.9 594.6 1360 594C1367.8 593.5 1393.7 584.1 1400 584C1409.2 583.8 1443.9 592.6 1460 592C1473.7 591.5 1500.6 582.7 1510 580C1517.7 577.8 1543.6 566.2 1550 566C1554.9 565.9 1572.8 576.4 1580 578C1591.2 580.5 1620.5 584.6 1630 584C1637.9 583.5 1663.7 572 1670 572C1674.9 572 1692.9 582.1 1700 584C1713.5 587.6 1743.7 595.2 1760 596C1776 596.8 1808.5 589.8 1820 590C1827.7 590.2 1847.8 595.6 1860 598V840H-420Z"/>
+          <path id="r6" d="M-420 592C-398.7 590.2 -366 586 -350 586C-336.3 586 -301.5 592.2 -290 592C-278.5 591.8 -241.5 583.6 -230 584C-218.4 584.4 -183.8 593.9 -170 596C-154.1 598.4 -116 602.5 -100 604C-81.8 605.7 -41.3 610 -20 610C-1.3 610 31.3 604.6 50 604C66 603.5 98.7 604.3 110 606C121.7 607.8 151.6 617.8 170 622C191.1 626.9 223.9 633.6 240 636C251.3 637.7 280.7 638 290 640C301.7 642.6 331.6 654.6 350 660C377.2 668 409 676.5 440 684C474 692.2 501.8 698.7 540 706C585.4 714.7 614.2 720 660 726C713 732.9 746.6 736.5 800 740C875.9 744.9 923.9 746.8 1000 748C1174.8 750.6 1285.2 749.2 1460 750C1612 750.7 1708 751.2 1860 752V840H-420Z"/>
+          <path id="r7" d="M-420 616C-374.4 618.3 -345.6 619.3 -300 622C-254.4 624.7 -225.6 627.1 -180 630C-142 632.4 -118 633.6 -80 636C-57.2 637.4 -42.8 638.8 -20 640C14.2 641.8 35.9 640.9 70 644C112 647.8 138.3 652.2 180 658C225.7 664.4 254.5 668.4 300 676C345.7 683.6 374.5 689.3 420 698C465.7 706.8 494.3 713.6 540 722C585.5 730.3 614.1 736.4 660 742C701.6 747.1 728.1 750 770 750C808.1 750 832.3 747.7 870 742C908.5 736.2 932 728.4 970 720C1008 711.6 1031.9 706 1070 698C1115.5 688.5 1144.3 682.4 1190 674C1235.5 665.7 1264.3 661 1310 654C1344.1 648.8 1365.7 646.1 1400 642C1422.8 639.3 1437.2 638.3 1460 636C1498 632.2 1521.9 628.9 1560 626C1613.1 622 1646.8 620.5 1700 618C1760.8 615.2 1799.2 614.3 1860 612V840H-420Z"/>
+          <path id="tree" d="M0-100C1.5-90 4-84 8-79 5-79.5 3.5-79 3-78 5-69 8.5-62 13-57 9-57.5 6.5-57 5.5-56 8-46 12-39 17.5-33 12.5-33.5 9-33 8-32 11-22 15.5-15 21.5-9 15-9.5 8-9 2.5-8.5V3H-2.5V-8.5C-8-9-15-9.5-21.5-9-15.5-15-11-22-8-32-9-33-12.5-33.5-17.5-33-12-39-8-46-5.5-56-6.5-57-9-57.5-13-57-8.5-62-5-69-3-78-3.5-79-5-79.5-8-79-4-84-1.5-90 0-100Z"/>
+          <g id="hk" stroke-linecap="round" stroke-linejoin="round"><path fill="none" stroke-width="1.7" d="M-2.3 0 0-7.5 3 0"/><path fill="none" stroke-width="3.4" d="M0-7.5.8-13.6"/><path fill="none" stroke-width="3" d="M-2.7-12.6-2.9-9"/><circle cx="1.3" cy="-17.5" r="2.3" stroke="none"/><path fill="none" stroke-width=".8" d="M4.2-11 6.4 0"/></g>
+          <g id="t6"><!--t6--><use href="#tree" transform="translate(-404 591.5) scale(.2 0.26)"/><use href="#tree" transform="translate(-378 588.8) scale(.2 0.2)"/><use href="#tree" transform="translate(-350 587) scale(.3 0.32)"/><use href="#tree" transform="translate(-322 589.7) scale(.2 0.18)"/><use href="#tree" transform="translate(-296 592.7) scale(.3 0.28)"/><use href="#tree" transform="translate(-268 590.1) scale(.2 0.2)"/><use href="#tree" transform="translate(-240 585.7) scale(.3 0.3)"/><use href="#tree" transform="translate(-214 587.5) scale(.2 0.18)"/><use href="#tree" transform="translate(-186 593.7) scale(.2 0.26)"/><use href="#tree" transform="translate(-158 598.6) scale(.2 0.2)"/><use href="#tree" transform="translate(-130 601.9) scale(.3 0.3)"/><use href="#tree" transform="translate(-104 604.6) scale(.2 0.18)"/><use href="#tree" transform="translate(-76 607.3) scale(.3 0.28)"/><use href="#tree" transform="translate(-48 609.7) scale(.2 0.2)"/><use href="#tree" transform="translate(-20 611) scale(.2 0.26)"/><use href="#tree" transform="translate(6 609.2) scale(.3 0.3)"/><use href="#tree" transform="translate(30 606.6) scale(.2 0.22)"/><use href="#tree" transform="translate(52 604.9) scale(.3 0.34)"/><use href="#tree" transform="translate(74 605) scale(.2 0.2)"/><use href="#tree" transform="translate(98 605.9) scale(.3 0.28)"/><use href="#tree" transform="translate(122 609.7) scale(.2 0.18)"/><use href="#tree" transform="translate(150 617.7) scale(.3 0.3)"/><use href="#tree" transform="translate(178 624.8) scale(.2 0.22)"/><use href="#tree" transform="translate(200 629.5) scale(.2 0.16)"/><use href="#tree" transform="translate(226 634.6) scale(.2 0.26)"/><use href="#tree" transform="translate(252 638.1) scale(.2 0.2)"/><use href="#tree" transform="translate(276 639.5) scale(.3 0.3)"/><use href="#tree" transform="translate(304 645.2) scale(.2 0.18)"/><use href="#tree" transform="translate(330 654.4) scale(.2 0.24)"/><use href="#tree" transform="translate(356 662.7) scale(.2 0.16)"/><use href="#tree" transform="translate(384 670.6) scale(.2 0.22)"/><use href="#tree" transform="translate(410 677.5) scale(.1 0.14)"/><use href="#tree" transform="translate(440 685) scale(.2 0.2)"/><use href="#tree" transform="translate(476 693.5) scale(.1 0.13)"/><!--/t6--></g>
+          <g id="t5"><!--t5--><use href="#tree" transform="translate(1004 656.6) scale(.1 0.13)"/><use href="#tree" transform="translate(1030 645.3) scale(.2 0.2)"/><use href="#tree" transform="translate(1056 634.6) scale(.1 0.15)"/><use href="#tree" transform="translate(1082 624.1) scale(.2 0.24)"/><use href="#tree" transform="translate(1104 615.6) scale(.2 0.17)"/><use href="#tree" transform="translate(1132 611.4) scale(.2 0.26)"/><use href="#tree" transform="translate(1160 615.9) scale(.2 0.18)"/><use href="#tree" transform="translate(1186 610.6) scale(.3 0.28)"/><use href="#tree" transform="translate(1214 602.3) scale(.2 0.2)"/><use href="#tree" transform="translate(1238 593.4) scale(.3 0.3)"/><use href="#tree" transform="translate(1262 585) scale(.2 0.2)"/><use href="#tree" transform="translate(1290 581.2) scale(.3 0.32)"/><use href="#tree" transform="translate(1318 592) scale(.2 0.22)"/><use href="#tree" transform="translate(1346 594.7) scale(.3 0.28)"/><use href="#tree" transform="translate(1372 592.3) scale(.2 0.18)"/><use href="#tree" transform="translate(1398 585.2) scale(.3 0.3)"/><use href="#tree" transform="translate(1424 588.5) scale(.2 0.22)"/><use href="#tree" transform="translate(1446 592.1) scale(.3 0.28)"/><use href="#tree" transform="translate(1474 590.9) scale(.2 0.2)"/><use href="#tree" transform="translate(1500 584) scale(.3 0.3)"/><use href="#tree" transform="translate(1528 574.2) scale(.2 0.2)"/><use href="#tree" transform="translate(1556 568.7) scale(.3 0.28)"/><use href="#tree" transform="translate(1584 579.8) scale(.2 0.18)"/><use href="#tree" transform="translate(1612 583.9) scale(.3 0.3)"/><use href="#tree" transform="translate(1640 582.5) scale(.2 0.2)"/><use href="#tree" transform="translate(1668 573.2) scale(.2 0.26)"/><use href="#tree" transform="translate(1696 583.6) scale(.2 0.18)"/><use href="#tree" transform="translate(1724 590.9) scale(.3 0.3)"/><use href="#tree" transform="translate(1752 596.2) scale(.2 0.22)"/><use href="#tree" transform="translate(1780 595.8) scale(.3 0.28)"/><use href="#tree" transform="translate(1808 592) scale(.2 0.2)"/><use href="#tree" transform="translate(1836 593.6) scale(.3 0.3)"/><!--/t5--></g>
+          <g id="trees"><!--trees--><use href="#tree" transform="translate(-392 619.4) scale(.9 0.9)"/><use href="#tree" transform="translate(-360 620.9) scale(.5 0.6)"/><use href="#tree" transform="translate(-326 622.6) scale(1.1 1.12)"/><use href="#tree" transform="translate(-290 624.6) scale(.7 0.7)"/><use href="#tree" transform="translate(-258 626.7) scale(.5 0.5)"/><use href="#tree" transform="translate(-222 629.2) scale(1 0.94)"/><use href="#tree" transform="translate(-188 631.5) scale(.6 0.62)"/><use href="#tree" transform="translate(-150 633.8) scale(1.1 1.06)"/><use href="#tree" transform="translate(-116 635.8) scale(.5 0.56)"/><use href="#tree" transform="translate(-82 637.9) scale(.8 0.8)"/><use href="#tree" transform="translate(-48 640.2) scale(.5 0.5)"/><use href="#tree" transform="translate(-18 642.1) scale(.7 0.74)"/><use href="#tree" transform="translate(14 643.2) scale(1 0.98)"/><use href="#tree" transform="translate(46 644.3) scale(.6 0.66)"/><use href="#tree" transform="translate(80 646.9) scale(1.2 1.16)"/><use href="#tree" transform="translate(112 650.5) scale(.5 0.56)"/><use href="#tree" transform="translate(142 654.6) scale(.8 0.84)"/><use href="#tree" transform="translate(176 659.4) scale(.4 0.46)"/><use href="#tree" transform="translate(206 663.6) scale(.7 0.7)"/><use href="#tree" transform="translate(252 670.3) scale(.4 0.4)"/><use href="#tree" transform="translate(288 676) scale(.5 0.52)"/><use href="#tree" transform="translate(1150 683.6) scale(.4 0.4)"/><use href="#tree" transform="translate(1188 676.4) scale(.6 0.56)"/><use href="#tree" transform="translate(1224 669.9) scale(.4 0.44)"/><use href="#tree" transform="translate(1262 663.5) scale(.8 0.82)"/><use href="#tree" transform="translate(1296 658.1) scale(.5 0.6)"/><use href="#tree" transform="translate(1332 652.7) scale(1.1 1.04)"/><use href="#tree" transform="translate(1368 647.9) scale(.7 0.72)"/><use href="#tree" transform="translate(1406 643.3) scale(1.2 1.2)"/><use href="#tree" transform="translate(1434 640.5) scale(.7 0.8)"/><use href="#tree" transform="translate(1466 637.4) scale(.5 0.6)"/><use href="#tree" transform="translate(1498 634) scale(1 1)"/><use href="#tree" transform="translate(1532 630.4) scale(.7 0.7)"/><use href="#tree" transform="translate(1566 627.6) scale(1.2 1.14)"/><use href="#tree" transform="translate(1600 625.2) scale(.5 0.56)"/><use href="#tree" transform="translate(1634 623.2) scale(.9 0.86)"/><use href="#tree" transform="translate(1670 621.4) scale(.6 0.64)"/><use href="#tree" transform="translate(1704 619.8) scale(1.1 1.08)"/><use href="#tree" transform="translate(1740 618.3) scale(.7 0.7)"/><use href="#tree" transform="translate(1774 617) scale(1 0.96)"/><use href="#tree" transform="translate(1808 615.8) scale(.5 0.6)"/><use href="#tree" transform="translate(1838 614.8) scale(1.1 1.1)"/><!--/trees--></g>
+        </defs>
+
+        <rect x="-400" width="2240" height="810" fill="url(#sky)"/>
+        <g stroke="#fff3dc" stroke-linecap="round" fill="none">
+          <path id="s1" stroke-width="1.3" opacity=".7" d="M684 108h.1M1499 259h.1M1018 79h.1M235 207h.1M1388 97h.1M1619 18h.1M-279 90h.1M-317 263h.1M871 57h.1M227 10h.1M1447 127h.1M782 116h.1M711 137h.1M316 167h.1M1700 12h.1M-41 75h.1M-28 319h.1M524 91h.1M1585 111h.1M1092 10h.1M148 83h.1M-294 80h.1M243 32h.1M279 35h.1M865 257h.1M-204 241h.1M336 185h.1M884 266h.1M987 67h.1M532 269h.1M58 89h.1M267 53h.1M251 314h.1M563 274h.1M1730 318h.1M683 173h.1M1541 112h.1M1070 69h.1M1796 189h.1M-6 137h.1M649 17h.1M561 33h.1M957 24h.1M1723 140h.1M1094 300h.1M1755 228h.1M608 53h.1M1336 235h.1M1420 113h.1M906 7h.1M92 6h.1M996 59h.1M-389 76h.1M-215 10h.1M113 16h.1M-22 17h.1M489 258h.1M250 215h.1M1739 238h.1M388 271h.1M1587 180h.1M808 306h.1M1539 41h.1M-239 106h.1M295 128h.1M677 112h.1M852 107h.1M-55 104h.1M-6 93h.1M604 155h.1M639 140h.1M1233 320h.1M1351 92h.1M1561 293h.1M-68 11h.1M88 44h.1M-75 70h.1M-272 298h.1M1076 62h.1M1075 116h.1M1437 15h.1M1083 7h.1M239 70h.1M-20 266h.1M546 225h.1M152 215h.1M456 136h.1M612 141h.1M1268 182h.1M282 9h.1M732 89h.1M663 316h.1M1437 7h.1"/>
+          <path id="s2" class="twinkle" stroke-width="1.9" d="M1054 26h.1M-78 289h.1M502 11h.1M-251 68h.1M612 174h.1M1758 58h.1M-92 212h.1M360 11h.1M1005 153h.1M1623 63h.1M0 188h.1M1200 8h.1M1029 14h.1M1179 258h.1M1248 198h.1M376 188h.1M199 72h.1M1296 45h.1M475 286h.1M-339 67h.1M989 142h.1M886 148h.1M1814 264h.1M659 180h.1M419 282h.1M1410 57h.1M1200 7h.1M-3 7h.1M21 10h.1M-150 88h.1M608 296h.1M27 62h.1M1369 56h.1M65 140h.1M-283 35h.1"/>
+          <path id="s3" class="twinkle twinkle--b" stroke-width="2.7" d="M-169 73h.1M615 89h.1M-43 41h.1M956 190h.1M1280 312h.1M654 7h.1M238 247h.1M1346 70h.1M-211 96h.1M537 117h.1M789 234h.1M1526 295h.1M616 60h.1M-72 78h.1M1119 273h.1M652 21h.1M1488 253h.1M231 104h.1M1473 302h.1M1450 10h.1M578 32h.1M1289 36h.1"/>
+        </g>
+
+        <g class="drift">
+          <path fill="url(#streak)" opacity=".75" d="M360 443Q560 433 800 440 560 446 360 443Z"/>
+          <path fill="url(#streak)" opacity=".5" d="M660 417Q880 408 1090 414 880 420 660 417Z"/>
+          <path fill="url(#streak)" opacity=".85" d="M770 463Q940 455 1120 461 940 467 770 463Z"/>
+          <path fill="url(#streak)" opacity=".5" d="M250 470Q430 463 640 468 430 473 250 470Z"/>
+          <path fill="url(#streak)" opacity=".6" d="M560 489Q650 484 760 488 650 492 560 489Z"/>
+        </g>
+        <ellipse cx="720" cy="578" rx="640" ry="84" fill="url(#bloom)"/>
+        <g class="round">
+          <circle cx="720" cy="540" r="250" fill="url(#halo)"/>
+          <circle cx="720" cy="540" r="58" fill="url(#disc)"/>
+        </g>
+
+        <use href="#r1" fill="url(#g1)" stroke="url(#rim)" stroke-width="2.4" stroke-linejoin="round"/>
+        <g clip-path="url(#c-r1)" fill="url(#sh1)">
+          <path d="M-306 379C-314 400-330 412-334 436-338 458-356 470-362 500L-380 600H-420V300Z"/>
+          <path d="M252 345C244 368 226 380 222 404 218 426 196 438 190 462 184 486 158 500 150 528 144 548 128 570 120 600H-64C-52 556-36 500-20 446V300Z"/>
+          <path d="M344 385C338 402 330 412 327 432 324 450 312 462 308 486L300 470C306 440 312 416 318 392Z"/>
+          <path d="M876 505C882 520 894 528 898 546 902 560 912 570 916 590L930 576C922 552 908 532 897 516Z"/>
+          <path d="M1014 435C1020 452 1032 462 1036 482 1040 500 1054 512 1058 536L1072 520C1064 490 1050 462 1036 441Z"/>
+          <path d="M1138 325C1146 350 1164 362 1168 386 1172 408 1194 420 1200 446 1206 470 1230 486 1238 514 1244 536 1258 566 1264 600H1504C1492 556 1476 500 1460 448V290Z"/>
+          <path d="M1562 379C1570 400 1586 412 1590 436 1594 458 1612 470 1618 500L1636 600H1860V300Z"/>
+        </g>
+        <g clip-path="url(#c-r1)" fill="url(#lit)">
+          <path d="M252 345C246 366 240 380 241 428L320 402 300 325Z"/>
+          <path d="M1138 325C1146 350 1160 360 1166 384V414H1046V300Z"/>
+        </g>
+        <path fill="url(#mist)" filter="url(#soft)" d="M330 606Q720 584 1120 606 720 622 330 606Z"/>
+        <use href="#r2" fill="url(#g2)"/>
+        <g clip-path="url(#c-r2)" fill="url(#sh2)">
+          <path d="M182 461C174 480 158 490 154 512 150 532 130 544 124 568 120 586 106 610 100 660H-420V400Z"/>
+        </g>
+        <use href="#r3" fill="url(#g3)"/>
+        <g clip-path="url(#c-r3)" fill="url(#sh3)">
+          <path d="M1288 473C1296 492 1312 502 1316 524 1320 544 1340 556 1346 580 1350 598 1364 622 1370 680H1860V420Z"/>
+        </g>
+        <path fill="url(#mist)" filter="url(#soft)" opacity=".8" d="M160 668Q560 648 960 666 560 682 160 668Z"/>
+        <use href="#r4" fill="url(#g4)"/>
+        <rect width="1440" height="810" fill="url(#valley)"/>
+        <use href="#t5" fill="#3b175a"/>
+        <use href="#r5" fill="url(#g5)"/>
+        <path fill="url(#mist2)" filter="url(#soft)" d="M520 716Q900 698 1300 714 900 730 520 716Z"/>
+        <use href="#t6" fill="#291048"/>
+        <use href="#r6" fill="url(#g6)"/>
+        <path fill="url(#mist2)" filter="url(#soft)" opacity=".9" d="M430 744Q760 728 1090 742 760 758 430 744Z"/>
+        <use href="#trees" fill="#140a2a"/>
+        <use href="#r7" fill="url(#g7)"/>
+        <g class="camp" fill="#0d0620" stroke="#0d0620"><!--hikers--><g class="round"><circle cx="628" cy="733.6" r="46" fill="url(#lamp)" stroke="none"/><path fill="#ffc45e" stroke="none" d="M614 738.6Q622 731.6 628 722.6 634 731.6 642 738.6Z"/><path fill="#8a2f3c" stroke="none" d="M625 738.6L628 729.1 631 738.6Z"/></g><g class="round"><use href="#hk" transform="translate(884 740.3) scale(-1 1)"/></g><g class="round"><use href="#hk" transform="translate(905 736.1) scale(-1 1)"/></g><g class="round"><use href="#hk" transform="translate(923 731.9) scale(-1 1)"/></g><g class="round"><use href="#hk" transform="translate(950 725.2) scale(-1 1)"/></g><!--/hikers--></g>
+      </svg>
+      <svg class="sky-top" viewBox="0 0 1440 372" preserveAspectRatio="xMidYMin slice" focusable="false">
+        <g stroke="#fff3dc" stroke-linecap="round" fill="none"><use href="#s1"/><use href="#s2"/><use href="#s3"/></g>
+      </svg>
+    </div>
+
+    <nav class="nav" aria-label="Main">
+      <a class="brand" href="#top">
+        <svg viewBox="0 0 28 28" aria-hidden="true"><circle cx="14.5" cy="12" r="6.2" fill="#ffc45e"/><path fill="#fff3dc" d="M0 25 8.4 13.6Q10 11.6 11.8 13.7L15 17.6 17.9 14.9Q19.6 13.4 21 15.3L28 25Z"/></svg>
+        Safar
+      </a>
+      <ul>
+        <li><a href="#treks">Treks</a></li>
+        <li><a href="#how">How a trip runs</a></li>
+        <li><a href="#included">What is included</a></li>
+      </ul>
+      <a class="pill" href="#book">Book a trek</a>
+    </nav>
+
+    <div class="hero-copy">
+      <p class="kicker">Guided treks in northern Pakistan</p>
+      <h1><span>Where the</span> <span>road ends,</span> <em>walk on.</em></h1>
+    </div>
+
+    <div class="hero-foot">
+      <p class="lead">Small-group treks through Hunza, Fairy Meadows, Skardu and Deosai, led by guides who grew up on these trails.</p>
+      <div class="actions">
+        <a class="link" href="#how">How a trip runs</a>
+        <a class="btn btn--gold" href="#treks">See the 2027 treks <span aria-hidden="true">&darr;</span></a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="wrap" id="treks">
+      <div class="head">
+        <div>
+          <span class="eyebrow">The 2027 season</span>
+          <h2>Four treks, <em>June to September.</em></h2>
+        </div>
+        <p>Prices are per person from the meeting point: Gilgit for Hunza and Fairy Meadows, Skardu for Deosai and the Baltoro.</p>
+      </div>
+
+      <ul class="cards">
+        <li class="card">
+          <div class="art">
+            <svg viewBox="40 300 480 300" preserveAspectRatio="xMidYMax slice" aria-hidden="true" focusable="false">
+              <defs><linearGradient id="c1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ef8f97"/><stop offset=".7" stop-color="#ffd3ae"/><stop offset="1" stop-color="#ffe9c9"/></linearGradient></defs>
+              <rect x="40" y="300" width="480" height="300" fill="url(#c1)"/>
+              <circle cx="440" cy="356" r="13" fill="#fff8ea"/>
+              <use href="#r1" fill="#fff8ee"/>
+              <use href="#r2" fill="#dd9aa6"/>
+              <use href="#r4" fill="#a35f8c"/>
+              <use href="#r6" fill="#5f2f6d"/>
+            </svg>
+            <span class="chip">Fairy Meadows</span>
+          </div>
+          <div class="card-body">
+            <h3>Fairy Meadows and Nanga Parbat Base Camp</h3>
+            <p class="desc">A jeep track, a pine forest, then the north face of Nanga Parbat filling the sky. The gentlest way into the high mountains.</p>
+            <dl>
+              <div><dt>Length</dt><dd>5 days</dd></div>
+              <div><dt>Difficulty</dt><dd><span class="lvl" aria-hidden="true"><i class="on"></i><i></i><i></i><i></i></span>Easy</dd></div>
+              <div><dt>Highest point</dt><dd>3,967 m</dd></div>
+              <div><dt>Next departure</dt><dd>5 June 2027</dd></div>
+            </dl>
+            <div class="card-foot">
+              <p class="price"><small>Per person</small>PKR 72,000</p>
+              <a class="go" href="#book" data-trek="Fairy Meadows and Nanga Parbat Base Camp">Hold a place</a>
+            </div>
+          </div>
+        </li>
+
+        <li class="card">
+          <div class="art">
+            <svg viewBox="900 290 480 300" preserveAspectRatio="xMidYMax slice" aria-hidden="true" focusable="false">
+              <defs><linearGradient id="c2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffb04e"/><stop offset=".75" stop-color="#ffe1a0"/><stop offset="1" stop-color="#fff0c8"/></linearGradient></defs>
+              <rect x="900" y="290" width="480" height="300" fill="url(#c2)"/>
+              <circle cx="1000" cy="404" r="21" fill="#fff8de"/>
+              <use href="#r1" fill="#ef8a4c"/>
+              <use href="#r3" fill="#c2503a"/>
+              <use href="#r5" fill="#7c2a3f"/>
+            </svg>
+            <span class="chip">Hunza</span>
+          </div>
+          <div class="card-body">
+            <h3>Passu Glacier and Patundas Meadow</h3>
+            <p class="desc">Cross the white ice of Passu Glacier and camp on a high meadow facing the Passu Cones. One glacier day, roped and guided.</p>
+            <dl>
+              <div><dt>Length</dt><dd>7 days</dd></div>
+              <div><dt>Difficulty</dt><dd><span class="lvl" aria-hidden="true"><i class="on"></i><i class="on"></i><i></i><i></i></span>Moderate</dd></div>
+              <div><dt>Highest point</dt><dd>4,100 m</dd></div>
+              <div><dt>Next departure</dt><dd>19 June 2027</dd></div>
+            </dl>
+            <div class="card-foot">
+              <p class="price"><small>Per person</small>PKR 98,000</p>
+              <a class="go" href="#book" data-trek="Passu Glacier and Patundas Meadow">Hold a place</a>
+            </div>
+          </div>
+        </li>
+
+        <li class="card">
+          <div class="art">
+            <svg viewBox="420 540 480 300" preserveAspectRatio="xMidYMax slice" aria-hidden="true" focusable="false">
+              <defs><linearGradient id="c3" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8fcbcc"/><stop offset=".42" stop-color="#f6ecc9"/></linearGradient><linearGradient id="c3l" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f3f7e6"/><stop offset="1" stop-color="#a9d6d2"/></linearGradient></defs>
+              <rect x="420" y="540" width="480" height="300" fill="url(#c3)"/>
+              <use href="#r2" fill="#8cc0bf"/>
+              <use href="#r4" fill="#5c9aa6" transform="translate(0 -14)"/>
+              <path fill="url(#c3l)" d="M508 703C552 689 664 684 768 689 826 692 872 698 858 708 824 720 700 724 596 719 544 716 486 712 508 703Z"/>
+              <use href="#r6" fill="#2f6378" transform="translate(0 26)"/>
+              <use href="#r7" fill="#17364b" transform="translate(0 34)"/>
+              <path fill="none" stroke="#ffc45e" stroke-width="4.6" stroke-linecap="round" d="M446 792h.1M474 808h.1M508 786h.1M548 816h.1M590 800h.1M640 822h.1M700 812h.1M758 824h.1M806 806h.1M850 818h.1M884 800h.1"/>
+              <path fill="none" stroke="#ff9db0" stroke-width="4" stroke-linecap="round" d="M460 822h.1M490 796h.1M528 804h.1M570 828h.1M612 814h.1M668 800h.1M728 828h.1M782 812h.1M828 826h.1M870 808h.1"/>
+            </svg>
+            <span class="chip">Deosai</span>
+          </div>
+          <div class="card-body">
+            <h3>Burji La and the Deosai Plains</h3>
+            <p class="desc">Climb out of Skardu over a 4,816 m pass, then walk the wildflower plateau to Sheosar Lake. On a clear morning the pass shows K2.</p>
+            <dl>
+              <div><dt>Length</dt><dd>6 days</dd></div>
+              <div><dt>Difficulty</dt><dd><span class="lvl" aria-hidden="true"><i class="on"></i><i class="on"></i><i class="on"></i><i></i></span>Challenging</dd></div>
+              <div><dt>Highest point</dt><dd>4,816 m</dd></div>
+              <div><dt>Next departure</dt><dd>10 July 2027</dd></div>
+            </dl>
+            <div class="card-foot">
+              <p class="price"><small>Per person</small>PKR 89,000</p>
+              <a class="go" href="#book" data-trek="Burji La and the Deosai Plains">Hold a place</a>
+            </div>
+          </div>
+        </li>
+
+        <li class="card">
+          <div class="art">
+            <svg viewBox="900 290 480 300" preserveAspectRatio="xMidYMax slice" aria-hidden="true" focusable="false">
+              <defs><linearGradient id="c4" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#140d3a"/><stop offset="1" stop-color="#4a3590"/></linearGradient></defs>
+              <rect x="900" y="290" width="480" height="300" fill="url(#c4)"/>
+              <g transform="translate(0 286)" stroke="#fff" stroke-linecap="round" fill="none"><use href="#s1"/><use href="#s2"/></g>
+              <circle cx="1300" cy="346" r="11" fill="#f4efff"/>
+              <g transform="matrix(-1 0 0 1 2280 0)">
+                <use href="#r1" fill="#dcd5f4"/>
+                <use href="#r3" fill="#6d5fb4"/>
+                <use href="#r5" fill="#30256a"/>
+              </g>
+            </svg>
+            <span class="chip">Skardu</span>
+          </div>
+          <div class="card-body">
+            <h3>Concordia and K2 Base Camp</h3>
+            <p class="desc">Eight days up the Baltoro Glacier to the foot of the second-highest mountain on earth. For walkers with one high trek already behind them.</p>
+            <dl>
+              <div><dt>Length</dt><dd>16 days</dd></div>
+              <div><dt>Difficulty</dt><dd><span class="lvl" aria-hidden="true"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></span>Strenuous</dd></div>
+              <div><dt>Highest point</dt><dd>5,150 m</dd></div>
+              <div><dt>Next departure</dt><dd>3 July 2027</dd></div>
+            </dl>
+            <div class="card-foot">
+              <p class="price"><small>Per person</small>PKR 385,000</p>
+              <a class="go" href="#book" data-trek="Concordia and K2 Base Camp">Hold a place</a>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </section>
+
+    <section class="how" id="how">
+      <div class="wrap">
+        <div class="head">
+          <div>
+            <span class="eyebrow">How a trip runs</span>
+            <h2>From your sofa <em>to the first camp.</em></h2>
+          </div>
+          <p>You bring the legs. We look after the jeeps, the permits, the cooking and the weather calls.</p>
+        </div>
+        <ol class="steps">
+          <li><b>01</b><h3>Pick a date</h3><p>Choose a trek and a departure. A deposit of PKR 15,000 holds your place and is refundable until 30 days before.</p></li>
+          <li><b>02</b><h3>Get ready</h3><p>We send a kit list and a four-week walking plan. Your lead guide calls to answer whatever the list did not.</p></li>
+          <li><b>03</b><h3>Meet in the north</h3><p>We collect you in Gilgit or Skardu, from the airport or the bus stand. Jeeps, permits and porters are already arranged.</p></li>
+          <li><b>04</b><h3>Walk</h3><p>Five to seven hours a day at the pace of the slowest walker, with rest days built in as the camps get higher.</p></li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="wrap" id="included">
+      <div class="head">
+        <div>
+          <span class="eyebrow">What you can count on</span>
+          <h2>Small groups, <em>local guides,</em> one price.</h2>
+        </div>
+        <p>The same three rules on every departure, from the five-day walk to the sixteen-day one.</p>
+      </div>
+      <ul class="trust">
+        <li><b>8</b><strong>walkers at most</strong><p>Small groups keep the camps quiet and the pace kind. A trek runs with as few as four.</p></li>
+        <li><b>2</b><strong>guides on every trek</strong><p>A lead and a sweep, both from Gilgit-Baltistan and both trained in mountain first aid. Nobody walks last alone.</p></li>
+        <li><b>1</b><strong>price, nothing extra on the trail</strong><p>Tents, meals, jeeps, porters, permits and park fees are all in it. You bring boots, a sleeping bag and a day pack.</p></li>
+      </ul>
+      <div class="incl">
+        <div>
+          <h3>In the price</h3>
+          <ul>
+            <li>Jeeps from the meeting point and back</li>
+            <li>Two-person tents, mats and a mess tent</li>
+            <li>Three cooked meals a day and boiled water</li>
+            <li>Porters or mules for 12 kg of your kit</li>
+            <li>Trekking permits and national park fees</li>
+            <li>First aid kit and a satellite messenger with the lead guide</li>
+          </ul>
+        </div>
+        <div class="not">
+          <h3>Not in the price</h3>
+          <ul>
+            <li>Travel to Gilgit or Skardu</li>
+            <li>Sleeping bag and boots (both can be hired)</li>
+            <li>Travel insurance</li>
+            <li>Tips for the crew</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="book" id="book">
+      <div class="wrap book-grid">
+        <div class="book-copy">
+          <h2>Tell us which trek. <em>We will hold your place.</em></h2>
+          <p>Send the form and we reply within one working day with dates, a kit list and how to pay the deposit.</p>
+          <ul class="dates" aria-label="Next departures">
+            <li><b>5 June</b> Fairy Meadows</li>
+            <li><b>19 June</b> Hunza</li>
+            <li><b>3 July</b> K2 Base Camp</li>
+            <li><b>10 July</b> Deosai</li>
+          </ul>
+        </div>
+        <form id="enquiry" action="#book" method="get">
+          <label class="full">Your name<input type="text" name="name" autocomplete="name" required></label>
+          <label class="full">Email or phone<input type="text" name="contact" required></label>
+          <label class="full">Trek
+            <select name="trek">
+              <option>Fairy Meadows and Nanga Parbat Base Camp</option>
+              <option>Passu Glacier and Patundas Meadow</option>
+              <option>Burji La and the Deosai Plains</option>
+              <option>Concordia and K2 Base Camp</option>
+            </select>
+          </label>
+          <label>Walkers
+            <select name="walkers"><option>1</option><option selected>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option></select>
+          </label>
+          <button class="btn btn--ink" type="submit">Ask about a date <span aria-hidden="true">&rarr;</span></button>
+          <p class="note full" role="status">No payment now. We only take the deposit once your date is confirmed.</p>
+        </form>
+      </div>
+      <svg class="ridges" viewBox="0 570 1440 240" preserveAspectRatio="xMidYMax slice" aria-hidden="true" focusable="false">
+        <use href="#r5" fill="#4a1a5c"/>
+        <use href="#r6" fill="#2a1149"/>
+        <use href="#trees" fill="#0d0620"/>
+        <use href="#r7" fill="#0d0620"/>
+      </svg>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <div class="foot-in">
+      <a class="brand" href="#top">Safar</a>
+      <span>Guided treks in Gilgit-Baltistan, June to September.</span>
+      <ul>
+        <li><a href="#treks">Treks</a></li>
+        <li><a href="#how">How a trip runs</a></li>
+        <li><a href="#included">What is included</a></li>
+        <li><a href="#book">Book</a></li>
+      </ul>
+    </div>
+  </footer>
+
+  <p class="credit">Design concept by <a href="/">Huzaifa Malik</a>. Safar is not a real company.</p>
+
+  <script>
+    (function () {
+      var form = document.getElementById('enquiry');
+      if (!form) return;
+      document.addEventListener('click', function (event) {
+        var link = event.target.closest && event.target.closest('[data-trek]');
+        if (link) form.elements.trek.value = link.getAttribute('data-trek');
+      });
+      form.addEventListener('submit', function (event) {
+        event.preventDefault();
+        form.querySelector('.note').textContent = 'Thank you. Safar is a design concept, so nothing was sent.';
+      });
+    })();
+  </script>
+</body>
+</html>
