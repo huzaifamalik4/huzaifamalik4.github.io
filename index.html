@@ -20,7 +20,6 @@
   <link rel="preload" href="assets/fonts/instrument-serif-latin-400-italic.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="assets/img/hero-figure.webp" as="image" type="image/webp">
   <link rel="stylesheet" href="assets/css/style.css">
-  <link rel="stylesheet" href="assets/css/variants.css">
   <link rel="stylesheet" href="assets/css/archive.css">
 
   <script>
@@ -267,8 +266,7 @@
         <p data-fade>Products I built end to end, and design concepts made to show a style. Client projects are shared on request.</p>
       </div>
 
-      <div class="work__viewport" data-work-viewport>
-      <div class="work__grid" data-work-track>
+      <div class="work__grid">
         <article class="card" data-project="salvo" data-cursor="Own project">
           <div class="card__media media" data-media>
             <img src="assets/img/work-salvo.webp" width="1284" height="724" loading="lazy" alt="Four screenshots from SALVO: a freefall over an island, a parachute over a town, a harbour and a forest">
@@ -375,7 +373,6 @@
           </div>
         </a>
       </div>
-      </div>
     </section>
 
     <!-- Screens wall: every tile is a screen from one of the projects above -->
@@ -414,8 +411,8 @@
       </div>
     </section>
 
-    <!-- Archive: every project in one place. The script flies the covers in as a ribbon and
-         settles them into this grid, or files them into folders (see the design picker). -->
+    <!-- Archive: every project in one place. On wide screens the script flies the covers in
+         as a ribbon and settles them into this grid. -->
     <section class="archive section" id="archive" data-section="archive">
       <div class="archive__track" data-archive-track>
         <div class="archive__pin" data-archive-pin>
@@ -434,7 +431,7 @@
           </div>
 
           <ul class="archive__grid" data-archive-grid>
-            <li class="tile" data-archive-item="salvo" data-group="products" data-file="salvo.png" data-work="salvo">
+            <li class="tile" data-archive-item="salvo" data-work="salvo">
               <button class="tile__open" type="button" aria-label="SALVO, browser game. Open details."><img src="assets/img/work-salvo.webp" width="1284" height="724" loading="lazy" alt=""></button>
               <div class="tile__text">
                 <h3>SALVO</h3>
@@ -445,7 +442,7 @@
                 <ul class="tile__stack"><li>Three.js</li><li>Node.js</li><li>WebSockets</li></ul>
               </div>
             </li>
-            <li class="tile" data-archive-item="morra" data-group="concepts-1" data-file="morra.png" data-work="morra">
+            <li class="tile" data-archive-item="morra" data-work="morra">
               <button class="tile__open" type="button" aria-label="Morra Coffee, online store concept. Open details."><img src="assets/img/work-morra.webp" width="1440" height="810" loading="lazy" alt=""></button>
               <div class="tile__text">
                 <h3>Morra Coffee</h3>
@@ -457,7 +454,7 @@
                 <a class="tile__link" href="concepts/morra/" target="_blank" rel="noopener">Open the concept</a>
               </div>
             </li>
-            <li class="tile" data-archive-item="dingline" data-group="products" data-file="dingline.png" data-work="dingline">
+            <li class="tile" data-archive-item="dingline" data-work="dingline">
               <button class="tile__open" type="button" aria-label="Dingline, SaaS product. Open details."><img src="assets/img/work-dingline.webp" width="1440" height="810" loading="lazy" alt=""></button>
               <div class="tile__text">
                 <h3>Dingline</h3>
@@ -468,7 +465,7 @@
                 <ul class="tile__stack"><li>Node.js</li><li>SQLite</li><li>Web Push</li></ul>
               </div>
             </li>
-            <li class="tile" data-archive-item="safar" data-group="concepts-2" data-file="safar.png">
+            <li class="tile" data-archive-item="safar">
               <button class="tile__open" type="button" aria-label="Safar, travel site concept. Open details."><img src="assets/img/work-safar.webp" width="1440" height="810" loading="lazy" alt=""></button>
               <div class="tile__text">
                 <h3>Safar</h3>
@@ -480,7 +477,7 @@
                 <a class="tile__link" href="concepts/safar/" target="_blank" rel="noopener">Open the concept</a>
               </div>
             </li>
-            <li class="tile" data-archive-item="quran" data-group="products" data-file="classroom.png" data-work="quran">
+            <li class="tile" data-archive-item="quran" data-work="quran">
               <button class="tile__open" type="button" aria-label="Quran Classroom, web app. Open details."><img src="assets/img/work-quran.webp" width="1076" height="605" loading="lazy" alt=""></button>
               <div class="tile__text">
                 <h3>Quran Classroom</h3>
@@ -491,7 +488,7 @@
                 <ul class="tile__stack"><li>WebRTC</li><li>Node.js</li><li>Canvas</li></ul>
               </div>
             </li>
-            <li class="tile" data-archive-item="printrun" data-group="builds" data-file="print-run.apk">
+            <li class="tile" data-archive-item="printrun">
               <button class="tile__open" type="button" aria-label="Print Run, mobile game. Open details."><img src="assets/img/work-printrun.webp" width="1440" height="810" loading="lazy" alt=""></button>
               <div class="tile__text">
                 <h3>Print Run</h3>
@@ -502,7 +499,7 @@
                 <ul class="tile__stack"><li>TypeScript</li><li>Canvas</li><li>Capacitor</li></ul>
               </div>
             </li>
-            <li class="tile" data-archive-item="mehrab" data-group="concepts-1" data-file="mehrab.png" data-work="mehrab">
+            <li class="tile" data-archive-item="mehrab" data-work="mehrab">
               <button class="tile__open" type="button" aria-label="Mehrab Studio, studio website concept. Open details."><img src="assets/img/work-mehrab.webp" width="1440" height="810" loading="lazy" alt=""></button>
               <div class="tile__text">
                 <h3>Mehrab Studio</h3>
@@ -514,7 +511,7 @@
                 <a class="tile__link" href="concepts/mehrab/" target="_blank" rel="noopener">Open the concept</a>
               </div>
             </li>
-            <li class="tile" data-archive-item="radar" data-group="builds" data-file="radar.py">
+            <li class="tile" data-archive-item="radar">
               <button class="tile__open" type="button" aria-label="Remote Radar, web tool. Open details."><img src="assets/img/work-radar.webp" width="1440" height="810" loading="lazy" alt=""></button>
               <div class="tile__text">
                 <h3>Remote Radar</h3>
@@ -525,7 +522,7 @@
                 <ul class="tile__stack"><li>Python</li><li>SQLite</li><li>No dependencies</li></ul>
               </div>
             </li>
-            <li class="tile" data-archive-item="raag" data-group="concepts-2" data-file="raag.png">
+            <li class="tile" data-archive-item="raag">
               <button class="tile__open" type="button" aria-label="Raag, music app concept. Open details."><img src="assets/img/work-raag.webp" width="1440" height="810" loading="lazy" alt=""></button>
               <div class="tile__text">
                 <h3>Raag</h3>
@@ -537,7 +534,7 @@
                 <a class="tile__link" href="concepts/raag/" target="_blank" rel="noopener">Open the concept</a>
               </div>
             </li>
-            <li class="tile" data-archive-item="ginti" data-group="concepts-1" data-file="ginti.png" data-work="ginti">
+            <li class="tile" data-archive-item="ginti" data-work="ginti">
               <button class="tile__open" type="button" aria-label="Ginti, app landing page concept. Open details."><img src="assets/img/work-ginti.webp" width="1440" height="810" loading="lazy" alt=""></button>
               <div class="tile__text">
                 <h3>Ginti</h3>
@@ -549,7 +546,7 @@
                 <a class="tile__link" href="concepts/ginti/" target="_blank" rel="noopener">Open the concept</a>
               </div>
             </li>
-            <li class="tile" data-archive-item="chowk" data-group="concepts-2" data-file="chowk.png">
+            <li class="tile" data-archive-item="chowk">
               <button class="tile__open" type="button" aria-label="Chowk, restaurant site concept. Open details."><img src="assets/img/work-chowk.webp" width="1440" height="810" loading="lazy" alt=""></button>
               <div class="tile__text">
                 <h3>Chowk</h3>
@@ -561,7 +558,7 @@
                 <a class="tile__link" href="concepts/chowk/" target="_blank" rel="noopener">Open the concept</a>
               </div>
             </li>
-            <li class="tile" data-archive-item="site" data-group="builds" data-file="index.html">
+            <li class="tile" data-archive-item="site">
               <button class="tile__open" type="button" aria-label="huzaifamalik.me, this portfolio. Open details."><img src="assets/img/work-site.webp" width="1440" height="810" loading="lazy" alt=""></button>
               <div class="tile__text">
                 <h3>huzaifamalik.me</h3>

@@ -1,5 +1,5 @@
 // The code shown on the hero stage, and a small tokeniser so each part can be given its
-// own weight or colour. Shared by both hero styles.
+// own weight.
 
 export const CODE_LINES = [
   '<!-- huzaifamalik.me -->',

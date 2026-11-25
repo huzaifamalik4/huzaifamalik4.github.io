@@ -5,6 +5,7 @@ import { spawn } from 'node:child_process';
 import { mkdir, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import sharp from 'sharp';
+import { ensurePortFree } from './cdp.mjs';
 
 const [width = '390', height = '844', name = 'mobile', mobileFlag] = process.argv.slice(2);
 const W = Number(width);
@@ -12,10 +13,12 @@ const H = Number(height);
 const mobile = mobileFlag === 'mobile';
 const URL_ = process.env.SHOOT_URL || 'http://localhost:4173/';
 const OUT = path.resolve('tools/shots');
-const PORT = 9333;
+// SHOOT_PORT picks another debugging port when this one is taken.
+const PORT = Number(process.env.SHOOT_PORT) || 9343;
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 await mkdir(OUT, { recursive: true });
+await ensurePortFree(PORT);
 
 const chrome = spawn('C:/Program Files/Google/Chrome/Application/chrome.exe', [
   '--headless=new',

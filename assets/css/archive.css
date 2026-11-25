@@ -1,12 +1,9 @@
-/* The archive: every project in one place. Three layouts share the same list:
-   the plain grid (phones, reduced motion, no script), the reel (covers fly in as a ribbon
-   and settle into the grid) and the folders (covers filed into glass folders). */
+/* The archive: every project in one place. Two layouts share the same list:
+   the plain grid (phones, reduced motion, no script) and the reel (covers fly in as a
+   ribbon and settle into the grid). */
 
 .archive {
   position: relative;
-}
-.archive[data-variant="c"] {
-  display: none;
 }
 
 .archive__head {
@@ -84,8 +81,9 @@
   cursor: default;
   pointer-events: none;
 }
+/* Shown once the script has wired it up, and only where there is a pointer to point with. */
 @media (hover: hover) and (pointer: fine) {
-  .archive[data-variant="a"] .archive__bar {
+  .archive.is-live .archive__bar {
     display: grid;
   }
 }
@@ -222,212 +220,6 @@
   z-index: 40 !important;
 }
 
-/* ---------- Folders: built by the script from the same list ---------- */
-
-.archive[data-variant="b"] .archive__grid,
-.archive[data-variant="b"] .archive__bar {
-  display: none;
-}
-.folders {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: clamp(16px, 2vw, 36px);
-  padding: clamp(60px, 8vw, 130px) 0 clamp(20px, 3vw, 48px);
-}
-.folder {
-  --lift: 0;
-  position: relative;
-  aspect-ratio: 1 / 0.86;
-  min-width: 0;
-}
-/* The back plate, with a tab on its left shoulder. */
-.folder__back {
-  position: absolute;
-  inset: 12% 0 0;
-  border-radius: 9% / 11%;
-  background: var(--folder-back);
-  box-shadow: 0 40px 60px -34px rgba(20, 20, 50, 0.55);
-}
-.folder__back::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  bottom: calc(100% - 14%);
-  width: 46%;
-  height: 26%;
-  border-radius: 22% 22% 0 0 / 60% 60% 0 0;
-  background: inherit;
-}
-.folder__files {
-  position: absolute;
-  inset: 0 6% 8%;
-}
-.file {
-  position: absolute;
-  left: 0;
-  top: 14%;
-  width: 78%;
-  aspect-ratio: 16 / 10.5;
-  border-radius: 7% / 10%;
-  overflow: hidden;
-  background: var(--card);
-  box-shadow: 0 14px 26px -14px rgba(10, 10, 30, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.16);
-  /* --drop and --spin are driven by the script while a file falls into its folder. */
-  transform: translate(var(--x), calc(var(--y) - var(--rise) * var(--lift) + var(--drop, 0%))) rotate(calc(var(--r) * (0.35 + var(--lift) * 0.65) + var(--spin, 0deg)));
-  transition: transform 0.75s var(--ease);
-  will-change: transform;
-}
-.folders.is-filing .file {
-  transition: none;
-}
-.file img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: top center;
-}
-.file__name {
-  position: absolute;
-  left: 7%;
-  top: 8%;
-  z-index: 1;
-  padding: 0.3em 0.7em;
-  border-radius: 999px;
-  background: rgba(12, 12, 14, 0.62);
-  -webkit-backdrop-filter: blur(6px);
-  backdrop-filter: blur(6px);
-  color: #fff;
-  font-family: ui-monospace, "Cascadia Mono", Consolas, Menlo, monospace;
-  font-size: clamp(0.5625rem, 0.72vw, 0.75rem);
-  font-weight: 500;
-  letter-spacing: 0.01em;
-  white-space: nowrap;
-}
-.file:nth-child(1) { --x: 0%; --y: 0%; --r: -5deg; --rise: 34%; }
-.file:nth-child(2) { --x: 28%; --y: 9%; --r: 4deg; --rise: 40%; }
-.file:nth-child(3) { --x: 12%; --y: 24%; --r: -2deg; --rise: 50%; }
-.file:focus-visible {
-  outline: 2px solid #fff;
-  outline-offset: 2px;
-}
-/* The frosted front: whatever is filed behind it shows through as blurred colour. */
-.folder__front {
-  position: absolute;
-  inset: 44% -2% -1%;
-  display: grid;
-  grid-template-columns: 1fr auto;
-  align-content: end;
-  align-items: end;
-  gap: 2px 10px;
-  padding: 8% 9% 8%;
-  border-radius: 10% / 19%;
-  background: var(--folder-front);
-  -webkit-backdrop-filter: blur(16px) saturate(1.5);
-  backdrop-filter: blur(16px) saturate(1.5);
-  box-shadow: inset 0 1px 0 var(--folder-edge), inset 0 0 0 1px var(--folder-line), 0 26px 44px -26px rgba(20, 20, 50, 0.5);
-  color: var(--folder-ink);
-  pointer-events: none;
-}
-/* The raised lip in the middle of the front's top edge. */
-.folder__front::before {
-  content: "";
-  position: absolute;
-  left: 34%;
-  right: 34%;
-  bottom: calc(100% - 1px);
-  height: 9%;
-  border-radius: 40% 40% 0 0 / 100% 100% 0 0;
-  background: var(--folder-front);
-  -webkit-backdrop-filter: blur(16px) saturate(1.5);
-  backdrop-filter: blur(16px) saturate(1.5);
-  box-shadow: inset 0 1px 0 var(--folder-edge);
-}
-.folder__front strong {
-  grid-column: 1;
-  font-size: clamp(1rem, 1.5vw, 1.5rem);
-  font-weight: 500;
-  letter-spacing: -0.03em;
-  line-height: 1.1;
-}
-.folder__front span {
-  grid-column: 1;
-  font-family: ui-monospace, "Cascadia Mono", Consolas, Menlo, monospace;
-  font-size: clamp(0.625rem, 0.78vw, 0.8125rem);
-  opacity: 0.66;
-}
-.folder__dots {
-  grid-column: 2;
-  grid-row: 1 / span 2;
-  display: flex;
-  gap: 5px;
-  padding-bottom: 0.3em;
-}
-.folder__dots i {
-  width: clamp(6px, 0.62vw, 9px);
-  aspect-ratio: 1;
-  border-radius: 2px;
-  box-shadow: inset 0 0 0 1.5px currentColor;
-  opacity: 0.5;
-  transition: background-color 0.3s, opacity 0.3s;
-}
-.folder__dots i.is-on {
-  background: currentColor;
-  opacity: 1;
-}
-
-.folder--frost {
-  --folder-back: linear-gradient(180deg, #ffffff, #ecebe6);
-  --folder-front: linear-gradient(180deg, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.86));
-  --folder-edge: rgba(255, 255, 255, 0.95);
-  --folder-line: rgba(255, 255, 255, 0.55);
-  --folder-ink: #0c0c0d;
-}
-.folder--smoke {
-  --folder-back: linear-gradient(180deg, #3a3a40, #202024);
-  --folder-front: linear-gradient(180deg, rgba(64, 64, 72, 0.5), rgba(16, 16, 20, 0.86));
-  --folder-edge: rgba(255, 255, 255, 0.28);
-  --folder-line: rgba(255, 255, 255, 0.1);
-  --folder-ink: #fff;
-}
-.folder--indigo {
-  --folder-back: linear-gradient(180deg, #8f84ff, #5a3fe0);
-  --folder-front: linear-gradient(180deg, rgba(150, 132, 255, 0.5), rgba(70, 44, 214, 0.86));
-  --folder-edge: rgba(255, 255, 255, 0.5);
-  --folder-line: rgba(255, 255, 255, 0.16);
-  --folder-ink: #fff;
-}
-/* Fluted glass: fine vertical ribs over a clear front. */
-.folder--fluted {
-  --folder-back: linear-gradient(180deg, #f4f6ff, #dfe3f6);
-  --folder-front: repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.62) 0 2px, rgba(255, 255, 255, 0.14) 2px 7px, rgba(120, 132, 210, 0.16) 7px 9px), linear-gradient(180deg, rgba(240, 243, 255, 0.34), rgba(240, 243, 255, 0.78));
-  --folder-edge: rgba(255, 255, 255, 0.95);
-  --folder-line: rgba(255, 255, 255, 0.6);
-  --folder-ink: #0c0c0d;
-}
-.folder--fluted .folder__front,
-.folder--fluted .folder__front::before {
-  -webkit-backdrop-filter: blur(7px) saturate(1.6);
-  backdrop-filter: blur(7px) saturate(1.6);
-}
-html[data-theme="dark"] .folder__back {
-  box-shadow: 0 40px 60px -34px rgba(0, 0, 0, 0.9);
-}
-
-/* A folder opens when pointed at, focused, or tapped: its files rise and fan out. */
-.folder.is-open,
-.folder:focus-within {
-  --lift: 1;
-}
-@media (hover: hover) and (pointer: fine) {
-  .folder:hover {
-    --lift: 1;
-  }
-  .file:hover {
-    z-index: 3;
-    transform: translate(var(--x), calc(var(--y) - var(--rise) * var(--lift) - 9%)) rotate(0deg) scale(1.05);
-  }
-}
-
 /* ---------- Project sheet ---------- */
 
 .sheet {
@@ -517,12 +309,6 @@ html[data-theme="dark"] .folder__back {
 
 /* ---------- Smaller screens ---------- */
 
-@media (max-width: 1100px) {
-  .folders {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    row-gap: clamp(70px, 12vw, 130px);
-  }
-}
 @media (max-width: 899px) {
   .archive__grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -535,13 +321,6 @@ html[data-theme="dark"] .folder__back {
   .tile__text {
     flex-wrap: wrap;
     gap: 4px 8px;
-  }
-  .folders {
-    gap: 76px 14px;
-    padding-inline: 0;
-  }
-  .folder__front {
-    padding: 8% 8% 9%;
   }
   .sheet[open] {
     grid-template-columns: 1fr;
@@ -560,7 +339,6 @@ html[data-theme="dark"] .folder__back {
   .sheet::backdrop {
     animation: none;
   }
-  .file,
   .tile__open img {
     transition: none;
   }

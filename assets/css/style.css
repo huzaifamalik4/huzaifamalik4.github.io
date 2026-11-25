@@ -762,17 +762,6 @@ em {
 .js:not(.is-fallback) .hero__stage:not(.is-still) {
   background-image: none;
 }
-/* The earlier hero ("Wipe" in the design picker): the photo printed in blue. */
-html[data-hero="b"] .hero__stage {
-  background: var(--blue) url("../img/hero-portrait.webp") 66% center / cover no-repeat;
-  background-blend-mode: multiply;
-}
-html[data-hero="b"].js:not(.is-fallback) .hero__stage:not(.is-still) {
-  background-image: none;
-}
-html[data-hero="b"] .hero__reveal {
-  display: none;
-}
 .hero__canvas {
   position: absolute;
   inset: 0;
@@ -1969,9 +1958,6 @@ html.is-theming::view-transition-group(prism) {
   margin-top: clamp(90px, 12vw, 200px);
   padding: 0 clamp(6px, 0.8vw, 14px);
 }
-html[data-wall="b"] .wall {
-  display: none;
-}
 /* Always dark, in both themes: the screens are the light. */
 .wall__stage {
   position: relative;
@@ -2279,9 +2265,6 @@ html:not(.js) .wall__still,
     right: 10px;
     bottom: 10px;
     width: auto;
-  }
-  .is-picking .scroll-pill {
-    display: none;
   }
   html[data-theme="dark"] .contact__inner::after {
     right: -30%;

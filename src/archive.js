@@ -1,7 +1,6 @@
-// The archive: every project in one list, shown one of two ways.
-// "Reel": on wide screens the covers fly in as a ribbon and settle into a grid.
-// "Folders": the covers are filed into four glass folders.
-// Either way, a cover opens a sheet with the project's details.
+// The archive: every project in one list. On wide screens the covers fly in as a ribbon
+// and settle into a grid; elsewhere the grid is simply there. A cover opens a sheet with
+// the project's details.
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
@@ -84,7 +83,7 @@ function createSheet(section, tiles, { lenis }) {
   return { open };
 }
 
-/* ---------- Reel ---------- */
+/* ---------- Grid and reel ---------- */
 
 // The line above the grid names whichever project the pointer or the keyboard is on.
 function initBar(section, tiles, sheet) {
@@ -191,7 +190,7 @@ function initReel(section, tiles) {
 
     measure();
     apply();
-    const tween = gsap.to(state, {
+    gsap.to(state, {
       q: 1,
       ease: 'none',
       onUpdate: apply,
@@ -203,11 +202,12 @@ function initReel(section, tiles) {
     };
     ScrollTrigger.addEventListener('refreshInit', onRefresh);
 
+    // Runs when the window becomes too small for the reel. By then gsap has already undone
+    // the tween and its ScrollTrigger; this puts the plain grid back.
     return () => {
       ScrollTrigger.removeEventListener('refreshInit', onRefresh);
-      tween.scrollTrigger.kill();
-      tween.kill();
       section.classList.remove('is-reel');
+      pin.classList.remove('is-settled');
       tiles.forEach((tile) => {
         tile.style.transform = '';
         tile.style.zIndex = '';
@@ -221,106 +221,17 @@ function initReel(section, tiles) {
   });
 }
 
-/* ---------- Folders ---------- */
-
-const FOLDERS = [
-  { id: 'products', name: 'Products', glass: 'frost' },
-  { id: 'builds', name: 'Games and tools', glass: 'smoke' },
-  { id: 'concepts-1', name: 'Concepts, set one', glass: 'indigo' },
-  { id: 'concepts-2', name: 'Concepts, set two', glass: 'fluted' },
-];
-
-function initFolders(section, tiles, sheet, { reducedMotion }) {
-  const pin = section.querySelector('[data-archive-pin]');
-  const wrap = document.createElement('div');
-  wrap.className = 'folders';
-  const files = [];
-  let touching = false;
-  wrap.addEventListener('pointerdown', (event) => { touching = event.pointerType === 'touch'; }, { passive: true });
-
-  FOLDERS.forEach((spec) => {
-    const members = tiles.map((tile, index) => ({ tile, index })).filter(({ tile }) => tile.dataset.group === spec.id);
-    const folder = document.createElement('div');
-    folder.className = `folder folder--${spec.glass}`;
-    folder.innerHTML = `
-      <div class="folder__back"></div>
-      <div class="folder__files"></div>
-      <div class="folder__front" aria-hidden="true">
-        <strong>${spec.name}</strong>
-        <span><b data-count>${reducedMotion ? members.length : 0}</b> files</span>
-        <i class="folder__dots">${members.map(() => `<i class="${reducedMotion ? 'is-on' : ''}"></i>`).join('')}</i>
-      </div>`;
-    const shelf = folder.querySelector('.folder__files');
-    members.forEach(({ tile, index }, order) => {
-      const button = document.createElement('button');
-      button.type = 'button';
-      button.className = 'file';
-      button.setAttribute('aria-label', `${tile.querySelector('h3').textContent}, in ${spec.name}. Open details.`);
-      const name = document.createElement('span');
-      name.className = 'file__name';
-      name.textContent = tile.dataset.file;
-      const picture = new Image();
-      picture.src = tile.querySelector('img').getAttribute('src');
-      picture.alt = '';
-      picture.loading = 'lazy';
-      button.append(name, picture);
-      // On a touch screen the first tap opens the folder; a tap on a raised file opens the project.
-      button.addEventListener('click', () => {
-        if (touching && !folder.classList.contains('is-open')) {
-          wrap.querySelectorAll('.folder.is-open').forEach((other) => other.classList.remove('is-open'));
-          folder.classList.add('is-open');
-          return;
-        }
-        sheet.open(index);
-      });
-      shelf.appendChild(button);
-      files.push({ button, folder, order });
-    });
-    wrap.appendChild(folder);
-  });
-  pin.appendChild(wrap);
-  document.addEventListener('pointerdown', (event) => {
-    if (!event.target.closest('.folder')) wrap.querySelectorAll('.folder.is-open').forEach((folder) => folder.classList.remove('is-open'));
-  });
-  if (reducedMotion) return;
-
-  // The files drop in one at a time, a folder after a folder, and each landing is counted.
-  const folders = Array.from(wrap.children);
-  wrap.classList.add('is-filing');
-  gsap.set(files.map((file) => file.button), { opacity: 0 });
-  const timeline = gsap.timeline({
-    scrollTrigger: { trigger: wrap, start: 'top 72%', once: true },
-    onComplete: () => wrap.classList.remove('is-filing'),
-  });
-  files.forEach((file, i) => {
-    const at = folders.indexOf(file.folder) * 0.34 + file.order * 0.3;
-    timeline.fromTo(
-      file.button,
-      { opacity: 0, '--drop': '-240%', '--spin': `${(i % 2 ? 1 : -1) * (10 + ((i * 7) % 9))}deg` },
-      { opacity: 1, '--drop': '0%', '--spin': '0deg', duration: 0.95, ease: 'power3.out' },
-      at,
-    );
-    timeline.add(() => {
-      const count = file.folder.querySelector('[data-count]');
-      count.textContent = String(file.order + 1);
-      file.folder.querySelectorAll('.folder__dots i')[file.order].classList.add('is-on');
-    }, at + 0.62);
-  });
-}
-
 /* ---------- Start ---------- */
 
-export function initArchive({ variant = 'a', lenis = null, reducedMotion = false } = {}) {
+export function initArchive({ lenis = null, reducedMotion = false } = {}) {
   const section = document.querySelector('[data-section="archive"]');
-  if (!section || variant === 'c') return;
+  if (!section) return;
   const tiles = Array.from(section.querySelectorAll('.tile'));
   const sheet = createSheet(section, tiles, { lenis });
   tiles.forEach((tile, index) => tile.querySelector('.tile__open').addEventListener('click', () => sheet.open(index)));
 
-  if (variant === 'b') {
-    initFolders(section, tiles, sheet, { reducedMotion });
-    return;
-  }
   initBar(section, tiles, sheet);
+  // The stylesheet keeps the bar hidden until it can do something.
+  section.classList.add('is-live');
   if (!reducedMotion) initReel(section, tiles);
 }

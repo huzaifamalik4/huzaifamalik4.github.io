@@ -2,11 +2,14 @@
 // Used to make the concept project covers from the concept pages themselves.
 import { spawn } from 'node:child_process';
 import { writeFile } from 'node:fs/promises';
+import { ensurePortFree } from './cdp.mjs';
 
 const [pagePath = '/', width = '1440', height = '810', out = 'tools/shots/snap.png', hide = ''] = process.argv.slice(2);
 // SNAP_PORT lets two snaps run at the same time without sharing a browser.
 const PORT = Number(process.env.SNAP_PORT) || 9334;
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+await ensurePortFree(PORT);
 
 const chrome = spawn('C:/Program Files/Google/Chrome/Application/chrome.exe', [
   '--headless=new', `--remote-debugging-port=${PORT}`, `--user-data-dir=D:/tmp/hm-snap-profile${PORT === 9334 ? '' : `-${PORT}`}`, '--hide-scrollbars', 'about:blank',

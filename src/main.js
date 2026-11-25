@@ -2,7 +2,6 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { SplitText } from 'gsap/SplitText';
 import Lenis from 'lenis';
-import { applyVariants, initPicker, initWorkVariant } from './variants.js';
 import { initTheme } from './theme.js';
 import { initTypedLabels, initScrollPill, initTimeDifference } from './details.js';
 import { initArchive } from './archive.js';
@@ -61,17 +60,8 @@ function initAnchors() {
   });
 }
 
-function initAccordion(interactive) {
+function initAccordion() {
   const items = $$('[data-accordion] .svc__item');
-  if (!interactive) {
-    // Layouts that show every service at once: the rows are no longer controls.
-    items.forEach((item) => {
-      const head = $('.svc__head', item);
-      head.setAttribute('aria-expanded', 'true');
-      head.setAttribute('tabindex', '-1');
-    });
-    return;
-  }
   const setOpen = (item, open) => {
     item.classList.toggle('is-open', open);
     $('.svc__head', item).setAttribute('aria-expanded', String(open));
@@ -140,21 +130,14 @@ function loadHero() {
   const container = $('[data-hero-canvas]');
   if (!container) return Promise.resolve(null);
   const stage = container.parentElement;
-  // "Wipe" is the earlier hero, still offered in the design picker.
-  const wipe = root.dataset.hero === 'b';
-  if (wipe) {
-    $('[data-hero-label]').textContent = 'Code view';
-    $('.hint-fine', stage).textContent = 'Move your cursor to meet the person behind the code';
-    $('.hint-touch', stage).textContent = 'Drag to wipe the code away';
-  }
-  return (wipe ? import('./hero-wipe.js') : import('./hero.js'))
+  return import('./hero.js')
     .then((module) => module.createHero(container, { reducedMotion }))
     .catch(() => null)
     .then((hero) => {
       // Without WebGL the stage falls back to the still picture set in the stylesheet.
       if (!hero) stage.classList.add('is-still');
-      // The decode hero is held on screen while the page scrolls through it.
-      else if (hero.setProgress && !reducedMotion) {
+      // The stage is held on screen while the page scrolls through it.
+      else if (!reducedMotion) {
         $('[data-hero-track]').classList.add('is-pinned');
         ScrollTrigger.refresh();
       }
@@ -165,7 +148,7 @@ function loadHero() {
 // The screens wall is only fetched once the visitor is getting close to it.
 function initWall() {
   const stage = $('[data-wall-stage]');
-  if (!stage || root.dataset.wall === 'b' || !('IntersectionObserver' in window)) return;
+  if (!stage || !('IntersectionObserver' in window)) return;
   const showProject = (card) => {
     if (lenis) lenis.scrollTo(card, { offset: -110, duration: 1.4 });
     else card.scrollIntoView({ block: 'center' });
@@ -287,11 +270,11 @@ function initHeroScroll(heroPromise) {
     scrollTrigger: { trigger: '.hero', start: 'top top', end: () => `+=${$('.hero__top').offsetHeight + 120}`, scrub: true },
   });
 
-  // The decode hero: scrolling from the top of the page to the end of the held stretch
-  // takes the stage from a wall of code to the photograph.
+  // Scrolling from the top of the page to the end of the held stretch takes the stage
+  // from a wall of code to the photograph.
   heroPromise.then((hero) => {
     const track = $('[data-hero-track]');
-    if (!hero || !hero.setProgress || !track.classList.contains('is-pinned')) return;
+    if (!hero || !track.classList.contains('is-pinned')) return;
     const label = $('[data-hero-label]');
 
     // The words on the stage turn over letter by letter as the photograph arrives.
@@ -452,7 +435,7 @@ function createDissolve(loader) {
   };
 }
 
-function runIntro(heroPromise, quick, blocks) {
+function runIntro(heroPromise) {
   const loader = $('.loader');
   const countEl = $('[data-loader-count]');
   const bar = $('[data-loader-bar]');
@@ -469,7 +452,7 @@ function runIntro(heroPromise, quick, blocks) {
   const counting = new Promise((resolve) => {
     gsap.to(counter, {
       value: 100,
-      duration: quick ? 0.3 : 1.9,
+      duration: 1.9,
       ease: 'power2.inOut',
       onUpdate: () => {
         countEl.textContent = String(Math.round(counter.value));
@@ -511,13 +494,14 @@ function runIntro(heroPromise, quick, blocks) {
     });
     tl.to(countEl, { yPercent: -108, duration: 0.7, ease: 'power3.in' }).to(bar, { opacity: 0, duration: 0.3 }, '<');
 
-    const dissolve = blocks ? createDissolve(loader) : null;
+    const dissolve = createDissolve(loader);
     if (dissolve) {
       const state = { progress: 0 };
       tl.add(() => dissolve.start(), '-=0.12')
         .to('.loader__top', { opacity: 0, duration: 0.3 }, '<')
         .to(state, { progress: 1, duration: 1.15, ease: 'power1.inOut', onUpdate: () => dissolve.draw(state.progress) }, '<');
     } else {
+      // No canvas to draw the blocks on: the loader slides away instead.
       tl.to(loader, { yPercent: -100, duration: 1.15, ease: 'expo.inOut' }, '-=0.2');
     }
 
@@ -535,10 +519,8 @@ function runIntro(heroPromise, quick, blocks) {
 
     // A link like /#work should still land on its section once the page has opened.
     if (location.hash && $(location.hash)) {
-      tl.add(() => (lenis ? lenis.scrollTo($(location.hash), quick ? { immediate: true } : { duration: 1.4 }) : $(location.hash).scrollIntoView()));
+      tl.add(() => (lenis ? lenis.scrollTo($(location.hash), { duration: 1.4 }) : $(location.hash).scrollIntoView()));
     }
-    // While comparing layouts the page reloads often, so the opening plays fast.
-    if (quick) tl.timeScale(3);
   });
 }
 
@@ -546,13 +528,11 @@ function runIntro(heroPromise, quick, blocks) {
 
 function start() {
   root.classList.add('is-ready');
-  const design = applyVariants();
   initMenu();
   initAnchors();
-  initAccordion(design.choices.services === 'a');
+  initAccordion();
   initClock();
   initTimeDifference();
-  if (design.pick) initPicker(design);
 
   // While the theme changes the page holds still, then scrolls again if it could before.
   let scrollWasFree = false;
@@ -576,13 +556,11 @@ function start() {
     heroPromise.then((hero) => {
       if (!hero) return;
       hero.start();
-      // The decode hero stands still on its last picture, so its labels say so.
-      if (hero.setProgress) {
-        $('[data-hero-label]').textContent = 'Huzaifa Malik';
-        $('[data-hero-stage]').classList.add('is-decoded');
-      }
+      // The stage stands still on its last picture, so its labels say so.
+      $('[data-hero-label]').textContent = 'Huzaifa Malik';
+      $('[data-hero-stage]').classList.add('is-decoded');
     });
-    initArchive({ variant: design.choices.archive, reducedMotion: true });
+    initArchive({ reducedMotion: true });
     return;
   }
 
@@ -593,7 +571,7 @@ function start() {
   lenis.stop();
   initCursor();
   initMagnetic();
-  runIntro(heroPromise, design.pick, design.choices.intro === 'a');
+  runIntro(heroPromise);
 
   const afterFonts = document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve();
   Promise.race([afterFonts, new Promise((resolve) => setTimeout(resolve, 2500))]).then(() => {
@@ -603,17 +581,12 @@ function start() {
     initMedia();
     initTypedLabels();
     initHeroScroll(heroPromise);
-    initWorkVariant(design.choices.work, { finePointer });
-    initArchive({ variant: design.choices.archive, lenis });
+    initArchive({ lenis });
     initAngles();
     initMarquee();
     initContact();
     initScrollPill(lenis);
     ScrollTrigger.refresh();
-    // The dial adds a long scroll of its own, so everything below it is measured again.
-    if (design.choices.experience === 'd') {
-      import('./dial.js').then((module) => module.initDial()).catch(() => null);
-    }
   });
 
   window.addEventListener('load', () => ScrollTrigger.refresh());

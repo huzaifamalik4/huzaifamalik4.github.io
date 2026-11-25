@@ -8,8 +8,20 @@ import sharp from 'sharp';
 export const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 export const OUT = path.resolve('tools/shots');
 
+// Stops if a browser is already answering on the port. Without this a script would drive
+// whichever browser got there first, which may belong to another program.
+export async function ensurePortFree(port) {
+  let taken = false;
+  try {
+    await fetch(`http://127.0.0.1:${port}/json/version`, { signal: AbortSignal.timeout(1500) });
+    taken = true;
+  } catch { /* nothing answers: the port is ours to use */ }
+  if (taken) throw new Error(`Port ${port} already has a browser on it. Close that browser or use another port.`);
+}
+
 export async function withPage({ width = 1440, height = 900, mobile = false, port = 9340, scale = mobile ? 2 : 1, preload = '' }, run) {
   await mkdir(OUT, { recursive: true });
+  await ensurePortFree(port);
   const chrome = spawn('C:/Program Files/Google/Chrome/Application/chrome.exe', [
     '--headless=new', `--remote-debugging-port=${port}`, `--user-data-dir=D:/tmp/hm-cdp-${port}`, '--hide-scrollbars', '--mute-audio', 'about:blank',
   ], { stdio: 'ignore' });
@@ -92,8 +104,7 @@ export async function sheet(name, frames, { perRow = 4, tileWidth = 480 } = {}) 
   return file;
 }
 
-// Stores layout choices and the theme before the page loads, the way the picker would.
-export const presets = ({ theme, choices } = {}) => `try {
+// Stores the theme before the page loads, the way an earlier visit would have.
+export const presets = ({ theme } = {}) => `try {
   ${theme ? `localStorage.setItem('hm-theme', ${JSON.stringify(theme)});` : `localStorage.removeItem('hm-theme');`}
-  ${choices ? `localStorage.setItem('hm-design-choices', ${JSON.stringify(JSON.stringify(choices))}); sessionStorage.setItem('hm-design-picker', '1'); sessionStorage.setItem('hm-design-picker-closed', '1');` : ''}
 } catch (e) {}`;

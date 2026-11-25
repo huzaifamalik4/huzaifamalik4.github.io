@@ -1,6 +1,6 @@
 // Checks the moving parts that a still screenshot cannot show: the opening, the theme
-// switch, the screens wall and the experience dial.
-// Usage: node tools/probe.mjs <intro|theme|wall|dial> [width] [height] [mobile] [dark]
+// switch, the hero, the archive and the screens wall.
+// Usage: node tools/probe.mjs <intro|theme|themeAt|hero|archive|wall> [width] [height] [mobile] [dark] [reduced] [novt]
 import { withPage, sheet, sleep, presets } from './cdp.mjs';
 
 const [what = 'theme', width = '1440', height = '900', ...flags] = process.argv.slice(2);
@@ -114,11 +114,11 @@ const scenarios = {
     return sheet(`probe-hero-${tag}.jpg`, frames, { perRow: mobile ? 6 : 3, tileWidth: mobile ? 260 : 700 });
   },
 
-  // The archive: the ribbon of covers settling into the grid (or the folders filling),
-  // then a cover pointed at and opened.
+  // The archive: the ribbon of covers settling into the grid (or, on a small screen, the
+  // plain grid), then a cover pointed at and opened.
   async archive(page) {
     await page.goto(URL_, 5500);
-    const info = await page.evaluate(`(() => { const t = document.querySelector('[data-archive-track]'); const s = document.querySelector('[data-section="archive"]'); return { top: t.getBoundingClientRect().top + scrollY, height: t.offsetHeight, cls: s.className, variant: s.dataset.variant }; })()`);
+    const info = await page.evaluate(`(() => { const t = document.querySelector('[data-archive-track]'); const s = document.querySelector('[data-section="archive"]'); return { top: t.getBoundingClientRect().top + scrollY, height: t.offsetHeight, cls: s.className }; })()`);
     console.log('archive', JSON.stringify(info));
     const frames = [];
     const reel = info.cls.includes('is-reel');
@@ -133,16 +133,16 @@ const scenarios = {
       await sleep(2000);
       return page.save(`probe-archive-at-${process.env.PROBE_AT}-${tag}.png`);
     }
-    await sleep(reel ? 400 : 4200);
+    await sleep(400);
     // Point at one cover, then open it.
-    const target = await page.evaluate(`(() => { const el = document.querySelector('.archive[data-variant="b"] .folder:nth-child(2) .file:nth-child(3)') || document.querySelectorAll('.tile__open')[5]; const r = el.getBoundingClientRect(); return { x: r.left + r.width / 2, y: r.top + r.height * 0.3 }; })()`);
+    const target = await page.evaluate(`(() => { const r = document.querySelectorAll('.tile__open')[5].getBoundingClientRect(); return { x: r.left + r.width / 2, y: r.top + r.height * 0.3 }; })()`);
     await page.move(target.x - 40, target.y + 4);
     await page.move(target.x, target.y);
     await sleep(1100);
     frames.push(await page.shot());
     await page.save(`probe-archive-${tag}-rest.png`);
-    if (mobile) await page.evaluate(`(document.querySelector('.archive[data-variant="b"] .folder:nth-child(2) .file:nth-child(3)') || document.querySelectorAll('.tile__open')[5]).click()`);
-    else await page.click(target.x, target.y - (reel ? 0 : H * 0.05));
+    if (mobile) await page.evaluate(`document.querySelectorAll('.tile__open')[5].click()`);
+    else await page.click(target.x, target.y);
     await sleep(1100);
     frames.push(await page.shot());
     console.log('sheet', await page.evaluate(`JSON.stringify({ open: document.querySelector('[data-sheet]').open, title: document.querySelector('[data-sheet-title]').textContent, button: document.querySelector('[data-sheet-link] span').textContent })`));
@@ -175,37 +175,11 @@ const scenarios = {
     await page.save(`probe-wall-${tag}-last.png`);
     return sheet(`probe-wall-${tag}.jpg`, frames, { perRow: mobile ? 5 : 2, tileWidth: mobile ? 300 : 900 });
   },
-
-  // The design picker, open.
-  async picker(page) {
-    await page.evaluate(`sessionStorage.removeItem('hm-design-picker-closed')`);
-    await page.goto(`${URL_}?pick=1`, 4500);
-    await page.evaluate(`sessionStorage.removeItem('hm-design-picker-closed'); document.querySelector('.picker').classList.remove('is-closed')`);
-    await sleep(300);
-    console.log('picker', await page.evaluate(`document.querySelector('[data-picker-summary]').textContent`));
-    return page.save(`probe-picker-${tag}.png`);
-  },
-
-  // Walk through the experience dial.
-  async dial(page) {
-    await page.goto(`${URL_}?pick=1`, 5000);
-    const info = await page.evaluate(`(() => { const d = document.querySelector('.dial'); if (!d) return null; return { top: d.getBoundingClientRect().top + window.scrollY, height: d.offsetHeight }; })()`);
-    if (!info) throw new Error('dial was not built');
-    const frames = [];
-    for (const k of [-0.12, 0.08, 0.3, 0.5, 0.7, 0.9, 1, 1.12]) {
-      await page.scrollTo(info.top + (info.height - H) * k);
-      await sleep(1700);
-      frames.push(await page.shot());
-    }
-    return sheet(`probe-dial-${tag}.jpg`, frames, { perRow: mobile ? 4 : 2, tileWidth: mobile ? 300 : 900 });
-  },
 };
 
 // "novt" hides the browser's view transitions, to check the fallback for older browsers.
 // "reduced" asks for reduced motion, the way a visitor's system setting would.
-// PROBE_CHOICES sets layout choices the way the picker would, for example "archive=b,hero=b".
-const chosen = process.env.PROBE_CHOICES ? Object.fromEntries(process.env.PROBE_CHOICES.split(',').map((pair) => pair.split('='))) : null;
-const preload = presets({ theme, choices: what === 'dial' ? { experience: 'd', ...chosen } : chosen })
+const preload = presets({ theme })
   + (flags.includes('novt') ? '\ntry { Object.defineProperty(Document.prototype, "startViewTransition", { value: undefined }); } catch (e) {}' : '');
 const file = await withPage({ width: W, height: H, mobile, preload, port: 9341 }, async (page) => {
   if (flags.includes('reduced')) {
