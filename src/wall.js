@@ -230,7 +230,7 @@ export function createWall(stage, { reducedMotion = false, onOpen } = {}) {
       link.href = href;
       link.target = '_blank';
       link.rel = 'noopener';
-      link.firstElementChild.textContent = 'Open the concept';
+      link.firstElementChild.textContent = source.dataset.open || 'Open the concept';
       link.onclick = null;
     } else {
       link.href = '#work';

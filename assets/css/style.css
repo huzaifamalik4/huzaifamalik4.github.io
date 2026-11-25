@@ -693,6 +693,9 @@ em {
   max-width: 34ch;
   line-height: 1.45;
 }
+.hero__aside .text-link {
+  justify-self: start;
+}
 
 .status {
   display: flex;
@@ -1034,6 +1037,95 @@ em {
   text-align: right;
 }
 
+/* ---------- CRM ---------- */
+
+.crm__stats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin-top: clamp(36px, 5vw, 80px);
+  border-top: 1px solid var(--line);
+}
+.crm__stats div {
+  padding: clamp(18px, 2vw, 32px) clamp(14px, 1.6vw, 28px) 0 0;
+}
+.crm__stats div + div {
+  padding-left: clamp(14px, 1.6vw, 28px);
+  border-left: 1px solid var(--line);
+}
+.crm__stats dt {
+  font-size: clamp(2.2rem, 4.6vw, 5rem);
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: -0.055em;
+}
+.crm__stats dt small {
+  margin-left: 0.12em;
+  font-size: 0.42em;
+  letter-spacing: -0.02em;
+}
+.crm__stats dd {
+  max-width: 26ch;
+  margin-top: 12px;
+  font-size: 0.9375rem;
+  line-height: 1.4;
+  color: var(--ink-2);
+}
+.crm__list {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0 var(--gap);
+  margin-top: clamp(36px, 5vw, 80px);
+  border-bottom: 1px solid var(--line);
+}
+.crm__list li {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  padding: clamp(14px, 1.5vw, 22px) 0;
+  border-top: 1px solid var(--line);
+  font-size: clamp(1.15rem, 1.7vw, 1.8rem);
+  font-weight: 500;
+  line-height: 1.1;
+  letter-spacing: -0.035em;
+}
+.crm__list span {
+  font-size: 0.8125rem;
+  letter-spacing: 0.06em;
+  color: var(--accent);
+}
+.crm__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px clamp(20px, 3vw, 48px);
+  margin-top: clamp(36px, 5vw, 80px);
+}
+.crm__actions p {
+  max-width: 34ch;
+  color: var(--ink-2);
+}
+@media (max-width: 1000px) {
+  .crm__stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .crm__stats div:nth-child(3) {
+    padding-left: 0;
+    border-left: 0;
+  }
+  .crm__stats div:nth-child(n + 3) {
+    margin-top: 18px;
+    border-top: 1px solid var(--line);
+  }
+  .crm__list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 700px) {
+  .crm__list {
+    grid-template-columns: 1fr;
+  }
+}
+
 /* ---------- Services ---------- */
 
 .svc {
@@ -1188,7 +1280,8 @@ em {
 .card {
   display: block;
 }
-.card--offset {
+/* In Work, the right-hand column sits lower than the left. */
+.work .work__grid > .card:nth-child(even) {
   margin-top: clamp(0px, 9vw, 170px);
 }
 .card__media {
@@ -1545,6 +1638,12 @@ em {
   font-weight: 500;
   line-height: 0.85;
   letter-spacing: -0.06em;
+}
+/* A plan that is quoted, not priced: a word in place of the figure. */
+.plan__price em {
+  font-size: 0.86em;
+  line-height: 1;
+  letter-spacing: -0.035em;
 }
 .plan__price sup {
   margin: 0.12em 0.08em 0 0;
@@ -2430,7 +2529,7 @@ html:not(.js) .wall__still,
   .work__grid {
     grid-template-columns: 1fr;
   }
-  .card--offset {
+  .work .work__grid > .card:nth-child(even) {
     margin-top: 0;
   }
   .angles__figure {

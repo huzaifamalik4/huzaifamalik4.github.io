@@ -38,11 +38,6 @@ await sharp('D:/dingline/docs/screenshots/landing.png')
   .webp({ quality: 86 })
   .toFile(path.join(OUT, 'work-dingline.webp'));
 
-await sharp('D:/quran-classroom/test/out/04-teacher-quran.png')
-  .extract({ left: 0, top: 0, width: 1076, height: 605 })
-  .webp({ quality: 86 })
-  .toFile(path.join(OUT, 'work-quran.webp'));
-
 // Social preview card.
 const og = Buffer.from(`<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630">
   <rect width="1200" height="630" fill="#ecebe7"/>

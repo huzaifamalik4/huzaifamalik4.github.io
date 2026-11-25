@@ -9,7 +9,6 @@ import path from 'node:path';
 
 const SALVO = 'D:/salvo/docs';
 const DING = 'D:/dingline/docs/screenshots';
-const QURAN = 'D:/quran-classroom/test/out';
 const IMG = path.resolve('assets/img');
 
 const COLS = 8;
@@ -54,13 +53,17 @@ const BUCKETS = {
     { file: `${DING}/customer-almost.png`, extract: { left: 0, top: 30, width: 390, height: 292 }, caption: 'You are next' },
     { file: `${DING}/staff-console-phone.png`, extract: { left: 0, top: 180, width: 780, height: 585 }, caption: 'Staff console on a phone' },
   ],
-  quran: [
-    { file: `${QURAN}/08-teacher-student-pointer.png`, extract: { left: 171, top: 0, width: 1024, height: 768 }, caption: 'Live pointer' },
-    { file: `${QURAN}/02-teacher-lobby.png`, extract: { left: 171, top: 0, width: 1024, height: 768 }, caption: 'Teacher lobby' },
-    { file: `${QURAN}/01-dashboard.png`, extract: { left: 171, top: 0, width: 1024, height: 768 }, caption: 'Class list' },
-    { file: `${QURAN}/10-invite.png`, extract: { left: 171, top: 0, width: 1024, height: 768 }, caption: 'Invite a student' },
-    { file: `${QURAN}/03-student-lobby.png`, extract: { left: 0, top: 50, width: 390, height: 292 }, caption: 'Student lobby' },
-    { file: `${QURAN}/11-settings.png`, extract: { left: 342, top: 0, width: 1024, height: 768 }, caption: 'Settings' },
+  playbook: [
+    { file: `${IMG}/work-playbook.webp`, extract: { left: 30, top: 195, width: 480, height: 360 }, caption: 'Pipeline board' },
+    { file: `${IMG}/work-playbook.webp`, extract: { left: 1010, top: 200, width: 410, height: 308 }, caption: 'Text thread' },
+    { file: `${IMG}/work-playbook.webp`, extract: { left: 520, top: 195, width: 480, height: 360 }, caption: 'Booked to showed' },
+  ],
+  leads: [
+    { file: `${IMG}/work-leads.webp`, extract: { left: 20, top: 120, width: 640, height: 480 }, caption: 'Lead sources' },
+    { file: `${IMG}/work-leads.webp`, extract: { left: 660, top: 300, width: 400, height: 300 }, caption: 'GoHighLevel hub' },
+  ],
+  radar: [
+    { file: `${IMG}/work-radar.webp`, extract: { left: 0, top: 0, width: 1080, height: 810 }, caption: 'Radar dashboard' },
   ],
   morra: [
     { file: `${IMG}/work-morra.webp`, extract: { left: 740, top: 90, width: 700, height: 525 }, caption: 'Coffee bags' },
@@ -77,7 +80,7 @@ const BUCKETS = {
 };
 
 // Deal the tiles out so neighbours on the wall come from different projects.
-const ORDER = ['salvo', 'dingline', 'quran', 'morra', 'salvo', 'dingline', 'quran', 'mehrab', 'salvo', 'dingline', 'quran', 'ginti'];
+const ORDER = ['salvo', 'dingline', 'playbook', 'morra', 'salvo', 'dingline', 'leads', 'mehrab', 'salvo', 'dingline', 'radar', 'ginti'];
 const queues = Object.fromEntries(Object.entries(BUCKETS).map(([key, list]) => [key, [...list]]));
 const tiles = [];
 for (let turn = 0; tiles.length < COLS * ROWS && turn < 400; turn++) {
